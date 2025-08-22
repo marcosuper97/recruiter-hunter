@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class VacancyResponseDto(
+data class VacanciesResponseDto(
     val page: Int,
     val pages: Int,
     val found: Long,

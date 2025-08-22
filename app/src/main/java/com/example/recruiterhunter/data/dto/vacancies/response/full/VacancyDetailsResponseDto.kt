@@ -13,7 +13,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class FullDetailsDto(
+data class VacancyDetailsResponseDto(
     override val id: String,
     override val name: String,
     override val employer: EmployerDto,

@@ -3,8 +3,8 @@ package com.example.recruiterhunter.data.network.vacancies
 import com.example.recruiterhunter.BuildConfig
 import com.example.recruiterhunter.data.dto.vacancies.filteres.areas.AreaDto
 import com.example.recruiterhunter.data.dto.vacancies.filteres.industry.IndustryGroupDto
-import com.example.recruiterhunter.data.dto.vacancies.response.full.FullDetailsDto
-import com.example.recruiterhunter.data.dto.vacancies.response.preview.VacancyResponseDto
+import com.example.recruiterhunter.data.dto.vacancies.response.full.VacancyDetailsResponseDto
+import com.example.recruiterhunter.data.dto.vacancies.response.preview.VacanciesResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
@@ -18,7 +18,7 @@ interface HhApi {
     @GET("vacancies")
     suspend fun searchVacancies(
         @QueryMap options: Map<String, String>
-    ): VacancyResponseDto
+    ): VacanciesResponseDto
 
     @Headers(
         "Authorization: Bearer ${BuildConfig.API_KEY}",
@@ -27,7 +27,7 @@ interface HhApi {
     @GET("vacancies/{vacancy_id}")
     suspend fun getVacancyDetails(
         @Path("vacancy_id") vacancyId: String
-    ): FullDetailsDto
+    ): VacancyDetailsResponseDto
 
     @Headers(
         "Authorization: Bearer ${BuildConfig.API_KEY}",
