@@ -12,7 +12,7 @@ import java.io.IOException
 class HhRetrofitClient(
     private val context: Context,
     private val api: HhApi
-): HhNetworkClient {
+) : HhNetworkClient {
 
     override suspend fun detailsVacancyRequest(requestId: String): Result<VacancyDetailsResponseDto> {
         return executeRequest { api.getVacancyDetails(requestId) }

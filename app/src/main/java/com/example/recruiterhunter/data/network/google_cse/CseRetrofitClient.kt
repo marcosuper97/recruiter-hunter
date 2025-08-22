@@ -5,5 +5,5 @@ import android.content.Context
 class CseRetrofitClient(
     private val context: Context,
     private val api: GoogleCseApi
-): GoogleNetworkClient {
+) : GoogleNetworkClient {
 }
