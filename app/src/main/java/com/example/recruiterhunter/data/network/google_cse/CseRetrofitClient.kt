@@ -1,0 +1,12 @@
+package com.example.recruiterhunter.data.network.google_cse
+
+import android.content.Context
+
+class CseRetrofitClient(
+    private val context: Context,
+    private val api: GoogleCseApi
+) : GoogleNetworkClient {
+    override suspend fun search(query: String): List<CseResponseDto> {
+        TODO("Not yet implemented")
+    }
+}
