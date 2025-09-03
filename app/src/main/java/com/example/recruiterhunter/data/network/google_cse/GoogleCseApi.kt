@@ -1,6 +1,7 @@
 package com.example.recruiterhunter.data.network.google_cse
 
 import com.example.recruiterhunter.BuildConfig
+import com.example.recruiterhunter.data.dto.google_cse.response.CseResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Query
 
