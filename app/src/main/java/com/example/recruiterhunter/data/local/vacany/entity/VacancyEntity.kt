@@ -2,7 +2,6 @@ package com.example.recruiterhunter.data.local.vacany.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import java.util.Date
 
 @Entity(tableName = "vacancies")
 data class VacancyEntity(
