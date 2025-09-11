@@ -7,4 +7,5 @@ import domain.model.vacancy.details.Vacancy
 interface VacanciesDetailsConverter {
     fun map(dto: VacancyDto): Vacancy
     fun mapToEntity(vacancy: Vacancy): VacancyEntity
+    fun map(vacancyEntity: VacancyEntity): Vacancy
 }
