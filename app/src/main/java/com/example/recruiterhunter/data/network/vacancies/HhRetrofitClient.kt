@@ -3,7 +3,7 @@ package com.example.recruiterhunter.data.network.vacancies
 import android.content.Context
 import com.example.recruiterhunter.data.dto.vacancies.filteres.areas.AreaDto
 import com.example.recruiterhunter.data.dto.vacancies.filteres.industry.IndustryGroupDto
-import com.example.recruiterhunter.data.dto.vacancies.response.full.VacancyDetailsResponseDto
+import com.example.recruiterhunter.data.dto.vacancies.response.details.VacancyDetailsResponseDto
 import com.example.recruiterhunter.data.dto.vacancies.response.preview.VacanciesResponseDto
 import com.example.recruiterhunter.data.network.common.isInternetAvailable
 import retrofit2.HttpException
