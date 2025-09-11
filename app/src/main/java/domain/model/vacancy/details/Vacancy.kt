@@ -1,6 +1,6 @@
-package domain.model.vacancy.full
+package domain.model.vacancy.details
 
-data class VacancyFull(
+data class Vacancy(
     val vacancyId: String,
     val vacancyName: String,
     val employerName: String?,
