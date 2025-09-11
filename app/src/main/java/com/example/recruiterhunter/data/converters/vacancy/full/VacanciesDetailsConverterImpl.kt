@@ -2,6 +2,7 @@ package com.example.recruiterhunter.data.converters.vacancy.full
 
 import com.example.recruiterhunter.data.dto.vacancies.response.details.VacancyDetailsResponseDto
 import com.example.recruiterhunter.data.local.vacany.entity.VacancyEntity
+import com.example.recruiterhunter.data.util.toCurrencySymbol
 import domain.model.vacancy.details.Vacancy
 
 class VacanciesDetailsConverterImpl() : VacanciesDetailsConverter {
@@ -14,7 +15,7 @@ class VacanciesDetailsConverterImpl() : VacanciesDetailsConverter {
             address = dto.address?.raw ?: dto.area.name,
             salaryFrom = dto.salary?.from?.toString() ?: "",
             salaryTo = dto.salary?.to?.toString() ?: "",
-            currency = dto.salary?.currency ?: "",
+            currency = dto.salary?.currency.toCurrencySymbol(),
             employmentForm = dto.employmentForm?.name ?: "",
             workFormat = dto.workFormat?.let {
                 it.map { workFormatDto -> workFormatDto.name }
@@ -22,7 +23,7 @@ class VacanciesDetailsConverterImpl() : VacanciesDetailsConverter {
             experience = dto.experience?.name ?: "",
             linkUrl = dto.linkUrl,
             description = dto.description,
-            keySkills = dto.keySkills.map { keySkillsDto ->  keySkillsDto.name},
+            keySkills = dto.keySkills.map { keySkillsDto -> keySkillsDto.name },
         )
     }
 
