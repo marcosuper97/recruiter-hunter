@@ -48,6 +48,22 @@ class VacanciesDetailsConverterImpl() : VacanciesDetailsConverter {
     }
 
     override fun map(vacancyEntity: VacancyEntity): Vacancy {
-        TODO("Not yet implemented")
+        return Vacancy(
+            vacancyId = vacancyEntity.id,
+            vacancyName = vacancyEntity.vacancyName,
+            employerName = vacancyEntity.employerName,
+            employerLogo = vacancyEntity.employerLogo,
+            address = vacancyEntity.address,
+            salaryFrom = vacancyEntity.salaryFrom,
+            salaryTo = vacancyEntity.salaryTo,
+            currency = vacancyEntity.currency,
+            employmentForm = vacancyEntity.employmentForm,
+            workFormat = vacancyEntity.workFormat,
+            experience = vacancyEntity.experience,
+            linkUrl = vacancyEntity.linkUrl,
+            description = vacancyEntity.description,
+            keySkills = vacancyEntity.keySkills,
+            isFavorite = true
+        )
     }
 }
