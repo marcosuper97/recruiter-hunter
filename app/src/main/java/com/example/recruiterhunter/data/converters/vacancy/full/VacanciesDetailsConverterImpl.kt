@@ -28,7 +28,23 @@ class VacanciesDetailsConverterImpl() : VacanciesDetailsConverter {
     }
 
     override fun mapToEntity(vacancy: Vacancy): VacancyEntity {
-        TODO("Not yet implemented")
+        return VacancyEntity(
+            id = vacancy.vacancyId,
+            vacancyName = vacancy.vacancyName,
+            employerName = vacancy.employerName,
+            employerLogo = vacancy.employerLogo,
+            address = vacancy.address,
+            salaryFrom = vacancy.salaryFrom,
+            salaryTo = vacancy.salaryTo,
+            currency = vacancy.currency,
+            employmentForm = vacancy.employmentForm,
+            workFormat = vacancy.workFormat,
+            experience = vacancy.experience,
+            linkUrl = vacancy.linkUrl,
+            description = vacancy.description,
+            keySkills = vacancy.keySkills,
+            additionTime = System.currentTimeMillis()
+        )
     }
 
     override fun map(vacancyEntity: VacancyEntity): Vacancy {
