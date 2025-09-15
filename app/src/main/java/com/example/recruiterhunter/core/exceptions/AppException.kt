@@ -1,31 +1,42 @@
 package com.example.recruiterhunter.core.exceptions
 
-sealed class AppException(override val message: String) : Exception() {
+sealed class AppException(
+    open val userMessage: String?,
+    open val originalCause: Throwable?
+) : Exception(userMessage, originalCause) {
+
     data class NetworkError(
-        override val message: String
-    ) : AppException(message)
+        override val userMessage: String?,
+        override val originalCause: Throwable?
+    ) : AppException(userMessage, originalCause)
 
     data class EmptyResult(
-        override val message: String
-    ) : AppException(message)
+        override val userMessage: String?,
+        override val originalCause: Throwable?
+    ) : AppException(userMessage, originalCause)
 
     data class AuthorizationError(
-        override val message: String
-    ) : AppException(message)
+        override val userMessage: String?,
+        override val originalCause: Throwable?
+    ) : AppException(userMessage, originalCause)
 
     data class ServerError(
-        override val message: String
-    ) : AppException(message)
+        override val userMessage: String?,
+        override val originalCause: Throwable?
+    ) : AppException(userMessage, originalCause)
 
     data class ClientError(
-        override val message: String
-    ) : AppException(message)
+        override val userMessage: String?,
+        override val originalCause: Throwable?
+    ) : AppException(userMessage, originalCause)
 
     data class HttpException(
-        override val message: String
-    ) : AppException(message)
+        override val userMessage: String?,
+        override val originalCause: Throwable?
+    ) : AppException(userMessage, originalCause)
 
     data class UnknownException(
-        override val message: String
-    ) : AppException(message)
+        override val userMessage: String?,
+        override val originalCause: Throwable?
+    ) : AppException(userMessage, originalCause)
 }
