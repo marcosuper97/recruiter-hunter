@@ -1,11 +1,12 @@
 package com.example.recruiterhunter.data.network.vacancies
 
 import android.content.Context
+import com.example.recruiterhunter.R
 import com.example.recruiterhunter.data.dto.vacancies.filteres.areas.AreaDto
 import com.example.recruiterhunter.data.dto.vacancies.filteres.industry.IndustryGroupDto
 import com.example.recruiterhunter.data.dto.vacancies.response.details.VacancyDetailsResponseDto
 import com.example.recruiterhunter.data.dto.vacancies.response.preview.VacanciesResponseDto
-import com.example.recruiterhunter.data.network.common.isInternetAvailable
+import com.example.recruiterhunter.data.network.common.NetworkCheck
 import retrofit2.HttpException
 import java.io.IOException
 
@@ -31,29 +32,19 @@ class HhRetrofitClient(
     }
 
     private suspend fun <T> executeRequest(block: suspend () -> T): Result<T> {
-        if (!isInternetAvailable(context)) {
-            return Result.failure(Hh)
+        if (!NetworkCheck.isInternetAvailable(context)) {
+            return Result.failure(IOException("Отсутствует соединение с интернетом"))
         }
         return try {
             Result.success(block())
         } catch (e: IOException) {
-            Result.failure(AppException.NoInternetConnection())
+            Result.failure(e)
         } catch (e: HttpException) {
             Result.failure(
-                when (e.code()) {
-                    NOT_FOUND_CODE -> AppException.NotFound()
-                    in SERVER_ERROR_CODE_MIN..SERVER_ERROR_CODE_MAX -> AppException.ServerError()
-                    else -> AppException.UnknownException()
-                }
+                e
             )
-        } catch (a: AppException.UnknownException) {
-            Result.failure(AppException.UnknownException())
+        } catch (e: Exception) {
+            Result.failure(e)
         }
-    }
-
-    companion object {
-        private const val NOT_FOUND_CODE = 404
-        private const val SERVER_ERROR_CODE_MIN = 500
-        private const val SERVER_ERROR_CODE_MAX = 599
     }
 }
