@@ -12,7 +12,7 @@ class HhRetrofitClient(
     private val requestEngine: RequestEngine
 ) : HhNetworkClient {
 
-    override suspend fun detailsVacancyRequest(requestId: String): Result<VacancyDetailsResponseDto> {
+    override suspend fun detailsVacancyRequest(requestId: Long): Result<VacancyDetailsResponseDto> {
         return requestEngine.doRequest { api.getVacancyDetails(requestId) }
     }
 

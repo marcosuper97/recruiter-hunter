@@ -6,7 +6,7 @@ import com.example.recruiterhunter.data.dto.vacancies.response.details.VacancyDe
 import com.example.recruiterhunter.data.dto.vacancies.response.preview.VacanciesResponseDto
 
 interface HhNetworkClient {
-    suspend fun detailsVacancyRequest(requestId: String): Result<VacancyDetailsResponseDto>
+    suspend fun detailsVacancyRequest(requestId: Long): Result<VacancyDetailsResponseDto>
     suspend fun vacanciesSearchRequest(requestQuery: Map<String, String>): Result<VacanciesResponseDto>
     suspend fun getAreas(): Result<List<AreaDto>>
     suspend fun getIndustries(): Result<List<IndustryGroupDto>>

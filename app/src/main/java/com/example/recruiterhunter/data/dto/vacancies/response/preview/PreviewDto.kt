@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class PreviewDto(
-    override val id: String,
+    override val id: Long,
     override val name: String,
     override val employer: EmployerDto,
     override val address: AddressDto?,
