@@ -1,7 +1,7 @@
 package domain.model.vacancy.details
 
 data class Vacancy(
-    val vacancyId: String,
+    val vacancyId: Long,
     val vacancyName: String,
     val employerName: String,
     val employerLogo: String,

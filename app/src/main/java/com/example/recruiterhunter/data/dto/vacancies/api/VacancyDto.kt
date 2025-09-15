@@ -6,7 +6,7 @@ import com.example.recruiterhunter.data.dto.vacancies.elements.SalaryDto
 import com.example.recruiterhunter.data.dto.vacancies.elements.VacancyAreaDto
 
 interface VacancyDto {
-    val id: String
+    val id: Long
     val name: String
     val employer: EmployerDto
     val address: AddressDto?

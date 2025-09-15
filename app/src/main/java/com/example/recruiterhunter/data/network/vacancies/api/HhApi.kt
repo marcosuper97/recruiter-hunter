@@ -26,7 +26,7 @@ interface HhApi {
     )
     @GET("vacancies/{vacancy_id}")
     suspend fun getVacancyDetails(
-        @Path("vacancy_id") vacancyId: String
+        @Path("vacancy_id") vacancyId: Long
     ): VacancyDetailsResponseDto
 
     @Headers(
