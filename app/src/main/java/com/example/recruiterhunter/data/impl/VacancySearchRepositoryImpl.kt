@@ -10,6 +10,6 @@ class VacancySearchRepositoryImpl(
     private val vacanciesPreviewConverter: VacanciesPreviewConverter
 ) : VacancySearchRepository {
     override suspend fun doRequest(query: String, page: Int): Result<VacancyPreview> = runCatching {
-        hhRetrofitClient.vacanciesSearchRequest()
+
     }
 }

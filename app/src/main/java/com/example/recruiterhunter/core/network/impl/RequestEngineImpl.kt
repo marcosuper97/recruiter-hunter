@@ -9,9 +9,8 @@ import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-class RequestEngineImpl() : RequestEngine {
+class RequestEngineImpl(private val context: Context) : RequestEngine {
     override suspend fun <T> doRequest(
-        context: Context,
         block: suspend () -> T
     ): Result<T> {
         if (!NetworkCheck.isInternetAvailable(context)) {
