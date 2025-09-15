@@ -3,7 +3,7 @@ package com.example.recruiterhunter.data.network.vacancies.request_builder.impl
 import com.example.recruiterhunter.data.dto.vacancies.request.VacancySearchRequest
 import com.example.recruiterhunter.data.network.vacancies.request_builder.RequestBuildService
 
-class RequestBuildServiceImpl(): RequestBuildService {
+class RequestBuildServiceImpl() : RequestBuildService {
     override suspend fun buildRequest(
         vacancySearchRequest: VacancySearchRequest
     ): Map<String, String> = buildMap {
