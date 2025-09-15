@@ -1,6 +1,8 @@
 package com.example.recruiterhunter.di
 
 import androidx.room.Room
+import com.example.recruiterhunter.core.network.RequestEngine
+import com.example.recruiterhunter.core.network.impl.RequestEngineImpl
 import com.example.recruiterhunter.data.converters.vacancy.full.VacanciesDetailsConverter
 import com.example.recruiterhunter.data.converters.vacancy.full.VacanciesDetailsConverterImpl
 import com.example.recruiterhunter.data.converters.vacancy.preview.VacanciesPreviewConverter
@@ -11,6 +13,8 @@ import com.example.recruiterhunter.data.local.db.AppDb
 import com.example.recruiterhunter.data.local.filters.entity.FiltersEntity
 import com.example.recruiterhunter.data.network.google_cse.GoogleCseApi
 import com.example.recruiterhunter.data.network.vacancies.HhApi
+import com.example.recruiterhunter.data.network.vacancies.HhNetworkClient
+import com.example.recruiterhunter.data.network.vacancies.HhRetrofitClient
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -35,6 +39,10 @@ val dataModule = module {
             .build()
             .create(HhApi::class.java)
 
+    }
+
+    single<HhNetworkClient> {
+        HhRetrofitClient(get(), get())
     }
 
     single<GoogleCseApi> {
@@ -71,8 +79,12 @@ val dataModule = module {
         VacanciesPreviewConverterImpl(get())
     }
 
-    single<VacanciesDetailsConverter>{
+    single<VacanciesDetailsConverter> {
         VacanciesDetailsConverterImpl()
+    }
+
+    single<RequestEngine> {
+        RequestEngineImpl(androidContext())
     }
 }
 
