@@ -1,4 +1,4 @@
-package com.example.recruiterhunter.domain.repository
+package com.example.recruiterhunter.domain.repository.filters
 
 import domain.model.filters.Filters
 import kotlinx.coroutines.flow.Flow

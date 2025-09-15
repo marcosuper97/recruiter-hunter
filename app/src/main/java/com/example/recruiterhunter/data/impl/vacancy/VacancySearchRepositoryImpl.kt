@@ -1,4 +1,4 @@
-package com.example.recruiterhunter.data.impl
+package com.example.recruiterhunter.data.impl.vacancy
 
 import com.example.recruiterhunter.data.converters.vacancy.preview.VacanciesPreviewConverter
 import com.example.recruiterhunter.data.dto.vacancies.request.VacancySearchRequest

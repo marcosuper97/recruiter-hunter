@@ -1,7 +1,7 @@
 package com.example.recruiterhunter.di
 
-import com.example.recruiterhunter.data.impl.VacancyDetailsRepositoryImpl
-import com.example.recruiterhunter.data.impl.VacancySearchRepositoryImpl
+import com.example.recruiterhunter.data.impl.vacancy.VacancyDetailsRepositoryImpl
+import com.example.recruiterhunter.data.impl.vacancy.VacancySearchRepositoryImpl
 import domain.repository.VacancyDetailsRepository
 import domain.repository.VacancySearchRepository
 import org.koin.dsl.module
