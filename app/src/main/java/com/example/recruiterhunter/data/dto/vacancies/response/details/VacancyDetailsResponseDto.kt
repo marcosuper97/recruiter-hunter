@@ -1,4 +1,4 @@
-package com.example.recruiterhunter.data.dto.vacancies.response.full
+package com.example.recruiterhunter.data.dto.vacancies.response.details
 
 import com.example.recruiterhunter.data.dto.vacancies.api.VacancyDto
 import com.example.recruiterhunter.data.dto.vacancies.elements.AddressDto

@@ -1,12 +1,7 @@
-package com.example.recruiterhunter.data.local.vacany.entity
+package domain.model.vacancy.details
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity(tableName = "vacancies")
-data class VacancyEntity(
-    @PrimaryKey(autoGenerate = true)
-    val id: String,
+data class Vacancy(
+    val vacancyId: String,
     val vacancyName: String,
     val employerName: String,
     val employerLogo: String,
@@ -20,5 +15,5 @@ data class VacancyEntity(
     val linkUrl: String,
     val description: String,
     val keySkills: List<String>,
-    val additionTime: Long
+    val isFavorite: Boolean = false
 )
