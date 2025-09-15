@@ -1,10 +1,9 @@
-package com.example.recruiterhunter.data.network.google_cse
+package com.example.recruiterhunter.data.network.google_cse.api
 
 import com.example.recruiterhunter.BuildConfig
 import com.example.recruiterhunter.data.dto.google_cse.response.CseResponseDto
 import retrofit2.http.GET
 import retrofit2.http.Query
-
 
 interface GoogleCseApi {
     @GET("customsearch/v1")

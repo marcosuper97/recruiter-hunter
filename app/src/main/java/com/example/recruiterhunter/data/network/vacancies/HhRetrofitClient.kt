@@ -1,10 +1,11 @@
 package com.example.recruiterhunter.data.network.vacancies
 
-import com.example.recruiterhunter.core.network.RequestEngine
+import com.example.recruiterhunter.core.network.request_engine.RequestEngine
 import com.example.recruiterhunter.data.dto.vacancies.filteres.areas.AreaDto
 import com.example.recruiterhunter.data.dto.vacancies.filteres.industry.IndustryGroupDto
 import com.example.recruiterhunter.data.dto.vacancies.response.details.VacancyDetailsResponseDto
 import com.example.recruiterhunter.data.dto.vacancies.response.preview.VacanciesResponseDto
+import com.example.recruiterhunter.data.network.vacancies.api.HhApi
 
 class HhRetrofitClient(
     private val api: HhApi,

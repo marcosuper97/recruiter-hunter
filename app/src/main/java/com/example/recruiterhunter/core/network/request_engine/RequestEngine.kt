@@ -1,6 +1,4 @@
-package com.example.recruiterhunter.core.network
-
-import android.content.Context
+package com.example.recruiterhunter.core.network.request_engine
 
 interface RequestEngine {
     suspend fun <T> doRequest(

@@ -6,6 +6,11 @@ import org.koin.dsl.module
 
 val repositoryModule = module {
     single<VacancySearchRepository> {
-        VacancySearchRepositoryImpl(get(), get())
+        VacancySearchRepositoryImpl(
+            get(),
+            get(),
+            get(),
+            get()
+        )
     }
 }

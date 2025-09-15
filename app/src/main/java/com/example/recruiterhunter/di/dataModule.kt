@@ -1,8 +1,8 @@
 package com.example.recruiterhunter.di
 
 import androidx.room.Room
-import com.example.recruiterhunter.core.network.RequestEngine
-import com.example.recruiterhunter.core.network.impl.RequestEngineImpl
+import com.example.recruiterhunter.core.network.request_engine.RequestEngine
+import com.example.recruiterhunter.core.network.request_engine.impl.RequestEngineImpl
 import com.example.recruiterhunter.data.converters.vacancy.full.VacanciesDetailsConverter
 import com.example.recruiterhunter.data.converters.vacancy.full.VacanciesDetailsConverterImpl
 import com.example.recruiterhunter.data.converters.vacancy.preview.VacanciesPreviewConverter
@@ -10,14 +10,12 @@ import com.example.recruiterhunter.data.converters.vacancy.preview.VacanciesPrev
 import com.example.recruiterhunter.data.converters.vacancy.preview.vacancies_list.VacanciesListConverter
 import com.example.recruiterhunter.data.converters.vacancy.preview.vacancies_list.VacanciesListConverterImpl
 import com.example.recruiterhunter.data.local.db.AppDb
-import com.example.recruiterhunter.data.local.filters.entity.FiltersEntity
-import com.example.recruiterhunter.data.network.google_cse.GoogleCseApi
-import com.example.recruiterhunter.data.network.vacancies.HhApi
+import com.example.recruiterhunter.data.local.filters.dao.FiltersDao
+import com.example.recruiterhunter.data.local.vacany.dao.VacancyDao
+import com.example.recruiterhunter.data.network.google_cse.api.GoogleCseApi
 import com.example.recruiterhunter.data.network.vacancies.HhNetworkClient
 import com.example.recruiterhunter.data.network.vacancies.HhRetrofitClient
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.example.recruiterhunter.data.network.vacancies.api.HhApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import org.koin.android.ext.koin.androidContext
@@ -56,20 +54,14 @@ val dataModule = module {
 
     }
 
-    single {
-        val db = Room.databaseBuilder(androidContext(), AppDb::class.java, "database.db")
+    single<AppDb> {
+        Room.databaseBuilder(androidContext(), AppDb::class.java, "database.db")
             .fallbackToDestructiveMigration(false)
             .build()
-        val dao = db.filtersDao()
-        CoroutineScope(Dispatchers.IO).launch {
-            dao.insert(
-                FiltersEntity(
-                    id = 1
-                )
-            )
-        }
-        db
     }
+
+    single<FiltersDao> { get<AppDb>().filtersDao() }
+    single<VacancyDao> { get<AppDb>().vacanciesDao() }
 
     single<VacanciesListConverter> {
         VacanciesListConverterImpl()

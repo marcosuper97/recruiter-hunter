@@ -1,4 +1,4 @@
-package com.example.recruiterhunter.data.network.vacancies
+package com.example.recruiterhunter.data.network.vacancies.api
 
 import com.example.recruiterhunter.BuildConfig
 import com.example.recruiterhunter.data.dto.vacancies.filteres.areas.AreaDto

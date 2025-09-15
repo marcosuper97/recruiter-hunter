@@ -1,9 +1,9 @@
-package com.example.recruiterhunter.core.network.impl
+package com.example.recruiterhunter.core.network.request_engine.impl
 
 import android.content.Context
 import com.example.recruiterhunter.core.exceptions.AppException
-import com.example.recruiterhunter.core.network.RequestEngine
-import com.example.recruiterhunter.data.network.common.NetworkCheck
+import com.example.recruiterhunter.core.network.request_engine.RequestEngine
+import com.example.recruiterhunter.core.network.network_checker.NetworkCheck
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException

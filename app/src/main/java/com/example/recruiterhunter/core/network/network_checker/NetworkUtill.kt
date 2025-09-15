@@ -1,4 +1,4 @@
-package com.example.recruiterhunter.data.network.common
+package com.example.recruiterhunter.core.network.network_checker
 
 import android.content.Context
 import android.net.ConnectivityManager
