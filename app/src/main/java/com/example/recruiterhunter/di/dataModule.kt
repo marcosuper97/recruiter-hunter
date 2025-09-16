@@ -83,7 +83,7 @@ val dataModule = module {
         FiltersConverterImpl()
     }
 
-    single<AreasConverter>{
+    single<AreasConverter> {
         AreasConverterImpl()
     }
 
