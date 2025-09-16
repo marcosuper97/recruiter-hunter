@@ -12,7 +12,6 @@ class FiltersNetworkRepositoryImpl(
     private val areasConverter: AreasConverter,
     private val industriesConverter: IndustriesConverter
 ) : FiltersNetworkRepository {
-
     private var cachedAreas: Result<List<Areas>>? = null
     private var cachedIndustries: Result<List<Industry>>? = null
 
@@ -23,9 +22,10 @@ class FiltersNetworkRepositoryImpl(
             cachedAreas = result
         }
 
-
     override suspend fun getIndustries(): Result<List<Industry>> =
-        cachedIndustries ?: hhNetworkClient.getIndustries().map { industryGroupDtos ->
-            industriesConverter.map(industryGroupDtos)
+        cachedIndustries ?: hhNetworkClient.getIndustries().map { industryGroupDto ->
+            industriesConverter.map(industryGroupDto)
+        }.also { result ->
+            cachedIndustries = result
         }
 }
