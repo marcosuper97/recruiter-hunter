@@ -7,6 +7,8 @@ import com.example.recruiterhunter.data.converters.areas.AreasConverter
 import com.example.recruiterhunter.data.converters.areas.AreasConverterImpl
 import com.example.recruiterhunter.data.converters.filters.FiltersConverter
 import com.example.recruiterhunter.data.converters.filters.FiltersConverterImpl
+import com.example.recruiterhunter.data.converters.industries.IndustriesConverter
+import com.example.recruiterhunter.data.converters.industries.IndustriesConverterImpl
 import com.example.recruiterhunter.data.converters.vacancy.full.VacanciesDetailsConverter
 import com.example.recruiterhunter.data.converters.vacancy.full.VacanciesDetailsConverterImpl
 import com.example.recruiterhunter.data.converters.vacancy.preview.VacanciesPreviewConverter
@@ -85,6 +87,10 @@ val dataModule = module {
 
     single<AreasConverter> {
         AreasConverterImpl()
+    }
+
+    single<IndustriesConverter> {
+        IndustriesConverterImpl()
     }
 
     single<RequestEngine> {
