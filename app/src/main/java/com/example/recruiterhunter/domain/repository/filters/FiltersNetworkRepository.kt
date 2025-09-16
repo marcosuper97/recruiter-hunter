@@ -4,6 +4,6 @@ import domain.model.filters.Areas
 import domain.model.filters.Industry
 
 interface FiltersNetworkRepository {
-    suspend fun getAreas(): Areas
-    suspend fun getIndustries(): Industry
+    suspend fun getAreas(): Result<List<Areas>>
+    suspend fun getIndustries(): Result<List<Industry>>
 }

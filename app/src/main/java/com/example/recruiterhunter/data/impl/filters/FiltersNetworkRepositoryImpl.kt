@@ -7,15 +7,21 @@ import domain.model.filters.Areas
 import domain.model.filters.Industry
 
 class FiltersNetworkRepositoryImpl(
-    private val hhNetworkClient: HhNetworkClient,
-    private val areasConverter: AreasConverter
+    private val hhNetworkClient: HhNetworkClient, private val areasConverter: AreasConverter
 ) : FiltersNetworkRepository {
-    override suspend fun getAreas(): Areas {
+
+    private var cachedAreas: Result<List<Areas>>? = null
+    private var cachedIndustries: Result<List<Industry>>? = null
+
+    override suspend fun getAreas(): Result<List<Areas>> =
+        cachedAreas ?: hhNetworkClient.getAreas().map { listAreasDto ->
+            areasConverter.map(listAreasDto)
+        }.also { result ->
+            cachedAreas = result
+        }
+
+
+    override suspend fun getIndustries(): Result<List<Industry>> {
         TODO("Not yet implemented")
     }
-
-    override suspend fun getIndustries(): Industry {
-        TODO("Not yet implemented")
-    }
-
 }
