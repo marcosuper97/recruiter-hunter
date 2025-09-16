@@ -4,8 +4,12 @@ import com.example.recruiterhunter.data.dto.vacancies.filteres.industry.Industry
 import domain.model.filters.Industry
 
 class IndustriesConverterImpl(): IndustriesConverter {
-    override suspend fun map(industryDto: IndustryDto): Industry = Industry(
-        id = TODO(),
-        name = TODO()
-    )
+    override suspend fun map(industryDto: List<IndustryDto>): List<Industry> = industryDto.map{
+        industryDto ->
+        Industry(
+            id = industryDto.id,
+            name = industryDto.name,
+            select = false
+        )
+    }
 }

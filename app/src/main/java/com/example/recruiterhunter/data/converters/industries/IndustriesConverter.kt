@@ -4,5 +4,5 @@ import com.example.recruiterhunter.data.dto.vacancies.filteres.industry.Industry
 import domain.model.filters.Industry
 
 interface IndustriesConverter {
-    suspend fun map(industryDto: IndustryDto): Industry
+    suspend fun map(industryDto: List<IndustryDto>): List<Industry>
 }
