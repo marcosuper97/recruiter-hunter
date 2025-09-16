@@ -1,10 +1,9 @@
 package com.example.recruiterhunter.data.converters.industries
 
-import com.example.recruiterhunter.data.dto.vacancies.filteres.industry.IndustryDto
 import com.example.recruiterhunter.data.dto.vacancies.filteres.industry.IndustryGroupDto
 import domain.model.filters.Industry
 
-class IndustriesConverterImpl(): IndustriesConverter {
+class IndustriesConverterImpl() : IndustriesConverter {
     override suspend fun map(industryDto: List<IndustryGroupDto>): List<Industry> =
         industryDto.flatMap { groupDto ->
             groupDto.industries.map { industryDto ->
