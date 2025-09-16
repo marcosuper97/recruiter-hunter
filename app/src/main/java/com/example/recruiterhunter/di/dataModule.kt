@@ -3,6 +3,8 @@ package com.example.recruiterhunter.di
 import androidx.room.Room
 import com.example.recruiterhunter.core.network.request_engine.RequestEngine
 import com.example.recruiterhunter.core.network.request_engine.impl.RequestEngineImpl
+import com.example.recruiterhunter.data.converters.areas.AreasConverter
+import com.example.recruiterhunter.data.converters.areas.AreasConverterImpl
 import com.example.recruiterhunter.data.converters.filters.FiltersConverter
 import com.example.recruiterhunter.data.converters.filters.FiltersConverterImpl
 import com.example.recruiterhunter.data.converters.vacancy.full.VacanciesDetailsConverter
@@ -79,6 +81,10 @@ val dataModule = module {
 
     single<FiltersConverter> {
         FiltersConverterImpl()
+    }
+
+    single<AreasConverter>{
+        AreasConverterImpl()
     }
 
     single<RequestEngine> {
