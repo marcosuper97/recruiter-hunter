@@ -12,7 +12,7 @@ class FiltersDbRepositoryImpl(
     private val filtersConverter: FiltersConverter,
     private val filtersDao: FiltersDao
 ) : FiltersDbRepository {
-    override suspend fun fetchFilters(): Flow<Filters> =
+    override fun fetchFilters(): Flow<Filters> =
         filtersDao.getFilters().map { filtersEntity ->
             filtersConverter.map(filtersEntity)
         }
@@ -24,6 +24,8 @@ class FiltersDbRepositoryImpl(
     override suspend fun clearFilters() {
         filtersDao.update(CLEAR_FILTERS)
     }
+
+    override fun hasAnyFilters(): Flow<Boolean> = filtersDao.hasAnyFilters()
 
     companion object {
         private val CLEAR_FILTERS = FiltersEntity()

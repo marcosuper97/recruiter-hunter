@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.SharedFlow
 interface FiltersInteractor {
     val areasFlow: SharedFlow<Result<List<Areas>>>
     val industryFlow: SharedFlow<Result<List<Industry>>>
-    suspend fun fetchFilters(): Flow<Filters>
+    fun fetchFilters(): Flow<Filters>
+    fun hasAnyFilters(): Flow<Boolean>
 
     suspend fun updateFilters(filters: Filters)
     suspend fun clearFilters()

@@ -20,7 +20,8 @@ class FiltersInteractorImpl(
     override val areasFlow: SharedFlow<Result<List<Areas>>> get() = _areasFlow
     override val industryFlow: SharedFlow<Result<List<Industry>>> get() = _industryFlow
 
-    override suspend fun fetchFilters(): Flow<Filters> = filtersDbRepository.fetchFilters()
+    override fun fetchFilters(): Flow<Filters> = filtersDbRepository.fetchFilters()
+    override fun hasAnyFilters(): Flow<Boolean> = filtersDbRepository.hasAnyFilters()
 
     override suspend fun fetchData() {
         val areasDate = filtersNetworkRepository.getAreas()
@@ -36,5 +37,4 @@ class FiltersInteractorImpl(
     override suspend fun clearFilters() {
         filtersDbRepository.clearFilters()
     }
-
 }
