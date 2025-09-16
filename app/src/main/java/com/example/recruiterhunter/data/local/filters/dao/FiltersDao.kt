@@ -17,7 +17,8 @@ interface FiltersDao {
     @Update
     suspend fun update(entity: FiltersEntity)
 
-    @Query("""
+    @Query(
+        """
         SELECT 
             CASE 
                 WHEN country IS NOT NULL OR 
@@ -33,6 +34,7 @@ interface FiltersDao {
             END as has_filters
         FROM filters
         WHERE id = 0
-    """)
+    """
+    )
     fun hasAnyFilters(): Flow<Boolean>
 }

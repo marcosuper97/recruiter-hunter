@@ -7,5 +7,5 @@ interface FiltersDbRepository {
     fun fetchFilters(): Flow<Filters>
     suspend fun updateFilters(filters: Filters)
     suspend fun clearFilters()
-    fun hasAnyFilters():Flow<Boolean>
+    fun hasAnyFilters(): Flow<Boolean>
 }
