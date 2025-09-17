@@ -1,9 +1,11 @@
 package com.example.recruiterhunter.di
 
+import com.example.recruiterhunter.data.impl.favorites.FavoritesRepositoryImpl
 import com.example.recruiterhunter.data.impl.filters.FiltersDbRepositoryImpl
 import com.example.recruiterhunter.data.impl.filters.FiltersNetworkRepositoryImpl
 import com.example.recruiterhunter.data.impl.vacancy.VacancyDetailsRepositoryImpl
 import com.example.recruiterhunter.data.impl.vacancy.VacancySearchRepositoryImpl
+import com.example.recruiterhunter.domain.repository.favorites.FavoritesRepository
 import com.example.recruiterhunter.domain.repository.filters.FiltersDbRepository
 import com.example.recruiterhunter.domain.repository.filters.FiltersNetworkRepository
 import domain.repository.VacancyDetailsRepository
@@ -38,5 +40,9 @@ val repositoryModule = module {
             get(),
             get()
         )
+    }
+
+    single<FavoritesRepository> {
+        FavoritesRepositoryImpl(get(), get())
     }
 }
