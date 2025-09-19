@@ -8,7 +8,7 @@ class CseRetrofitClient(
     private val context: Context,
     private val api: GoogleCseApi
 ) : GoogleNetworkClient {
-    override suspend fun search(query: String): List<CseResponseDto> {
+    override suspend fun search(query: String): CseResponseDto {
         TODO("Not yet implemented")
     }
 }
