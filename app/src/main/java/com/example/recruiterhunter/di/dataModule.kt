@@ -9,6 +9,10 @@ import com.example.recruiterhunter.data.converters.filters.FiltersConverter
 import com.example.recruiterhunter.data.converters.filters.FiltersConverterImpl
 import com.example.recruiterhunter.data.converters.industries.IndustriesConverter
 import com.example.recruiterhunter.data.converters.industries.IndustriesConverterImpl
+import com.example.recruiterhunter.data.converters.sce.full_response.CseResponseConverter
+import com.example.recruiterhunter.data.converters.sce.full_response.CseResponseConverterImpl
+import com.example.recruiterhunter.data.converters.sce.item.CseItemResponseConverter
+import com.example.recruiterhunter.data.converters.sce.item.CseItemResponseConverterImpl
 import com.example.recruiterhunter.data.converters.vacancy.full.VacanciesDetailsConverter
 import com.example.recruiterhunter.data.converters.vacancy.full.VacanciesDetailsConverterImpl
 import com.example.recruiterhunter.data.converters.vacancy.preview.VacanciesPreviewConverter
@@ -91,6 +95,14 @@ val dataModule = module {
 
     single<IndustriesConverter> {
         IndustriesConverterImpl()
+    }
+
+    single<CseItemResponseConverter> {
+        CseItemResponseConverterImpl()
+    }
+
+    single<CseResponseConverter> {
+        CseResponseConverterImpl(get())
     }
 
     single<RequestEngine> {
