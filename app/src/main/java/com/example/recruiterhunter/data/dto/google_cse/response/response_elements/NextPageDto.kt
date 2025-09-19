@@ -5,6 +5,6 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NextPageDto(
     val startIndex: Int,
-    val totalResults: String,
+    val totalResults: Int,
     val searchTherms: String,
 )

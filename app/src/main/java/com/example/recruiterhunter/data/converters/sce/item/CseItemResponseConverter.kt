@@ -4,5 +4,5 @@ import com.example.recruiterhunter.data.dto.google_cse.response.CseItemResponseD
 import domain.model.cse.item.ItemCse
 
 interface CseItemResponseConverter {
-    suspend fun map(cseItemResponseDto: CseItemResponseDto): ItemCse
+    suspend fun map(cseItemResponseDto: List<CseItemResponseDto>?): List<ItemCse>
 }
