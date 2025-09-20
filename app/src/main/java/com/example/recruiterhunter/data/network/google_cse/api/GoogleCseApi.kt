@@ -10,7 +10,7 @@ interface GoogleCseApi {
     suspend fun search(
         @Query("key") apiKey: String = BuildConfig.GOOGLE_SEARCH_KEY,
         @Query("cx") cx: String = BuildConfig.CUSTOM_SEARCH_ENGINE,
-        @Query("start") start: Int = 1,
+        @Query("start") start: Int,
         @Query("q") query: String,
     ): CseResponseDto
 }

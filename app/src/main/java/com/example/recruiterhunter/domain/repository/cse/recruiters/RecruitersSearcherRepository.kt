@@ -1,0 +1,7 @@
+package com.example.recruiterhunter.domain.repository.cse.recruiters
+
+import domain.model.cse.response_list.ResponseListCse
+
+interface RecruitersSearcherRepository {
+    suspend fun doRequest(query: String, startIndex: Int): Result<ResponseListCse>
+}
