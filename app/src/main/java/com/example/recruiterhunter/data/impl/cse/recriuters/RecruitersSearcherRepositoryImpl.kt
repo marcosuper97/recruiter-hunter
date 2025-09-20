@@ -10,6 +10,12 @@ class RecruitersSearcherRepositoryImpl(
     private val googleNetworkClient: GoogleNetworkClient
 ) :
     RecruitersSearcherRepository {
-    override suspend fun doRequest(query: String): ResponseListCse =
-        cseResponseConverter.map(googleNetworkClient.search(query))
+    override suspend fun doRequest(
+        query: String,
+        startIndex: Int
+    ): Result<ResponseListCse> = googleNetworkClient
+        .search(query, startIndex)
+        .map { data ->
+            cseResponseConverter.map(data)
+        }
 }
