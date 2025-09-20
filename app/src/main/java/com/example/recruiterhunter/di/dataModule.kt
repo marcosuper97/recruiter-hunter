@@ -71,6 +71,7 @@ val dataModule = module {
     }
 
     single<FiltersDao> { get<AppDb>().filtersDao() }
+
     single<VacancyDao> { get<AppDb>().vacanciesDao() }
 
     single<VacanciesListConverter> {
