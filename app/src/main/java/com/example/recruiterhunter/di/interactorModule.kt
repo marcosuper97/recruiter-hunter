@@ -1,9 +1,11 @@
 package com.example.recruiterhunter.di
 
+import com.example.recruiterhunter.domain.impl.cse.posts.PostsSearcherInteractorImpl
 import com.example.recruiterhunter.domain.impl.cse.rectuiters.RecruitersSearchInteractorImpl
 import com.example.recruiterhunter.domain.impl.favorites.FavoritesInteractorImpl
 import com.example.recruiterhunter.domain.impl.filters.FiltersInteractorImpl
 import com.example.recruiterhunter.domain.impl.vacancy.VacancyDetailsInteractorImpl
+import com.example.recruiterhunter.domain.interactor.cse.posts.PostsSearcherInteractor
 import com.example.recruiterhunter.domain.interactor.cse.recruiters.RecruitersSearchInteractor
 import com.example.recruiterhunter.domain.interactor.favorites.FavoritesInteractor
 import com.example.recruiterhunter.domain.interactor.filters.FiltersInteractor
@@ -27,6 +29,10 @@ val interactorModule = module {
 
     single<FiltersInteractor> {
         FiltersInteractorImpl(get(), get())
+    }
+
+    single<PostsSearcherInteractor> {
+        PostsSearcherInteractorImpl(get())
     }
 
     single<FavoritesInteractor> {
