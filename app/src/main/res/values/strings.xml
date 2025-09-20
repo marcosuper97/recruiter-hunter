@@ -1,3 +1,30 @@
 <resources>
     <string name="app_name">Recruiter hunter</string>
+    <string name="internet_is_unavailable">Отсутствует соединение с сетью</string>
+
+    <!-- Булин меотды. для юзеров "%1$s"(компания) "%2$s" (город) -->
+    <!-- для постов "%1$s"(компания) "%2$s" (название вакансии) -->
+    <string name="setka_users">
+        site:setka.ru (users) "%1$s" "%2$s" ("Recruiter" OR "Talent Acquisition" OR "Talent Manager" OR "Talent Partner" OR "Sourcing" OR "Headhunter" OR "HR Manager" OR "HR Specialist" OR "HR Business Partner" OR "HRBP" OR "People Partner" OR "People Ops" OR "Hiring Manager" OR "Recruitment Consultant" OR "Staffing Specialist" OR "Talent Scout" OR "People Manager" OR "HR Director" OR "HRD" OR "People Operations" OR "Рекрутер" OR "Эйчар" OR "HR-менеджер" OR "Менеджер по подбору персоналу" OR "Кадровик") -site:setka.ru/posts -site:setka.ru/communities
+    </string>
+
+    <string name="setka_posts">
+        site:setka.ru (posts) "%1$s" "%2$s" -site:setka.ru/users -site:setka.ru/communities
+    </string>
+
+    <string name="tenchat_users">
+        site:tenchat.ru "%1$s" "%2$s" ("Recruiter" OR "Talent Acquisition" OR "Talent Manager" OR "Talent Partner" OR "Sourcing" OR "Headhunter" OR "HR Manager" OR "HR Specialist" OR "HR Business Partner" OR "HRBP" OR "People Partner" OR "People Ops" OR "Hiring Manager" OR "Recruitment Consultant" OR "Рекрутер" OR "Эйчар" OR "HR-менеджер" OR "HR специалист" OR "HR бизнес партнер" OR "Менеджер по подбору персонала" OR "Специалист по подбору персонала" OR "Подбор персонала" OR "Специалист по кадрам" OR "Менеджер по персоналу" OR "Кадровик" OR "Хэдхантер") -inurl:/media/
+    </string>
+
+    <string name="tenchat_posts">
+        site:tenchat.ru inurl:/media/ "%1$s" "%2$s"
+    </string>
+
+    <string name="linkedin_users">
+        site:linkedin.com inurl:in/ "%1$s" "%2$s" ("Recruiter" OR "Talent Acquisition" OR "Talent Manager" OR "Talent Partner" OR "Sourcing" OR "Headhunter" OR "HR Manager" OR "HR Specialist" OR "HR Business Partner" OR "HRBP" OR "People Partner" OR "People Ops" OR "Hiring Manager" OR "Recruitment Consultant" OR "Staffing Specialist" OR "Talent Scout" OR "People Manager" OR "HR Director" OR "HRD" OR "People Operations" OR "Рекрутер" OR "Эйчар" OR "HR-менеджер" OR "Менеджер по подбору персоналу" OR "Кадровик") -inurl:posts -inurl:company/ -inurl:feed/update/
+    </string>
+
+    <string name="linkedin_posts">
+        site:linkedin.com ("%1$s" "%2$s") (inurl:posts OR inurl:feed OR inurl:feed/update) -inurl:in/ -inurl:company/
+    </string>
 </resources>
