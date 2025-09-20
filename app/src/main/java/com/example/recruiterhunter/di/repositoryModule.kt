@@ -1,11 +1,13 @@
 package com.example.recruiterhunter.di
 
+import com.example.recruiterhunter.data.impl.cse.posts.PostsSearcherRepositoryImpl
 import com.example.recruiterhunter.data.impl.cse.recriuters.RecruitersSearcherRepositoryImpl
 import com.example.recruiterhunter.data.impl.favorites.FavoritesRepositoryImpl
 import com.example.recruiterhunter.data.impl.filters.FiltersDbRepositoryImpl
 import com.example.recruiterhunter.data.impl.filters.FiltersNetworkRepositoryImpl
 import com.example.recruiterhunter.data.impl.vacancy.VacancyDetailsRepositoryImpl
 import com.example.recruiterhunter.data.impl.vacancy.VacancySearchRepositoryImpl
+import com.example.recruiterhunter.domain.repository.cse.posts.PostsSearcherRepository
 import com.example.recruiterhunter.domain.repository.cse.recruiters.RecruitersSearcherRepository
 import com.example.recruiterhunter.domain.repository.favorites.FavoritesRepository
 import com.example.recruiterhunter.domain.repository.filters.FiltersDbRepository
@@ -34,6 +36,13 @@ val repositoryModule = module {
 
     single<RecruitersSearcherRepository> {
         RecruitersSearcherRepositoryImpl(
+            get(),
+            get()
+        )
+    }
+
+    single<PostsSearcherRepository> {
+        PostsSearcherRepositoryImpl(
             get(),
             get()
         )
