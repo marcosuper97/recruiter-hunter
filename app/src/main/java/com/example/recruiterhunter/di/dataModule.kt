@@ -19,9 +19,9 @@ import com.example.recruiterhunter.data.converters.vacancy.preview.VacanciesPrev
 import com.example.recruiterhunter.data.converters.vacancy.preview.VacanciesPreviewConverterImpl
 import com.example.recruiterhunter.data.converters.vacancy.preview.vacancies_list.VacanciesListConverter
 import com.example.recruiterhunter.data.converters.vacancy.preview.vacancies_list.VacanciesListConverterImpl
-import com.example.recruiterhunter.data.local.db.AppDb
-import com.example.recruiterhunter.data.local.filters.dao.FiltersDao
-import com.example.recruiterhunter.data.local.vacany.dao.VacancyDao
+import com.example.recruiterhunter.data.local.roomdb.db.AppDb
+import com.example.recruiterhunter.data.local.roomdb.filters.dao.FiltersDao
+import com.example.recruiterhunter.data.local.roomdb.vacany.dao.VacancyDao
 import com.example.recruiterhunter.data.network.google_cse.api.GoogleCseApi
 import com.example.recruiterhunter.data.network.vacancies.HhNetworkClient
 import com.example.recruiterhunter.data.network.vacancies.HhRetrofitClient

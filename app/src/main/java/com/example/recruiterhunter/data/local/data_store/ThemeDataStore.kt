@@ -1,9 +1,9 @@
-package com.example.recruiterhunter.domain.repository.theme_changer
+package com.example.recruiterhunter.data.local.data_store
 
 import com.example.recruiterhunter.core.theme_changer.state.ActualTheme
 import kotlinx.coroutines.flow.Flow
 
-interface ThemeChangerRepository {
+interface ThemeDataStore {
     fun getTheme(): Flow<ActualTheme>
     suspend fun changeDark(theme: ActualTheme)
 }

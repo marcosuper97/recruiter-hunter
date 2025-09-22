@@ -1,9 +1,9 @@
-package com.example.recruiterhunter.data.local.vacany.dao
+package com.example.recruiterhunter.data.local.roomdb.vacany.dao
 
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.recruiterhunter.data.local.vacany.entity.VacancyEntity
+import com.example.recruiterhunter.data.local.roomdb.vacany.entity.VacancyEntity
 import kotlinx.coroutines.flow.Flow
 
 interface VacancyDao {

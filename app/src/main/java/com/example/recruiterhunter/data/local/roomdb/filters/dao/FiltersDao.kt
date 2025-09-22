@@ -1,10 +1,10 @@
-package com.example.recruiterhunter.data.local.filters.dao
+package com.example.recruiterhunter.data.local.roomdb.filters.dao
 
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.example.recruiterhunter.data.local.filters.entity.FiltersEntity
+import com.example.recruiterhunter.data.local.roomdb.filters.entity.FiltersEntity
 import kotlinx.coroutines.flow.Flow
 
 interface FiltersDao {
