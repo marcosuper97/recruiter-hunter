@@ -1,6 +1,7 @@
 [versions]
 agp = "8.11.1"
 converterKotlinxSerialization = "3.0.0"
+datastorePreferences = "1.1.7"
 glide = "4.16.0"
 koinAndroid = "4.1.0"
 kotlin = "2.2.0"
@@ -21,6 +22,7 @@ roomRuntime = "2.7.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "materialIconsExtended" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
