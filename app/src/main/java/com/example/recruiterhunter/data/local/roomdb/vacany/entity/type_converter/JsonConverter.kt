@@ -1,4 +1,4 @@
-package com.example.recruiterhunter.data.local.vacany.entity.type_converter
+package com.example.recruiterhunter.data.local.roomdb.vacany.entity.type_converter
 
 import androidx.room.TypeConverter
 import kotlinx.serialization.builtins.ListSerializer
