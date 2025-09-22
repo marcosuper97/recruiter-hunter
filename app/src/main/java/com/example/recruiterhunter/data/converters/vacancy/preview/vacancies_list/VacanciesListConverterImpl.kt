@@ -2,7 +2,7 @@ package com.example.recruiterhunter.data.converters.vacancy.preview.vacancies_li
 
 import com.example.recruiterhunter.data.dto.vacancies.response.preview.PreviewDto
 import com.example.recruiterhunter.data.util.toCurrencySymbol
-import domain.model.vacancy.preview.VacancyPreview
+import com.example.recruiterhunter.domain.model.vacancy.preview.VacancyPreview
 
 class VacanciesListConverterImpl() : VacanciesListConverter {
     override fun map(previewDto: List<PreviewDto>): List<VacancyPreview> =

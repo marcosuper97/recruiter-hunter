@@ -1,7 +1,7 @@
-package domain.model.vacancy.preview
+package com.example.recruiterhunter.domain.model.vacancy.preview
 
 data class VacancyPreview(
-    val vacancyId: String,
+    val vacancyId: Long,
     val vacancyName: String,
     val employerName: String,
     val employerLogo: String,
