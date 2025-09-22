@@ -5,6 +5,7 @@ import com.example.recruiterhunter.data.impl.cse.recriuters.RecruitersSearcherRe
 import com.example.recruiterhunter.data.impl.favorites.FavoritesRepositoryImpl
 import com.example.recruiterhunter.data.impl.filters.FiltersDbRepositoryImpl
 import com.example.recruiterhunter.data.impl.filters.FiltersNetworkRepositoryImpl
+import com.example.recruiterhunter.data.impl.theme_changer.ThemeChangerRepositoryImpl
 import com.example.recruiterhunter.data.impl.vacancy.VacancyDetailsRepositoryImpl
 import com.example.recruiterhunter.data.impl.vacancy.VacancySearchRepositoryImpl
 import com.example.recruiterhunter.domain.repository.cse.posts.PostsSearcherRepository
@@ -12,6 +13,7 @@ import com.example.recruiterhunter.domain.repository.cse.recruiters.RecruitersSe
 import com.example.recruiterhunter.domain.repository.favorites.FavoritesRepository
 import com.example.recruiterhunter.domain.repository.filters.FiltersDbRepository
 import com.example.recruiterhunter.domain.repository.filters.FiltersNetworkRepository
+import com.example.recruiterhunter.domain.repository.theme_changer.ThemeChangerRepository
 import domain.repository.VacancyDetailsRepository
 import domain.repository.VacancySearchRepository
 import org.koin.dsl.module
@@ -62,5 +64,9 @@ val repositoryModule = module {
 
     single<FavoritesRepository> {
         FavoritesRepositoryImpl(get(), get())
+    }
+
+    single<ThemeChangerRepository>{
+        ThemeChangerRepositoryImpl(get())
     }
 }
