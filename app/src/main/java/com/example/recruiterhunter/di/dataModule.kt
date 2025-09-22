@@ -1,5 +1,9 @@
 package com.example.recruiterhunter.di
 
+import android.content.Context
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
 import com.example.recruiterhunter.core.network.request_engine.RequestEngine
 import com.example.recruiterhunter.core.network.request_engine.impl.RequestEngineImpl
@@ -19,6 +23,8 @@ import com.example.recruiterhunter.data.converters.vacancy.preview.VacanciesPrev
 import com.example.recruiterhunter.data.converters.vacancy.preview.VacanciesPreviewConverterImpl
 import com.example.recruiterhunter.data.converters.vacancy.preview.vacancies_list.VacanciesListConverter
 import com.example.recruiterhunter.data.converters.vacancy.preview.vacancies_list.VacanciesListConverterImpl
+import com.example.recruiterhunter.data.local.data_store.ThemeDataStore
+import com.example.recruiterhunter.data.local.data_store.impl.ThemeDataStoreImpl
 import com.example.recruiterhunter.data.local.roomdb.db.AppDb
 import com.example.recruiterhunter.data.local.roomdb.filters.dao.FiltersDao
 import com.example.recruiterhunter.data.local.roomdb.vacany.dao.VacancyDao
@@ -36,6 +42,10 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 private val json = Json {
     ignoreUnknownKeys = true
 }
+
+private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(
+    name = DataStoreNames.SETTINGS_NAME
+)
 
 val dataModule = module {
     single<HhApi> {
@@ -109,9 +119,17 @@ val dataModule = module {
     single<RequestEngine> {
         RequestEngineImpl(androidContext())
     }
+
+    single<ThemeDataStore> {
+        ThemeDataStoreImpl(androidContext().dataStore)
+    }
 }
 
 object ApiConfig {
     const val HH_BASE_URL = "https://api.hh.ru/"
     const val CSE_BASE_URL = "https://www.googleapis.com/customsearch/v1"
+}
+
+object DataStoreNames {
+    const val SETTINGS_NAME = "settings"
 }
