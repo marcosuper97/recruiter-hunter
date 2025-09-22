@@ -8,6 +8,8 @@ import com.example.recruiterhunter.data.impl.filters.FiltersNetworkRepositoryImp
 import com.example.recruiterhunter.data.impl.theme_changer.ThemeChangerRepositoryImpl
 import com.example.recruiterhunter.data.impl.vacancy.VacancyDetailsRepositoryImpl
 import com.example.recruiterhunter.data.impl.vacancy.VacancySearchRepositoryImpl
+import com.example.recruiterhunter.domain.impl.settings.SettingsInteractorImpl
+import com.example.recruiterhunter.domain.interactor.settings.SettingsInteractor
 import com.example.recruiterhunter.domain.repository.cse.posts.PostsSearcherRepository
 import com.example.recruiterhunter.domain.repository.cse.recruiters.RecruitersSearcherRepository
 import com.example.recruiterhunter.domain.repository.favorites.FavoritesRepository
@@ -66,7 +68,11 @@ val repositoryModule = module {
         FavoritesRepositoryImpl(get(), get())
     }
 
-    single<ThemeChangerRepository>{
+    single<ThemeChangerRepository> {
         ThemeChangerRepositoryImpl(get())
+    }
+
+    single<SettingsInteractor> {
+        SettingsInteractorImpl(get())
     }
 }
