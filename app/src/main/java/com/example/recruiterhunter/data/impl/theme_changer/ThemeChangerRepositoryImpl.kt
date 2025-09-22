@@ -1,15 +1,14 @@
 package com.example.recruiterhunter.data.impl.theme_changer
 
 import com.example.recruiterhunter.core.theme_changer.state.ActualTheme
+import com.example.recruiterhunter.data.local.data_store.ThemeDataStore
 import com.example.recruiterhunter.domain.repository.theme_changer.ThemeChangerRepository
 import kotlinx.coroutines.flow.Flow
 
-class ThemeChangerRepositoryImpl(): ThemeChangerRepository {
-    override fun getTheme(): Flow<ActualTheme> {
-        TODO("Not yet implemented")
-    }
+class ThemeChangerRepositoryImpl(private val dataStore: ThemeDataStore): ThemeChangerRepository {
+    override fun getTheme(): Flow<ActualTheme> = dataStore.getTheme()
 
-    override suspend fun changeDark(theme: ActualTheme) {
-        TODO("Not yet implemented")
+    override suspend fun changeTheme(theme: ActualTheme) {
+        dataStore.setTheme(theme)
     }
 }

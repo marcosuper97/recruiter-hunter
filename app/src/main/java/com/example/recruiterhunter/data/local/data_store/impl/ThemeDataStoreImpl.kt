@@ -12,8 +12,7 @@ import kotlinx.coroutines.flow.map
 class ThemeDataStoreImpl(
     private val dataStore: DataStore<Preferences>
 ) : ThemeDataStore {
-    override val themeKey: Preferences.Key<String> = stringPreferencesKey("theme_key")
-
+    private val themeKey = stringPreferencesKey("theme_key")
     override fun getTheme(): Flow<ActualTheme> = dataStore.data
         .map { prefs ->
             ActualTheme.entries.firstOrNull { it.name == prefs[themeKey] } ?: ActualTheme.SYSTEM
