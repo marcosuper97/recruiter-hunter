@@ -1,6 +1,6 @@
 package com.example.recruiterhunter.data.local.data_store
 
-import com.example.recruiterhunter.core.theme_changer.state.ActualTheme
+import com.example.recruiterhunter.domain.model.theme_state.ActualTheme
 import kotlinx.coroutines.flow.Flow
 
 interface ThemeDataStore {

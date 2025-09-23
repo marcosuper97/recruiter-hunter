@@ -1,4 +1,4 @@
-package com.example.recruiterhunter.core.application
+package com.example.recruiterhunter.Infrastructure.application
 
 import android.app.Application
 import com.example.recruiterhunter.di.dataModule

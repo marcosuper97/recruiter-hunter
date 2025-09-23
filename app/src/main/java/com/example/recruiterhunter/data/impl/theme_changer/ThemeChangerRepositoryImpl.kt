@@ -1,7 +1,7 @@
 package com.example.recruiterhunter.data.impl.theme_changer
 
-import com.example.recruiterhunter.core.theme_changer.state.ActualTheme
 import com.example.recruiterhunter.data.local.data_store.ThemeDataStore
+import com.example.recruiterhunter.domain.model.theme_state.ActualTheme
 import com.example.recruiterhunter.domain.repository.theme_changer.ThemeChangerRepository
 import kotlinx.coroutines.flow.Flow
 

@@ -1,4 +1,4 @@
-package com.example.recruiterhunter.core.network.request_engine
+package com.example.recruiterhunter.Infrastructure.network.request_engine
 
 interface RequestEngine {
     suspend fun <T> doRequest(

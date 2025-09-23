@@ -1,4 +1,4 @@
-package com.example.recruiterhunter.core.exceptions
+package com.example.recruiterhunter.domain.model.exceptions
 
 sealed class AppException(
     open val userMessage: String?,
