@@ -5,8 +5,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.room.Room
-import com.example.recruiterhunter.Infrastructure.network.request_engine.RequestEngine
-import com.example.recruiterhunter.Infrastructure.network.request_engine.impl.RequestEngineImpl
 import com.example.recruiterhunter.data.converters.areas.AreasConverter
 import com.example.recruiterhunter.data.converters.areas.AreasConverterImpl
 import com.example.recruiterhunter.data.converters.filters.FiltersConverter
@@ -23,15 +21,19 @@ import com.example.recruiterhunter.data.converters.vacancy.preview.VacanciesPrev
 import com.example.recruiterhunter.data.converters.vacancy.preview.VacanciesPreviewConverterImpl
 import com.example.recruiterhunter.data.converters.vacancy.preview.vacancies_list.VacanciesListConverter
 import com.example.recruiterhunter.data.converters.vacancy.preview.vacancies_list.VacanciesListConverterImpl
+import com.example.recruiterhunter.data.impl.network.google_cse.api.GoogleCseApi
+import com.example.recruiterhunter.data.impl.network.request_engine.RequestEngineImpl
+import com.example.recruiterhunter.data.impl.network.vacancies.HhNetworkClient
+import com.example.recruiterhunter.data.impl.network.vacancies.HhRetrofitClient
+import com.example.recruiterhunter.data.impl.network.vacancies.api.HhApi
 import com.example.recruiterhunter.data.local.data_store.ThemeDataStore
 import com.example.recruiterhunter.data.local.data_store.impl.ThemeDataStoreImpl
 import com.example.recruiterhunter.data.local.roomdb.db.AppDb
 import com.example.recruiterhunter.data.local.roomdb.filters.dao.FiltersDao
 import com.example.recruiterhunter.data.local.roomdb.vacany.dao.VacancyDao
-import com.example.recruiterhunter.data.network.google_cse.api.GoogleCseApi
-import com.example.recruiterhunter.data.network.vacancies.HhNetworkClient
-import com.example.recruiterhunter.data.network.vacancies.HhRetrofitClient
-import com.example.recruiterhunter.data.network.vacancies.api.HhApi
+import com.example.recruiterhunter.domain.services.network_check.NetworkCheckService
+import com.example.recruiterhunter.domain.services.request_engine.RequestEngine
+import com.example.recruiterhunter.infrastructure.impl.network_checker.NetworkCheckServiceImpl
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import org.koin.android.ext.koin.androidContext
@@ -116,8 +118,12 @@ val dataModule = module {
         CseResponseConverterImpl(get())
     }
 
+    single<NetworkCheckService> {
+        NetworkCheckServiceImpl(get())
+    }
+
     single<RequestEngine> {
-        RequestEngineImpl(androidContext())
+        RequestEngineImpl(get())
     }
 
     single<ThemeDataStore> {

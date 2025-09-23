@@ -2,7 +2,7 @@ package com.example.recruiterhunter.data.impl.filters
 
 import com.example.recruiterhunter.data.converters.areas.AreasConverter
 import com.example.recruiterhunter.data.converters.industries.IndustriesConverter
-import com.example.recruiterhunter.data.network.vacancies.HhNetworkClient
+import com.example.recruiterhunter.data.impl.network.vacancies.HhNetworkClient
 import com.example.recruiterhunter.domain.repository.filters.FiltersNetworkRepository
 import domain.model.filters.Areas
 import domain.model.filters.Industry
