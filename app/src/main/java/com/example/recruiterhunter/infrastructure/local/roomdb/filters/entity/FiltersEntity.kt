@@ -1,4 +1,4 @@
-package com.example.recruiterhunter.data.local.roomdb.filters.entity
+package com.example.recruiterhunter.infrastructure.local.roomdb.filters.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

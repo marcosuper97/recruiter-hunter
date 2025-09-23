@@ -1,7 +1,7 @@
 package com.example.recruiterhunter.data.impl.favorites
 
 import com.example.recruiterhunter.data.converters.vacancy.full.VacanciesDetailsConverter
-import com.example.recruiterhunter.data.local.roomdb.vacany.dao.VacancyDao
+import com.example.recruiterhunter.infrastructure.local.roomdb.vacany.dao.VacancyDao
 import com.example.recruiterhunter.domain.repository.favorites.FavoritesRepository
 import domain.model.vacancy.details.Vacancy
 import kotlinx.coroutines.flow.Flow

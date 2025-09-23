@@ -1,7 +1,7 @@
 package com.example.recruiterhunter.data.converters.vacancy.full
 
 import com.example.recruiterhunter.data.dto.vacancies.response.details.VacancyDetailsResponseDto
-import com.example.recruiterhunter.data.local.roomdb.vacany.entity.VacancyEntity
+import com.example.recruiterhunter.infrastructure.local.roomdb.vacany.entity.VacancyEntity
 import com.example.recruiterhunter.data.util.toCurrencySymbol
 import domain.model.vacancy.details.Vacancy
 

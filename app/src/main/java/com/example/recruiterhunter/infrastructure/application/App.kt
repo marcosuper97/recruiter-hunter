@@ -2,6 +2,7 @@ package com.example.recruiterhunter.infrastructure.application
 
 import android.app.Application
 import com.example.recruiterhunter.di.dataModule
+import com.example.recruiterhunter.di.infrastructureModule
 import com.example.recruiterhunter.di.interactorModule
 import com.example.recruiterhunter.di.repositoryModule
 import com.example.recruiterhunter.di.viewModelModule
@@ -14,7 +15,13 @@ class App : Application() {
 
         GlobalContext.startKoin {
             androidContext(this@App)
-            modules(dataModule, repositoryModule, interactorModule, viewModelModule)
+            modules(
+                dataModule,
+                infrastructureModule,
+                repositoryModule,
+                interactorModule,
+                viewModelModule
+            )
         }
     }
 }

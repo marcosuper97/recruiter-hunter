@@ -1,17 +1,17 @@
-package com.example.recruiterhunter.data.local.data_store.impl
+package com.example.recruiterhunter.infrastructure.local.datastore
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.example.recruiterhunter.data.local.data_store.ThemeDataStore
+import com.example.recruiterhunter.domain.data_store.ThemeChanger
 import com.example.recruiterhunter.domain.model.theme_state.ActualTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class ThemeDataStoreImpl(
+class ThemeChangerImpl(
     private val dataStore: DataStore<Preferences>
-) : ThemeDataStore {
+) : ThemeChanger {
     private val themeKey = stringPreferencesKey("theme_key")
     override fun getTheme(): Flow<ActualTheme> = dataStore.data
         .map { prefs ->
