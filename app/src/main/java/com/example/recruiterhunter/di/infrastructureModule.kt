@@ -16,6 +16,8 @@ import com.example.recruiterhunter.infrastructure.impl.actions.system_settings.S
 import com.example.recruiterhunter.infrastructure.impl.services.network_checker.NetworkCheckServiceImpl
 import com.example.recruiterhunter.infrastructure.local.datastore.ThemeChangerImpl
 import com.example.recruiterhunter.infrastructure.local.roomdb.db.AppDb
+import com.example.recruiterhunter.infrastructure.local.roomdb.filters.dao.FiltersDao
+import com.example.recruiterhunter.infrastructure.local.roomdb.vacany.dao.VacancyDao
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
@@ -50,6 +52,10 @@ val infrastructureModule = module {
             .fallbackToDestructiveMigration(false)
             .build()
     }
+
+    single<FiltersDao> { get<AppDb>().filtersDao() }
+
+    single<VacancyDao> { get<AppDb>().vacanciesDao() }
 }
 
 private object DataStoreNames {

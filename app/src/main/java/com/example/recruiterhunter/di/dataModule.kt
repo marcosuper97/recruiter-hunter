@@ -22,9 +22,6 @@ import com.example.recruiterhunter.data.impl.network.vacancies.HhNetworkClient
 import com.example.recruiterhunter.data.impl.network.vacancies.HhRetrofitClient
 import com.example.recruiterhunter.data.impl.network.vacancies.api.HhApi
 import com.example.recruiterhunter.domain.services.request_engine.RequestEngine
-import com.example.recruiterhunter.infrastructure.local.roomdb.db.AppDb
-import com.example.recruiterhunter.infrastructure.local.roomdb.filters.dao.FiltersDao
-import com.example.recruiterhunter.infrastructure.local.roomdb.vacany.dao.VacancyDao
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import org.koin.dsl.module
@@ -61,10 +58,6 @@ val dataModule = module {
             .create(GoogleCseApi::class.java)
 
     }
-
-    single<FiltersDao> { get<AppDb>().filtersDao() }
-
-    single<VacancyDao> { get<AppDb>().vacanciesDao() }
 
     single<VacanciesListConverter> {
         VacanciesListConverterImpl()
