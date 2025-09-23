@@ -33,7 +33,7 @@ import com.example.recruiterhunter.data.local.roomdb.filters.dao.FiltersDao
 import com.example.recruiterhunter.data.local.roomdb.vacany.dao.VacancyDao
 import com.example.recruiterhunter.domain.services.network_check.NetworkCheckService
 import com.example.recruiterhunter.domain.services.request_engine.RequestEngine
-import com.example.recruiterhunter.infrastructure.impl.network_checker.NetworkCheckServiceImpl
+import com.example.recruiterhunter.infrastructure.impl.services.network_checker.NetworkCheckServiceImpl
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import org.koin.android.ext.koin.androidContext

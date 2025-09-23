@@ -1,5 +1,5 @@
 package com.example.recruiterhunter.domain.actions.settings
 
-interface SystemSettingsHandle {
+interface SystemSettingsAction {
     suspend fun openSettings()
 }

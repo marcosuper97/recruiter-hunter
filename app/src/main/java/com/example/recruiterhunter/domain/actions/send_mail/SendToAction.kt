@@ -1,5 +1,5 @@
 package com.example.recruiterhunter.domain.actions.send_mail
 
-interface MailToHandle {
+interface SendToAction {
     suspend fun sendMail()
 }

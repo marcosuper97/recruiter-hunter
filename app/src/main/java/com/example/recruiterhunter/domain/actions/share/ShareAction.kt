@@ -1,5 +1,5 @@
 package com.example.recruiterhunter.domain.actions.share
 
-interface ShareHandle {
+interface ShareAction {
     suspend fun shareVacancy(urlLink: String)
 }
