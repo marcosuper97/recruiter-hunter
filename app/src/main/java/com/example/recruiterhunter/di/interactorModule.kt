@@ -4,11 +4,13 @@ import com.example.recruiterhunter.domain.impl.cse.posts.PostsSearcherInteractor
 import com.example.recruiterhunter.domain.impl.cse.rectuiters.RecruitersSearchInteractorImpl
 import com.example.recruiterhunter.domain.impl.favorites.FavoritesInteractorImpl
 import com.example.recruiterhunter.domain.impl.filters.FiltersInteractorImpl
+import com.example.recruiterhunter.domain.impl.settings.SettingsInteractorImpl
 import com.example.recruiterhunter.domain.impl.vacancy.VacancyDetailsInteractorImpl
 import com.example.recruiterhunter.domain.interactor.cse.posts.PostsSearcherInteractor
 import com.example.recruiterhunter.domain.interactor.cse.recruiters.RecruitersSearchInteractor
 import com.example.recruiterhunter.domain.interactor.favorites.FavoritesInteractor
 import com.example.recruiterhunter.domain.interactor.filters.FiltersInteractor
+import com.example.recruiterhunter.domain.interactor.settings.SettingsInteractor
 import com.example.recruiterhunter.domain.interactor.vacancy.VacancyDetailsInteractor
 import domain.impl.VacancySearchInteractorImpl
 import domain.interactor.VacancySearchInteractor
@@ -37,5 +39,9 @@ val interactorModule = module {
 
     single<FavoritesInteractor> {
         FavoritesInteractorImpl(get())
+    }
+
+    single<SettingsInteractor> {
+        SettingsInteractorImpl(get())
     }
 }
