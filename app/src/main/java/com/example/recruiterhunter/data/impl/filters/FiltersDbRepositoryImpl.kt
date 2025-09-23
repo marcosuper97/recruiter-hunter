@@ -1,9 +1,9 @@
 package com.example.recruiterhunter.data.impl.filters
 
 import com.example.recruiterhunter.data.converters.filters.FiltersConverter
+import com.example.recruiterhunter.domain.repository.filters.FiltersDbRepository
 import com.example.recruiterhunter.infrastructure.local.roomdb.filters.dao.FiltersDao
 import com.example.recruiterhunter.infrastructure.local.roomdb.filters.entity.FiltersEntity
-import com.example.recruiterhunter.domain.repository.filters.FiltersDbRepository
 import domain.model.filters.Filters
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
