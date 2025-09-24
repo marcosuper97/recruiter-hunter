@@ -8,7 +8,6 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import com.example.recruiterhunter.domain.model.theme_state.ActualTheme
 
@@ -98,17 +97,15 @@ fun RecruiterHunterTheme(
     val context = LocalContext.current
     val isDarkTheme = isSystemInDarkTheme()
 
-    val colorScheme = remember {
-        when (actualTheme) {
-            ActualTheme.DARK -> darkScheme
-            ActualTheme.LIGHT -> lightScheme
-            ActualTheme.SYSTEM -> {
-                when {
-                    dynamicIsAvailable && isDarkTheme -> dynamicDarkColorScheme(context)
-                    dynamicIsAvailable && !isDarkTheme -> dynamicLightColorScheme(context)
-                    else -> {
-                        if (isDarkTheme) darkScheme else lightScheme
-                    }
+    val colorScheme = when (actualTheme) {
+        ActualTheme.DARK -> darkScheme
+        ActualTheme.LIGHT -> lightScheme
+        ActualTheme.SYSTEM -> {
+            when {
+                dynamicIsAvailable && isDarkTheme -> dynamicDarkColorScheme(context)
+                dynamicIsAvailable && !isDarkTheme -> dynamicLightColorScheme(context)
+                else -> {
+                    if (isDarkTheme) darkScheme else lightScheme
                 }
             }
         }
