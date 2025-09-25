@@ -27,4 +27,8 @@
     <string name="linkedin_posts">
         site:linkedin.com ("%1$s" "%2$s") (inurl:posts OR inurl:feed OR inurl:feed/update) -inurl:in/ -inurl:company/
     </string>
+
+    <string name="light_theme">Светлая</string>
+    <string name="dark_theme">Темная</string>
+    <string name="system_theme">Системная</string>
 </resources>
