@@ -44,7 +44,7 @@ private data class ThemeButtonConfig(
 )
 
 @Composable
-fun ThemeButtonsGroup(actualTheme: ActualTheme, clickAction: (ActualTheme) -> Unit) {
+fun ButtonsGroup(actualTheme: ActualTheme, clickAction: (ActualTheme) -> Unit) {
     val buttonsMap =
         listOf(
             ThemeButtonConfig(
@@ -91,7 +91,7 @@ fun ThemeButtonsGroup(actualTheme: ActualTheme, clickAction: (ActualTheme) -> Un
             )
 
             val elevatedAnimation by animateDpAsState(
-                targetValue = if (isActive) 12.dp else 2.dp,
+                targetValue = if (isActive) 14.dp else 2.dp,
                 label = "ButtonElevation",
                 animationSpec = spring(
                     dampingRatio = Spring.DampingRatioMediumBouncy,
@@ -152,7 +152,7 @@ fun ThemeButtonsGroup(actualTheme: ActualTheme, clickAction: (ActualTheme) -> Un
 fun PreviewSystem() {
     var actualTheme by remember { mutableStateOf(ActualTheme.SYSTEM) }
     RecruiterHunterTheme(actualTheme) {
-        ThemeButtonsGroup(actualTheme = actualTheme) {
+        ButtonsGroup(actualTheme = actualTheme) {
             actualTheme = when (actualTheme) {
                 ActualTheme.SYSTEM -> ActualTheme.DARK
                 ActualTheme.DARK -> ActualTheme.LIGHT

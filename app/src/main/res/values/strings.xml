@@ -28,7 +28,11 @@
         site:linkedin.com ("%1$s" "%2$s") (inurl:posts OR inurl:feed OR inurl:feed/update) -inurl:in/ -inurl:company/
     </string>
 
+    <string name="choose_app_theme">Тема приложения</string>
     <string name="light_theme">Светлая</string>
     <string name="dark_theme">Темная</string>
     <string name="system_theme">Системная</string>
+    <string name="app_repository">Исходный код на GitHub.</string>
+    <string name="feedback">Обратная связь.</string>
+    <string name="open_system_settings">Системные настройки.</string>
 </resources>

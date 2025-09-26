@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.recruiterhunter.presentation.app_theme_vm.AppThemeViewModel
-import com.example.recruiterhunter.ui.components.settings.ThemeButtonsGroup
+import com.example.recruiterhunter.ui.components.settings.ButtonsGroup
 import com.example.recruiterhunter.ui.theme.RecruiterHunterTheme
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
@@ -24,7 +24,7 @@ fun CoreCompose(
     RecruiterHunterTheme(actualTheme) {
         Surface {
             Box(contentAlignment = Alignment.Center, modifier = Modifier.fillMaxSize()) {
-                ThemeButtonsGroup(actualTheme) { selectedTheme ->
+                ButtonsGroup(actualTheme) { selectedTheme ->
                     scope.launch { viewModel.themeChange(selectedTheme) }
                 }
             }
