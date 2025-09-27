@@ -8,11 +8,13 @@ import androidx.room.Room
 import com.example.recruiterhunter.domain.actions.send_mail.SendToAction
 import com.example.recruiterhunter.domain.actions.settings.SystemSettingsAction
 import com.example.recruiterhunter.domain.actions.share.ShareAction
+import com.example.recruiterhunter.domain.actions.source_code.OpenSourceCodeAction
 import com.example.recruiterhunter.domain.services.application_theme.ThemeChangerService
 import com.example.recruiterhunter.domain.services.application_theme.ThemeGetterService
 import com.example.recruiterhunter.domain.services.network_check.NetworkCheckService
 import com.example.recruiterhunter.infrastructure.impl.actions.dev_link.SendToActionImpl
 import com.example.recruiterhunter.infrastructure.impl.actions.share_vacancy.ShareActionImpl
+import com.example.recruiterhunter.infrastructure.impl.actions.source_code.OpenSourceCodeActionImpl
 import com.example.recruiterhunter.infrastructure.impl.actions.system_settings.SystemSettingActionImpl
 import com.example.recruiterhunter.infrastructure.impl.services.network_checker.NetworkCheckServiceImpl
 import com.example.recruiterhunter.infrastructure.local.datastore.application_theme.ThemeChangerServiceImpl
@@ -51,6 +53,10 @@ val infrastructureModule = module {
 
     single<ThemeGetterService> {
         ThemeGetterServiceImpl(androidContext().dataStore)
+    }
+
+    single<OpenSourceCodeAction> {
+        OpenSourceCodeActionImpl(androidContext())
     }
 
     single<AppDb> {
