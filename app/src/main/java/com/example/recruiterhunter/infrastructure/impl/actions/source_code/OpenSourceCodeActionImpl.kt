@@ -9,14 +9,18 @@ import com.example.recruiterhunter.domain.actions.source_code.OpenSourceCodeActi
 class OpenSourceCodeActionImpl(private val context: Context) : OpenSourceCodeAction {
     private val appRepositoryUrl = context.getString(R.string.app_repository_url)
     private val gitHubPackage = context.getString(R.string.github_app_package_name)
+
     override suspend fun openRepository() {
         val githubIntent = Intent(Intent.ACTION_VIEW, appRepositoryUrl.toUri()).apply {
-            setPackage(gitHubPackage)
+            setPackage("package:$gitHubPackage")
         }
-        if (githubIntent.resolveActivity(context.packageManager) != null) {
+
+        try {
             context.startActivity(githubIntent)
-        } else {
-            val intent = Intent(Intent.ACTION_VIEW, appRepositoryUrl.toUri())
+        } catch (e: Exception) {
+            val intent = Intent(Intent.ACTION_VIEW, appRepositoryUrl.toUri()).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
             context.startActivity(intent)
         }
     }

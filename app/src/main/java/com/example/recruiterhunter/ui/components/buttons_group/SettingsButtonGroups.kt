@@ -35,7 +35,7 @@ data class SettingButtonsConfig(
 )
 
 @Composable
-fun SettingsButton(
+private fun SettingsButton(
     text: String,
     icon: Int,
     dividerIsEnabled: Boolean = true,
@@ -45,7 +45,7 @@ fun SettingsButton(
     Box(
         modifier = Modifier
             .clip(shape)
-            .background(MaterialTheme.colorScheme.primaryContainer)
+            .background(MaterialTheme.colorScheme.surfaceContainerLow)
             .clickable(
                 onClick = action
             )
@@ -68,11 +68,13 @@ fun SettingsButton(
                     text = text,
                     modifier = Modifier
                         .weight(1f),
-                    style = MaterialTheme.typography.bodyLarge
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.primary
                 )
                 Icon(
                     painterResource(icon), contentDescription = text,
-                    modifier = Modifier.padding(end = 4.dp)
+                    modifier = Modifier.padding(end = 4.dp),
+                    tint = MaterialTheme.colorScheme.primary
                 )
             }
         }
@@ -83,7 +85,7 @@ fun SettingsButton(
 fun SettingsButtonsGroup(
     buttonsParams: List<SettingButtonsConfig>
 ) {
-    Column(modifier = Modifier.shadow(8.dp, RoundedCornerShape(24.dp))) {
+    Column(modifier = Modifier.shadow(2.dp, RoundedCornerShape(24.dp))) {
         buttonsParams.forEachIndexed { index, (text, icon, action) ->
             val buttonShape = when {
                 buttonsParams.size == 1 -> RoundedCornerShape(24.dp)
