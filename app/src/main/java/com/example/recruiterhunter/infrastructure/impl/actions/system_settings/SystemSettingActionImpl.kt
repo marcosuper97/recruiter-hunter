@@ -9,7 +9,8 @@ import com.example.recruiterhunter.domain.actions.settings.SystemSettingsAction
 class SystemSettingActionImpl(private val context: Context) : SystemSettingsAction {
     override suspend fun openSettings() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-            data = context.packageName.toUri()
+            data = "package:${context.packageName}".toUri()
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         context.startActivity(intent)
     }

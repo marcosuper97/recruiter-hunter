@@ -1,6 +1,5 @@
 package com.example.recruiterhunter.presentation.app_theme_vm
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recruiterhunter.domain.model.theme_state.ActualTheme
@@ -18,7 +17,6 @@ class AppThemeViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.d("asdasd", "VIEWMODEL")
             themeGetterService.getActualTheme().collect { theme ->
                 _actualThemeState.value = theme
             }
