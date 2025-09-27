@@ -7,4 +7,5 @@ class SettingsScreenViewModel(
     private val settingsInteractor: SettingsInteractor
 ) : ViewModel() {
 
+
 }
