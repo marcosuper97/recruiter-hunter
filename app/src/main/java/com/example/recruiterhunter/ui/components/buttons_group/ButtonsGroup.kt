@@ -108,7 +108,11 @@ fun ThemeButtonGroups(
                     .padding(2.dp)
                     .weight(1f)
                     .height(62.dp),
-                contentPadding = PaddingValues(horizontal = 8.dp)
+                contentPadding = PaddingValues(horizontal = 8.dp),
+                colors = if (isActive)
+                    ButtonDefaults.elevatedButtonColors(MaterialTheme.colorScheme.surfaceVariant)
+                else ButtonDefaults.elevatedButtonColors()
+
             ) {
                 Row(
                     horizontalArrangement = Arrangement.Center,
