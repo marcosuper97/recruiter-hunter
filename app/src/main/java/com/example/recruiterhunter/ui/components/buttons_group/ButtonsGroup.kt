@@ -1,4 +1,4 @@
-package com.example.recruiterhunter.ui.components.settings
+package com.example.recruiterhunter.ui.components.buttons_group
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.Spring
@@ -44,7 +44,7 @@ private data class ThemeButtonConfig(
 )
 
 @Composable
-fun ButtonsGroup(actualTheme: ActualTheme, clickAction: (ActualTheme) -> Unit) {
+fun ThemeButtonGroups(actualTheme: ActualTheme, clickAction: (ActualTheme) -> Unit) {
     val buttonsMap =
         listOf(
             ThemeButtonConfig(
@@ -152,7 +152,7 @@ fun ButtonsGroup(actualTheme: ActualTheme, clickAction: (ActualTheme) -> Unit) {
 fun PreviewSystem() {
     var actualTheme by remember { mutableStateOf(ActualTheme.SYSTEM) }
     RecruiterHunterTheme(actualTheme) {
-        ButtonsGroup(actualTheme = actualTheme) {
+        ThemeButtonGroups(actualTheme = actualTheme) {
             actualTheme = when (actualTheme) {
                 ActualTheme.SYSTEM -> ActualTheme.DARK
                 ActualTheme.DARK -> ActualTheme.LIGHT

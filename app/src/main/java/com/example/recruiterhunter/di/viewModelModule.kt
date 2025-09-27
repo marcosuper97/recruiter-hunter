@@ -5,6 +5,6 @@ import org.koin.dsl.module
 
 val viewModelModule = module {
     single {
-        AppThemeViewModel(get(),get())
+        AppThemeViewModel(get(), get())
     }
 }
