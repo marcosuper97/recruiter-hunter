@@ -36,4 +36,7 @@
     <string name="app_repository">Исходный код на GitHub.</string>
     <string name="feedback">Обратная связь.</string>
     <string name="open_system_settings">Системные настройки.</string>
+    <string name="button_go_back">Кнопка вернуться назад</string>
+    <string name="app_repository_url">https://github.com/your/repository</string>
+    <string name="github_app_package_name">com.github.android</string>
 </resources>

@@ -1,11 +1,13 @@
 package com.example.recruiterhunter.ui.screens.setting_screen
 
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.example.recruiterhunter.R
 
@@ -16,13 +18,13 @@ fun SettingsScreen() {
     Scaffold(topBar = {
         TopAppBar(
             title = { Text(stringResource(R.string.app_settings)) },
-            modifier = TODO(),
-            navigationIcon = TODO(),
-            actions = TODO(),
-            expandedHeight = TODO(),
-            windowInsets = TODO(),
-            colors = TODO(),
-            scrollBehavior = TODO()
+            navigationIcon = {
+                Icon(
+                    painterResource(R.drawable.baseline_arrow_back_24),
+                    contentDescription = stringResource(R.string.button_go_back)
+                )
+            },
+            actions = {},
         )
     }) {
 

@@ -4,4 +4,7 @@ import com.example.recruiterhunter.domain.model.theme_state.ActualTheme
 
 interface SettingsInteractor {
     suspend fun setTheme(theme: ActualTheme)
+    suspend fun sendFeedBack()
+    suspend fun openSystemSettings()
+    suspend fun openSourceCode()
 }
