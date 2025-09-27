@@ -27,4 +27,16 @@
     <string name="linkedin_posts">
         site:linkedin.com ("%1$s" "%2$s") (inurl:posts OR inurl:feed OR inurl:feed/update) -inurl:in/ -inurl:company/
     </string>
+
+    <string name="app_settings">Настройки приложения</string>
+    <string name="choose_app_theme">Тема</string>
+    <string name="light_theme">Светлая</string>
+    <string name="dark_theme">Темная</string>
+    <string name="system_theme">Системная</string>
+    <string name="open_source_github">Исходный код на GitHub.</string>
+    <string name="feedback">Обратная связь.</string>
+    <string name="open_system_settings">Системные настройки.</string>
+    <string name="button_go_back">Кнопка вернуться назад</string>
+    <string name="app_repository_url">https://github.com/marcosuper97/recruiter-hunter</string>
+    <string name="github_app_package_name">com.github.android</string>
 </resources>

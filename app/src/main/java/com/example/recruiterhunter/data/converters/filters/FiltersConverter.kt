@@ -1,6 +1,6 @@
 package com.example.recruiterhunter.data.converters.filters
 
-import com.example.recruiterhunter.data.local.filters.entity.FiltersEntity
+import com.example.recruiterhunter.infrastructure.local.roomdb.filters.entity.FiltersEntity
 import domain.model.filters.Filters
 
 interface FiltersConverter {

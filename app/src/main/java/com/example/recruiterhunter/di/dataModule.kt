@@ -1,8 +1,5 @@
 package com.example.recruiterhunter.di
 
-import androidx.room.Room
-import com.example.recruiterhunter.core.network.request_engine.RequestEngine
-import com.example.recruiterhunter.core.network.request_engine.impl.RequestEngineImpl
 import com.example.recruiterhunter.data.converters.areas.AreasConverter
 import com.example.recruiterhunter.data.converters.areas.AreasConverterImpl
 import com.example.recruiterhunter.data.converters.filters.FiltersConverter
@@ -19,16 +16,14 @@ import com.example.recruiterhunter.data.converters.vacancy.preview.VacanciesPrev
 import com.example.recruiterhunter.data.converters.vacancy.preview.VacanciesPreviewConverterImpl
 import com.example.recruiterhunter.data.converters.vacancy.preview.vacancies_list.VacanciesListConverter
 import com.example.recruiterhunter.data.converters.vacancy.preview.vacancies_list.VacanciesListConverterImpl
-import com.example.recruiterhunter.data.local.db.AppDb
-import com.example.recruiterhunter.data.local.filters.dao.FiltersDao
-import com.example.recruiterhunter.data.local.vacany.dao.VacancyDao
-import com.example.recruiterhunter.data.network.google_cse.api.GoogleCseApi
-import com.example.recruiterhunter.data.network.vacancies.HhNetworkClient
-import com.example.recruiterhunter.data.network.vacancies.HhRetrofitClient
-import com.example.recruiterhunter.data.network.vacancies.api.HhApi
+import com.example.recruiterhunter.data.impl.network.google_cse.api.GoogleCseApi
+import com.example.recruiterhunter.data.impl.network.request_engine.RequestEngineImpl
+import com.example.recruiterhunter.data.impl.network.vacancies.HhNetworkClient
+import com.example.recruiterhunter.data.impl.network.vacancies.HhRetrofitClient
+import com.example.recruiterhunter.data.impl.network.vacancies.api.HhApi
+import com.example.recruiterhunter.domain.services.request_engine.RequestEngine
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
-import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
@@ -64,16 +59,6 @@ val dataModule = module {
 
     }
 
-    single<AppDb> {
-        Room.databaseBuilder(androidContext(), AppDb::class.java, "database.db")
-            .fallbackToDestructiveMigration(false)
-            .build()
-    }
-
-    single<FiltersDao> { get<AppDb>().filtersDao() }
-
-    single<VacancyDao> { get<AppDb>().vacanciesDao() }
-
     single<VacanciesListConverter> {
         VacanciesListConverterImpl()
     }
@@ -107,11 +92,11 @@ val dataModule = module {
     }
 
     single<RequestEngine> {
-        RequestEngineImpl(androidContext())
+        RequestEngineImpl(get())
     }
 }
 
-object ApiConfig {
+private object ApiConfig {
     const val HH_BASE_URL = "https://api.hh.ru/"
     const val CSE_BASE_URL = "https://www.googleapis.com/customsearch/v1"
 }

@@ -1,6 +1,6 @@
 package domain.model.vacancy
 
-import domain.model.vacancy.preview.VacancyPreview
+import com.example.recruiterhunter.domain.model.vacancy.preview.VacancyPreview
 
 data class VacanciesList(
     val page: Int,

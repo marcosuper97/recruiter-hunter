@@ -8,8 +8,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("com.google.devtools.ksp") version "2.2.0-2.0.2"
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.0"
+    id("com.google.devtools.ksp") version "2.2.10-2.0.2"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.2.20"
 }
 
 android {
@@ -26,17 +26,17 @@ android {
             "String",
             "API_KEY",
             "\"${secretProperties.getProperty("hhApiKey") ?: ""}\""
-        )  // Уже ок, String
+        )
         buildConfigField(
             "String",
             "GOOGLE_SEARCH_KEY",
             "\"${secretProperties.getProperty("googleSearchKey") ?: ""}\""
-        )  // Измени на String и добавь кавычки
+        )
         buildConfigField(
             "String",
             "CUSTOM_SEARCH_ENGINE",
             "\"${secretProperties.getProperty("customSearchEngineCx") ?: ""}\""
-        )  // То же самое
+        )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -78,7 +78,7 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.kotlinx.serialization)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.glide)
+    implementation(libs.coil.compose)
     implementation(libs.androidx.material.icons.extended)
     ksp(libs.moshi.kotlin.codegen)
     implementation(libs.androidx.room.runtime)
@@ -91,4 +91,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(libs.koin.androidx.compose)
 }
