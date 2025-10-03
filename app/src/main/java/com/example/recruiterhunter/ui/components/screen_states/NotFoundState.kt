@@ -2,6 +2,7 @@ package com.example.recruiterhunter.ui.components.screen_states
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -13,19 +14,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.recruiterhunter.R
 import com.example.recruiterhunter.domain.model.theme_state.ActualTheme
 import com.example.recruiterhunter.ui.theme.RecruiterHunterTheme
 
 @Composable
 fun ErrorStateScreen(
     modifier: Modifier = Modifier,
-    stateMessage: String? = null,
-    subMassageState: String? = null,
+    title: String? = null,
+    message: String? = null,
     iconState: ImageVector? = null
 ) {
     val textStyle = MaterialTheme.typography
@@ -38,12 +42,12 @@ fun ErrorStateScreen(
             iconState?.let {
                 Icon(
                     imageVector = it,
-                    tint = colors.primary,
+                    tint = Color.Unspecified,
                     contentDescription = "",
-                    modifier = Modifier.size(125.dp)
+                    modifier = Modifier.size(210.dp),
                 )
             }
-            stateMessage?.let {
+            title?.let {
                 Text(
                     it,
                     style = textStyle.displaySmall,
@@ -52,14 +56,14 @@ fun ErrorStateScreen(
                     fontWeight = FontWeight.Light
                 )
             }
-            subMassageState?.let {
+            message?.let {
                 Text(
                     it,
-                    style = textStyle.displaySmall,
+                    style = textStyle.titleLarge,
                     textAlign = TextAlign.Center,
                     color = colors.primary,
                     fontWeight = FontWeight.Thin,
-                    modifier = Modifier.alpha(0.3f)
+                    modifier = Modifier.alpha(0.4f)
                 )
             }
         }
@@ -68,10 +72,15 @@ fun ErrorStateScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewNotFoundScreen() {
+fun PreviewNotFoundScreen1() {
     RecruiterHunterTheme(ActualTheme.DARK) {
         Scaffold { innerPaddings ->
-            NotFoundScreen(modifier = Modifier.padding(innerPaddings))
+            ErrorStateScreen(
+                modifier = Modifier.padding(innerPaddings),
+                title = "Ошибка сети",
+                message = "Свяжитесь с разработчиком приложения через \"настройки\" ",
+                iconState = ImageVector.vectorResource(R.drawable.error_naughty_dog)
+            )
         }
     }
 }
