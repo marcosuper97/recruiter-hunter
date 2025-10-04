@@ -13,20 +13,21 @@ object ShimmerEffectsConfig {
     const val SHIMMER_ANIM_DURATION = 1500
 }
 
-fun Modifier.drawShimmer(
-    progress: Float,
-    mainContainerHeight: Float,
-    mainContainerWidth: Float,
+fun Modifier.drawShimmerOptimized(
+    progressProvider: () -> Float,
+    containerWidthProvider: Float,
+    containerHeightProvider: Float,
     baseColor: Color,
     shimmerColor: Color
 ): Modifier = this.drawWithCache {
-    val shimmerWidth = mainContainerWidth * ShimmerEffectsConfig.SHIMMER_WIDTH
-    val offset = mainContainerWidth * progress
+    val progressShimmer = progressProvider()
+    val shimmerWidth = containerWidthProvider * ShimmerEffectsConfig.SHIMMER_WIDTH
+    val offset = containerWidthProvider * progressShimmer
 
     val brush = Brush.linearGradient(
         colors = listOf(baseColor, shimmerColor, baseColor),
         start = Offset(offset, 0f),
-        end = Offset(offset + shimmerWidth, mainContainerHeight)
+        end = Offset(offset + shimmerWidth, containerHeightProvider)
     )
     onDrawBehind {
         drawRect(brush = brush)

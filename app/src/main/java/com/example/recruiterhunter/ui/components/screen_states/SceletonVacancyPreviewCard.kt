@@ -29,7 +29,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.recruiterhunter.domain.model.theme_state.ActualTheme
@@ -67,9 +67,11 @@ fun SkeletonVacancyPreviewCard(
             .background(CardDefaults.cardColors().containerColor)
             .padding(12.dp)
             .alpha(0.4f)
-            .onGloballyPositioned { coordinates ->
-                containerWidth = coordinates.size.width.toFloat()
-                containerHeight = coordinates.size.height.toFloat()
+            .onSizeChanged { size ->
+                val newWidth = size.width.toFloat()
+                val newHeight = size.height.toFloat()
+                if (containerWidth != newWidth) containerWidth = newWidth
+                if (containerHeight != newHeight) containerHeight = newHeight
             }
     ) {
         Row(verticalAlignment = Alignment.Top) {
@@ -77,12 +79,12 @@ fun SkeletonVacancyPreviewCard(
                 Modifier
                     .size(56.dp)
                     .clip(elementCornerShape)
-                    .drawShimmer(
-                        shimmerProgress,
-                        mainContainerHeight = containerHeight,
-                        mainContainerWidth = containerWidth,
-                        bgColor,
-                        shimmerColor
+                    .drawShimmerOptimized(
+                        { shimmerProgress },
+                        containerHeightProvider = containerHeight,
+                        containerWidthProvider = containerWidth,
+                        baseColor = bgColor,
+                        shimmerColor = shimmerColor
                     )
             )
             Spacer(modifier = Modifier.width(6.dp))
@@ -92,12 +94,12 @@ fun SkeletonVacancyPreviewCard(
                         .width(100.dp)
                         .height(18.dp)
                         .clip(elementCornerShape)
-                        .drawShimmer(
-                            shimmerProgress,
-                            mainContainerHeight = containerHeight,
-                            mainContainerWidth = containerWidth,
-                            bgColor,
-                            shimmerColor
+                        .drawShimmerOptimized(
+                            { shimmerProgress },
+                            containerHeightProvider = containerHeight,
+                            containerWidthProvider = containerWidth,
+                            baseColor = bgColor,
+                            shimmerColor = shimmerColor
                         )
                 )
                 Spacer(modifier = Modifier.height(4.dp))
@@ -106,12 +108,12 @@ fun SkeletonVacancyPreviewCard(
                         .width(70.dp)
                         .height(13.dp)
                         .clip(elementCornerShape)
-                        .drawShimmer(
-                            shimmerProgress,
-                            mainContainerHeight = containerHeight,
-                            mainContainerWidth = containerWidth,
-                            bgColor,
-                            shimmerColor
+                        .drawShimmerOptimized(
+                            { shimmerProgress },
+                            containerHeightProvider = containerHeight,
+                            containerWidthProvider = containerWidth,
+                            baseColor = bgColor,
+                            shimmerColor = shimmerColor
                         )
                 )
             }
@@ -122,12 +124,12 @@ fun SkeletonVacancyPreviewCard(
                 Modifier
                     .size(20.dp)
                     .clip(elementCornerShape)
-                    .drawShimmer(
-                        shimmerProgress,
-                        mainContainerHeight = containerHeight,
-                        mainContainerWidth = containerWidth,
-                        bgColor,
-                        shimmerColor
+                    .drawShimmerOptimized(
+                        { shimmerProgress },
+                        containerHeightProvider = containerHeight,
+                        containerWidthProvider = containerWidth,
+                        baseColor = bgColor,
+                        shimmerColor = shimmerColor
                     )
             )
             Spacer(modifier = Modifier.width(2.dp))
@@ -136,12 +138,12 @@ fun SkeletonVacancyPreviewCard(
                     .width(80.dp)
                     .height(14.dp)
                     .clip(elementCornerShape)
-                    .drawShimmer(
-                        shimmerProgress,
-                        mainContainerHeight = containerHeight,
-                        mainContainerWidth = containerWidth,
-                        bgColor,
-                        shimmerColor
+                    .drawShimmerOptimized(
+                        { shimmerProgress },
+                        containerHeightProvider = containerHeight,
+                        containerWidthProvider = containerWidth,
+                        baseColor = bgColor,
+                        shimmerColor = shimmerColor
                     )
             )
         }
@@ -150,12 +152,12 @@ fun SkeletonVacancyPreviewCard(
             Modifier
                 .fillMaxWidth()
                 .height(1.dp)
-                .drawShimmer(
-                    shimmerProgress,
-                    mainContainerHeight = containerHeight,
-                    mainContainerWidth = containerWidth,
-                    bgColor,
-                    shimmerColor
+                .drawShimmerOptimized(
+                    { shimmerProgress },
+                    containerHeightProvider = containerHeight,
+                    containerWidthProvider = containerWidth,
+                    baseColor = bgColor,
+                    shimmerColor = shimmerColor
                 )
         )
         Spacer(modifier = Modifier.height(6.dp))
@@ -165,12 +167,12 @@ fun SkeletonVacancyPreviewCard(
                     .width(90.dp)
                     .height(17.dp)
                     .clip(elementCornerShape)
-                    .drawShimmer(
-                        shimmerProgress,
-                        mainContainerHeight = containerHeight,
-                        mainContainerWidth = containerWidth,
-                        bgColor,
-                        shimmerColor
+                    .drawShimmerOptimized(
+                        { shimmerProgress },
+                        containerHeightProvider = containerHeight,
+                        containerWidthProvider = containerWidth,
+                        baseColor = bgColor,
+                        shimmerColor = shimmerColor
                     )
             )
         }
