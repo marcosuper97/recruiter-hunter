@@ -58,8 +58,8 @@ fun SearchBarDock(
     state: TextFieldState,
     placeholder: String = "Поиск",
     onSearch: ((String) -> Unit)? = null,
-    @DrawableRes filterIcon: Int? = null,
-    @DrawableRes labelIcon: Int? = null,
+    filterIcon: ImageVector? = null,
+    labelIcon: ImageVector? = null,
     onFilterClick: (() -> Unit)? = null,
     filterState: MutableState<Boolean> = mutableStateOf(false)
 ) {
@@ -67,8 +67,6 @@ fun SearchBarDock(
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
     val roundedCorner = remember { RoundedCornerShape(24.dp) }
-    val labelIconPainter = labelIcon?.let { ImageVector.vectorResource(it) }
-    val filterIconPainter = filterIcon?.let { ImageVector.vectorResource(it) }
     val colors = SearchBarDefaults.colors()
     val searchBarColors = remember { colors.inputFieldColors }
     val textStyle =
@@ -114,9 +112,9 @@ fun SearchBarDock(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Spacer(modifier = Modifier.padding(start = 16.dp))
-                labelIconPainter?.let {
+                labelIcon?.let {
                     Icon(
-                        labelIconPainter,
+                        it,
                         contentDescription = "Mail Icon",
                         tint = searchBarColors.unfocusedLeadingIconColor,
                         modifier = Modifier.padding(end = 16.dp)
@@ -131,7 +129,7 @@ fun SearchBarDock(
                     )
                 }
                 innerTextField()
-                filterIconPainter?.let {
+                filterIcon?.let {
                     Spacer(modifier = Modifier.weight(1f))
                     Box(
                         modifier = Modifier
@@ -142,7 +140,7 @@ fun SearchBarDock(
                         contentAlignment = Alignment.Center,
                     ) {
                         Icon(
-                            filterIconPainter,
+                            imageVector = it,
                             contentDescription = "Иконка фильтра",
                             tint = searchBarColors.unfocusedLeadingIconColor
                         )
@@ -167,8 +165,8 @@ fun PreviewSearchBars() {
                     onSearch = { query ->
                         Log.d("zapros", query)
                     },
-                    filterIcon = R.drawable.baseline_filter_list_24,
-                    labelIcon = R.drawable.baseline_search_24,
+                    filterIcon = ImageVector.vectorResource(R.drawable.baseline_filter_list_24),
+                    labelIcon = ImageVector.vectorResource(R.drawable.baseline_search_24),
                     onFilterClick = {}
                 )
 
