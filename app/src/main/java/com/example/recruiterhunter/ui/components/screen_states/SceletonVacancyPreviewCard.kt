@@ -79,7 +79,7 @@ fun SkeletonVacancyPreviewCard(
                 Modifier
                     .size(56.dp)
                     .clip(elementCornerShape)
-                    .drawShimmerOptimized(
+                    .drawShimmer(
                         { shimmerProgress },
                         containerHeightProvider = containerHeight,
                         containerWidthProvider = containerWidth,
@@ -94,7 +94,7 @@ fun SkeletonVacancyPreviewCard(
                         .width(100.dp)
                         .height(18.dp)
                         .clip(elementCornerShape)
-                        .drawShimmerOptimized(
+                        .drawShimmer(
                             { shimmerProgress },
                             containerHeightProvider = containerHeight,
                             containerWidthProvider = containerWidth,
@@ -108,7 +108,7 @@ fun SkeletonVacancyPreviewCard(
                         .width(70.dp)
                         .height(13.dp)
                         .clip(elementCornerShape)
-                        .drawShimmerOptimized(
+                        .drawShimmer(
                             { shimmerProgress },
                             containerHeightProvider = containerHeight,
                             containerWidthProvider = containerWidth,
@@ -124,7 +124,7 @@ fun SkeletonVacancyPreviewCard(
                 Modifier
                     .size(20.dp)
                     .clip(elementCornerShape)
-                    .drawShimmerOptimized(
+                    .drawShimmer(
                         { shimmerProgress },
                         containerHeightProvider = containerHeight,
                         containerWidthProvider = containerWidth,
@@ -138,7 +138,7 @@ fun SkeletonVacancyPreviewCard(
                     .width(80.dp)
                     .height(14.dp)
                     .clip(elementCornerShape)
-                    .drawShimmerOptimized(
+                    .drawShimmer(
                         { shimmerProgress },
                         containerHeightProvider = containerHeight,
                         containerWidthProvider = containerWidth,
@@ -152,7 +152,7 @@ fun SkeletonVacancyPreviewCard(
             Modifier
                 .fillMaxWidth()
                 .height(1.dp)
-                .drawShimmerOptimized(
+                .drawShimmer(
                     { shimmerProgress },
                     containerHeightProvider = containerHeight,
                     containerWidthProvider = containerWidth,
@@ -167,7 +167,7 @@ fun SkeletonVacancyPreviewCard(
                     .width(90.dp)
                     .height(17.dp)
                     .clip(elementCornerShape)
-                    .drawShimmerOptimized(
+                    .drawShimmer(
                         { shimmerProgress },
                         containerHeightProvider = containerHeight,
                         containerWidthProvider = containerWidth,
@@ -183,7 +183,7 @@ fun SkeletonVacancyPreviewCard(
 @Preview
 @Composable
 fun PreviewSkeleton() {
-    RecruiterHunterTheme(ActualTheme.DARK) {
+    RecruiterHunterTheme(ActualTheme.LIGHT) {
         Scaffold { innerPadding ->
             Column(modifier = Modifier.padding(innerPadding)) {
                 SkeletonVacancyPreviewCard()

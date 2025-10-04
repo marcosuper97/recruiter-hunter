@@ -13,7 +13,7 @@ object ShimmerEffectsConfig {
     const val SHIMMER_ANIM_DURATION = 1500
 }
 
-fun Modifier.drawShimmerOptimized(
+fun Modifier.drawShimmer(
     progressProvider: () -> Float,
     containerWidthProvider: Float,
     containerHeightProvider: Float,
