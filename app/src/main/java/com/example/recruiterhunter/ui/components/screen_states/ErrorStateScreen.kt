@@ -77,8 +77,8 @@ fun PreviewNotFoundScreen1() {
             ErrorStateScreen(
                 modifier = Modifier.padding(innerPaddings),
                 title = "Ошибка сети",
-                message = "Свяжитесь с разработчиком приложения через \"настройки\" ",
-                iconState = ImageVector.vectorResource(R.drawable.error_naughty_dog)
+                message = "Сонька обкакала провода и все обгадилось",
+                iconState = ImageVector.vectorResource(R.drawable.tissue_01)
             )
         }
     }
