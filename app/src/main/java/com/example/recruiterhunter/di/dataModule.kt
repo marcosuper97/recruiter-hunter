@@ -21,6 +21,8 @@ import com.example.recruiterhunter.data.impl.network.request_engine.RequestEngin
 import com.example.recruiterhunter.data.impl.network.vacancies.HhNetworkClient
 import com.example.recruiterhunter.data.impl.network.vacancies.HhRetrofitClient
 import com.example.recruiterhunter.data.impl.network.vacancies.api.HhApi
+import com.example.recruiterhunter.data.impl.network.vacancies.request_builder.RequestBuildService
+import com.example.recruiterhunter.data.impl.network.vacancies.request_builder.impl.RequestBuildServiceImpl
 import com.example.recruiterhunter.domain.services.request_engine.RequestEngine
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -93,6 +95,10 @@ val dataModule = module {
 
     single<RequestEngine> {
         RequestEngineImpl(get())
+    }
+
+    single<RequestBuildService>{
+        RequestBuildServiceImpl()
     }
 }
 

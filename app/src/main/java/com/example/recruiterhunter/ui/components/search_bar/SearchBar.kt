@@ -2,7 +2,6 @@ package com.example.recruiterhunter.ui.components.search_bar
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.annotation.DrawableRes
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -34,9 +33,7 @@ import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSearchBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -56,14 +53,13 @@ import com.example.recruiterhunter.ui.theme.RecruiterHunterTheme
 @Composable
 fun SearchBarDock(
     state: TextFieldState,
-    placeholder: String = "Поиск",
+    label: String,
     onSearch: ((String) -> Unit)? = null,
     filterIcon: ImageVector? = null,
     labelIcon: ImageVector? = null,
     onFilterClick: (() -> Unit)? = null,
-    filterState: MutableState<Boolean> = mutableStateOf(false)
+    filterState: Boolean = false
 ) {
-    val filterState by filterState
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
     val roundedCorner = remember { RoundedCornerShape(24.dp) }
@@ -122,7 +118,7 @@ fun SearchBarDock(
                 }
                 if (!isFocused && state.text.isEmpty()) {
                     Text(
-                        text = placeholder,
+                        text = label,
                         style = MaterialTheme.typography.bodyLarge.copy(
                             color = searchBarColors.unfocusedPlaceholderColor
                         )
@@ -167,7 +163,8 @@ fun PreviewSearchBars() {
                     },
                     filterIcon = ImageVector.vectorResource(R.drawable.baseline_filter_list_24),
                     labelIcon = ImageVector.vectorResource(R.drawable.baseline_search_24),
-                    onFilterClick = {}
+                    onFilterClick = {},
+                    label = "Поиск"
                 )
 
                 SearchBar(

@@ -1,5 +1,6 @@
 package com.example.recruiterhunter.presentation.seachVacancyVm
 
+import android.util.Log
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -40,8 +41,8 @@ class SearchVacancyViewModel(
     fun sendIntent(intent: SearchScreenIntent) {
         viewModelScope.launch {
             when (intent) {
-                is SearchScreenIntent.DoNewRequest -> doNewRequest(intent.query)
-                is SearchScreenIntent.LoadNextPage -> loadNextPage(intent.query)
+                is SearchScreenIntent.DoNewRequest -> doNewRequest()
+                is SearchScreenIntent.LoadNextPage -> loadNextPage()
             }
         }
     }
@@ -56,12 +57,13 @@ class SearchVacancyViewModel(
         }
     }
 
-    private fun loadNextPage(query: String) {
+    private fun loadNextPage() {
         if (canLoadMore) {
             viewModelScope.launch {
                 _screenState.value = _screenState.value.copy(
                     loadingNextPage = true
                 )
+                val query = textField.text.toString()
                 vacancySearchInteractor.doRequest(query, nextPage)
                     .onSuccess { (page, pages, found, vacancyList) ->
                         _screenState.value = _screenState.value.copy(
@@ -90,7 +92,7 @@ class SearchVacancyViewModel(
         }
     }
 
-    private suspend fun doNewRequest(query: String) {
+    private suspend fun doNewRequest() {
         _screenState.value = _screenState.value.copy(
             loading = true,
             loadingNextPage = false,
@@ -98,14 +100,18 @@ class SearchVacancyViewModel(
             hasContent = false,
             errorMessage = "",
         )
-
+        Log.d("на загрузку", _screenState.value.toString())
+        val query = textField.text.toString()
         vacancySearchInteractor.doRequest(query, 1)
             .onSuccess { (page, pages, found, vacancyList) ->
                 _screenState.value = _screenState.value.copy(
+                    loading = false,
                     loadingNextPage = false,
+                    hasContent = true,
                     vacancyList = vacancyList,
                     vacanciesFounded = found
                 )
+                Log.d("SUCCESS", vacancyList.toString())
                 canLoadMore = page < pages
                 if (canLoadMore) nextPage = page + 1
             }
@@ -118,6 +124,7 @@ class SearchVacancyViewModel(
                         errorMessage = failure.message,
                         vacancyList = emptyList()
                     )
+                Log.d("провал", _screenState.value.toString())
             }
     }
 }

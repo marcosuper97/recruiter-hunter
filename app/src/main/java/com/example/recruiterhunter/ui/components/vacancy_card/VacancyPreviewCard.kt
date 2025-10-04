@@ -188,7 +188,7 @@ fun PreviewCard(
     RecruiterHunterTheme(ActualTheme.DARK) {
         Scaffold { innerPadding ->
             Column {
-                SearchBarDock(state)
+                SearchBarDock(state,label = "")
                 Spacer(modifier = Modifier.padding(vertical = 12.dp))
                 VacancyPreviewCard(
                     {},
