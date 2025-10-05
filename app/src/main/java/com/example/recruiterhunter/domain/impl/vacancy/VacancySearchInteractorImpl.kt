@@ -1,6 +1,6 @@
 package domain.impl
 
-import domain.interactor.VacancySearchInteractor
+import com.example.recruiterhunter.domain.interactor.vacancy.VacancySearchInteractor
 import domain.model.vacancy.VacanciesList
 import domain.repository.VacancySearchRepository
 

@@ -11,6 +11,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -40,6 +41,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -49,7 +52,7 @@ import com.example.recruiterhunter.R
 import com.example.recruiterhunter.domain.model.theme_state.ActualTheme
 import com.example.recruiterhunter.ui.theme.RecruiterHunterTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun SearchBarDock(
     state: TextFieldState,
@@ -60,11 +63,12 @@ fun SearchBarDock(
     onFilterClick: (() -> Unit)? = null,
     filterState: Boolean = false
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
     val interactionSource = remember { MutableInteractionSource() }
     val isFocused by interactionSource.collectIsFocusedAsState()
     val roundedCorner = remember { RoundedCornerShape(24.dp) }
-    val colors = SearchBarDefaults.colors()
-    val searchBarColors = remember { colors.inputFieldColors }
+    val searchBarColors = SearchBarDefaults.colors().inputFieldColors
     val textStyle =
         MaterialTheme.typography.bodyLarge.copy(color = searchBarColors.focusedTextColor)
     val filterBackgroundColor by animateColorAsState(
@@ -88,7 +92,11 @@ fun SearchBarDock(
         ),
         onKeyboardAction = {
             onSearch?.let {
-                if (state.text.isNotEmpty()) onSearch(state.text.toString())
+                keyboardController?.hide()
+                focusManager.clearFocus()
+                if (state.text.trim().isNotEmpty()) {
+                    onSearch(state.text.toString())
+                }
             }
         },
         lineLimits = TextFieldLineLimits.SingleLine,

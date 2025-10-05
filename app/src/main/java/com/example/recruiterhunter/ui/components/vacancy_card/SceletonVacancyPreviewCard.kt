@@ -1,4 +1,4 @@
-package com.example.recruiterhunter.ui.components.screen_states
+package com.example.recruiterhunter.ui.components.vacancy_card
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.RepeatMode
@@ -33,6 +33,8 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.recruiterhunter.domain.model.theme_state.ActualTheme
+import com.example.recruiterhunter.ui.components.screen_states.ShimmerEffectsConfig
+import com.example.recruiterhunter.ui.components.screen_states.drawShimmer
 import com.example.recruiterhunter.ui.theme.RecruiterHunterTheme
 
 @Composable
@@ -62,7 +64,7 @@ fun SkeletonVacancyPreviewCard(
     Column(
         modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(horizontal = 16.dp, vertical = 6.dp)
             .clip(RoundedCornerShape(12.dp))
             .background(CardDefaults.cardColors().containerColor)
             .padding(12.dp)

@@ -27,14 +27,13 @@ class VacancySearchRepositoryImpl(
                 filtersDao.insert(FiltersEntity())
             }
         }
-        .filterNotNull()
         .map { filters ->
             Log.d("Дошли до запроса во флоу", "Как вы поняли, ничего не работает")
             VacancySearchRequest(
-                area = filters.area,
-                industry = filters.industry,
-                salary = filters.salary,
-                onlyWithSalary = filters.onlyWithSalary == true,
+                area = filters?.area,
+                industry = filters?.industry,
+                salary = filters?.salary,
+                onlyWithSalary = filters?.onlyWithSalary == true,
                 text = ""
             )
         }
@@ -47,4 +46,5 @@ class VacancySearchRepositoryImpl(
                     .copy(text = query, page = page)
             )
         ).map { response -> vacanciesPreviewConverter.map(response) }
+            .onFailure { exception -> Log.d("Ошибка",exception.toString() ) }
 }

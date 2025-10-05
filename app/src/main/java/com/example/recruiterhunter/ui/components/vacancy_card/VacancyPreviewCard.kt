@@ -87,7 +87,7 @@ fun VacancyPreviewCard(
     Card(
         modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(horizontal = 16.dp, vertical = 6.dp)
             .clickable(
                 enabled = true,
                 onClick = { onCardClick(vacancy.vacancyId) },

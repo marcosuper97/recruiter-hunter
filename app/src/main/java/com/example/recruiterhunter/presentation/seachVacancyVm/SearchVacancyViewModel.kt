@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.recruiterhunter.domain.interactor.filters.FiltersInteractor
 import com.example.recruiterhunter.presentation.seachVacancyVm.intents.SearchScreenIntent
 import com.example.recruiterhunter.presentation.seachVacancyVm.intents.SearchScreenSideEffects
-import domain.interactor.VacancySearchInteractor
+import com.example.recruiterhunter.domain.interactor.vacancy.VacancySearchInteractor
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
