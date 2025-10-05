@@ -78,7 +78,7 @@ fun SearchScreen(viewModel: SearchVacancyViewModel = koinViewModel()) {
         topBar = {
             TopAppBar(
                 title = {
-                    Column(modifier = Modifier.padding(end = 12.dp, top = 24.dp, bottom = 6.dp)) {
+                    Column(modifier = Modifier.padding(end = 12.dp, top = 24.dp, bottom = 12.dp)) {
                         Text(
                             stringResource(R.string.app_name),
                             style = MaterialTheme.typography.headlineSmall
