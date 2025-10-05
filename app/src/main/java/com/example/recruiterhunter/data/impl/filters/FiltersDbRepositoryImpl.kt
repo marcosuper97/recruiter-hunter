@@ -6,16 +6,24 @@ import com.example.recruiterhunter.infrastructure.local.roomdb.filters.dao.Filte
 import com.example.recruiterhunter.infrastructure.local.roomdb.filters.entity.FiltersEntity
 import domain.model.filters.Filters
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 class FiltersDbRepositoryImpl(
     private val filtersConverter: FiltersConverter,
     private val filtersDao: FiltersDao
 ) : FiltersDbRepository {
     override fun fetchFilters(): Flow<Filters> =
-        filtersDao.getFilters().map { filtersEntity ->
-            filtersConverter.map(filtersEntity)
+        filtersDao.getFilters().onEach { filters ->
+            if (filters == null) {
+                filtersDao.insert(FiltersEntity())
+            }
         }
+            .filterNotNull()
+            .map { filtersEntity ->
+                filtersConverter.map(filtersEntity)
+            }
 
     override suspend fun updateFilters(filters: Filters) {
         filtersDao.update(filtersConverter.map(filters))

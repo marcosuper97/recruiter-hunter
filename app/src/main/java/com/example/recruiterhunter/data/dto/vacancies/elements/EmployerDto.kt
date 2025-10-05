@@ -8,8 +8,6 @@ data class EmployerDto(
     val name: String,
     @SerialName("logo_urls")
     val logo: EmployerLogoDto?,
-    @SerialName("employer_rating")
-    val rating: EmployerRatingDto,
     @SerialName("accredited_it_employer")
     val accreditedIt: Boolean
 )
