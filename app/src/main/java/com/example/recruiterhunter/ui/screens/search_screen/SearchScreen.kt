@@ -1,6 +1,7 @@
 package com.example.recruiterhunter.ui.screens.search_screen
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -26,6 +27,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.recruiterhunter.R
 import com.example.recruiterhunter.domain.model.theme_state.ActualTheme
 import com.example.recruiterhunter.presentation.seachVacancyVm.SearchVacancyViewModel
@@ -76,7 +78,26 @@ fun SearchScreen(viewModel: SearchVacancyViewModel = koinViewModel()) {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(stringResource(R.string.app_name))
+                    Column(modifier = Modifier.padding(end = 12.dp, top = 24.dp, bottom = 6.dp)) {
+                        Text(
+                            stringResource(R.string.app_name),
+                            style = MaterialTheme.typography.headlineSmall
+                        )
+                        Spacer(Modifier.padding(vertical = 8.dp))
+                        SearchBarDock(
+                            state = viewModel.textField,
+                            labelIcon = searchIcon,
+                            filterIcon = filterIcon,
+                            onSearch = {
+                                viewModel.sendIntent(SearchScreenIntent.DoNewRequest)
+                                scope.launch { listState.scrollToItem(0) }
+                            },
+                            onFilterClick = { viewModel.sendSideEffect(SearchScreenSideEffects.OpenFilters) },
+                            filterState = screenState.hasAnyFilters,
+                            label = stringResource(R.string.search)
+                        )
+
+                    }
                 },
                 scrollBehavior = scrollBehavior,
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -88,18 +109,6 @@ fun SearchScreen(viewModel: SearchVacancyViewModel = koinViewModel()) {
         snackbarHost = { SnackbarHost(snackBarHostState) }
     ) { innerPaddings ->
         Column(modifier = Modifier.padding(innerPaddings)) {
-            SearchBarDock(
-                state = viewModel.textField,
-                labelIcon = searchIcon,
-                filterIcon = filterIcon,
-                onSearch = {
-                    viewModel.sendIntent(SearchScreenIntent.DoNewRequest)
-                    scope.launch { listState.scrollToItem(0) }
-                },
-                onFilterClick = { viewModel.sendSideEffect(SearchScreenSideEffects.OpenFilters) },
-                filterState = screenState.hasAnyFilters,
-                label = stringResource(R.string.search)
-            )
             if (screenState.hasContent) {
                 LazyColumn(state = listState) {
                     itemsIndexed(
@@ -132,15 +141,49 @@ fun SearchScreen(viewModel: SearchVacancyViewModel = koinViewModel()) {
                         }
                 }
             }
-            if (screenState.loading) {
-                LazyColumn {
+
+            when {
+                screenState.loading -> LazyColumn {
                     items(4) {
                         SkeletonVacancyPreviewCard()
                     }
                 }
-            }
-            if (screenState.error) {
-                ErrorStateScreen(title = screenState.errorMessage)
+
+                screenState.emptyResult -> ErrorStateScreen(
+                    title = stringResource(R.string.nothing_found),
+                    message = stringResource(R.string.nothing_found_hint),
+                    iconState = ImageVector.vectorResource(R.drawable.cow_01)
+                )
+
+                screenState.internetHasNotAvailable -> ErrorStateScreen(
+                    title = stringResource(R.string.internet_is_unavailable),
+                    message = stringResource(R.string.internet_is_unavailable_hint),
+                    iconState = ImageVector.vectorResource(R.drawable.error_naughty_dog)
+                )
+
+                screenState.networkError -> ErrorStateScreen(
+                    title = stringResource(R.string.internet_is_unavailable),
+                    message = stringResource(R.string.internet_is_unavailable_hint),
+                    iconState = ImageVector.vectorResource(R.drawable.error_naughty_dog)
+                )
+
+                screenState.authorizationError || screenState.clientError -> ErrorStateScreen(
+                    title = stringResource(R.string.authorization_error),
+                    message = stringResource(R.string.authorization_error_hint),
+                    iconState = ImageVector.vectorResource(R.drawable.error_rocket_destroyed)
+                )
+
+                screenState.serverError -> ErrorStateScreen(
+                    title = stringResource(R.string.server_error),
+                    message = stringResource(R.string.server_error_hint),
+                    iconState = ImageVector.vectorResource(R.drawable.tissue_01)
+                )
+
+                screenState.unknownError -> ErrorStateScreen(
+                    title = stringResource(R.string.unknown_error),
+                    message = stringResource(R.string.unknown_error_hint),
+                    iconState = ImageVector.vectorResource(R.drawable.lochness_monster_01)
+                )
             }
         }
     }

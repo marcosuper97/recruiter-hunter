@@ -8,9 +8,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recruiterhunter.domain.interactor.filters.FiltersInteractor
+import com.example.recruiterhunter.domain.interactor.vacancy.VacancySearchInteractor
+import com.example.recruiterhunter.domain.model.exceptions.AppException
 import com.example.recruiterhunter.presentation.seachVacancyVm.intents.SearchScreenIntent
 import com.example.recruiterhunter.presentation.seachVacancyVm.intents.SearchScreenSideEffects
-import com.example.recruiterhunter.domain.interactor.vacancy.VacancySearchInteractor
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
@@ -57,6 +58,45 @@ class SearchVacancyViewModel(
         }
     }
 
+    private suspend fun doNewRequest() {
+        _screenState.value = _screenState.value.copy(
+            loading = true,
+            loadingNextPage = false,
+            hasContent = false,
+            vacancyList = emptyList(),
+            vacanciesFounded = 0L,
+            emptyResult = false,
+            authorizationError = false,
+            serverError = false,
+            clientError = false,
+            unknownError = false,
+            networkError = false,
+            internetHasNotAvailable = false,
+        )
+        val query = textField.text.toString()
+        vacancySearchInteractor.doRequest(query, 1)
+            .onSuccess { (page, pages, found, vacancyList) ->
+                if (vacancyList.isNotEmpty()) {
+                    _screenState.value = _screenState.value.copy(
+                        loading = false,
+                        hasContent = true,
+                        vacancyList = vacancyList,
+                        vacanciesFounded = found
+                    )
+                    Log.d("SUCCESS", vacancyList.toString())
+                    canLoadMore = page < pages
+                    if (canLoadMore) nextPage = page + 1
+                } else {
+                    _screenState.value = _screenState.value
+                        .copy(
+                            loading = false,
+                            emptyResult = true,
+                        )
+                }
+            }
+            .onFailure { failure -> failureHandler(failure) }
+    }
+
     private fun loadNextPage() {
         if (canLoadMore) {
             viewModelScope.launch {
@@ -84,47 +124,87 @@ class SearchVacancyViewModel(
         }
     }
 
+    private fun failureHandler(failure: Throwable) {
+        when (failure) {
+            is AppException.InternetHasNotAvailable -> {
+                _screenState.value = _screenState.value
+                    .copy(
+                        loading = false,
+                        internetHasNotAvailable = true,
+                    )
+                Log.d(failure.logMessage, failure.cause.toString())
+            }
+
+            is AppException.NetworkError -> {
+                _screenState.value = _screenState.value
+                    .copy(
+                        loading = false,
+                        networkError = true,
+                    )
+                Log.d(failure.logMessage, failure.cause.toString())
+            }
+
+            is AppException.EmptyResult -> {
+                _screenState.value = _screenState.value
+                    .copy(
+                        loading = false,
+                        emptyResult = true,
+                    )
+                Log.d(failure.logMessage, failure.cause.toString())
+            }
+
+            is AppException.AuthorizationError -> {
+                _screenState.value = _screenState.value
+                    .copy(
+                        loading = false,
+                        authorizationError = true,
+                    )
+                Log.d(failure.logMessage, failure.cause.toString())
+            }
+
+            is AppException.ServerError -> {
+                _screenState.value = _screenState.value
+                    .copy(
+                        loading = false,
+                        serverError = true,
+                    )
+                Log.d(failure.logMessage, failure.cause.toString())
+            }
+
+            is AppException.ClientError -> {
+                _screenState.value = _screenState.value
+                    .copy(
+                        loading = false,
+                        clientError = true,
+                    )
+                Log.d(failure.logMessage, failure.cause.toString())
+            }
+
+            is AppException.UnknownException -> {
+                _screenState.value = _screenState.value
+                    .copy(
+                        loading = false,
+                        unknownError = true,
+                    )
+                Log.d(failure.logMessage, failure.cause.toString())
+            }
+
+            else -> {
+                _screenState.value = _screenState.value
+                    .copy(
+                        loading = false,
+                        unknownError = true,
+                    )
+                Log.d("unknown", failure.cause.toString())
+            }
+        }
+    }
+
     private suspend fun checkFilters() {
         filtersInteractor.hasAnyFilters().collect { filtersState ->
             _screenState.value = _screenState.value.copy(
                 hasAnyFilters = filtersState
             )
         }
-    }
-
-    private suspend fun doNewRequest() {
-        _screenState.value = _screenState.value.copy(
-            loading = true,
-            loadingNextPage = false,
-            error = false,
-            hasContent = false,
-            errorMessage = "",
-        )
-        Log.d("на загрузку", _screenState.value.toString())
-        val query = textField.text.toString()
-        vacancySearchInteractor.doRequest(query, 1)
-            .onSuccess { (page, pages, found, vacancyList) ->
-                _screenState.value = _screenState.value.copy(
-                    loading = false,
-                    loadingNextPage = false,
-                    hasContent = true,
-                    vacancyList = vacancyList,
-                    vacanciesFounded = found
-                )
-                Log.d("SUCCESS", vacancyList.toString())
-                canLoadMore = page < pages
-                if (canLoadMore) nextPage = page + 1
-            }
-            .onFailure { failure ->
-                _screenState.value = _screenState.value
-                    .copy(
-                        loading = false,
-                        error = true,
-                        hasContent = false,
-                        errorMessage = failure.message,
-                        vacancyList = emptyList()
-                    )
-                Log.d("провал", _screenState.value.toString())
-            }
     }
 }

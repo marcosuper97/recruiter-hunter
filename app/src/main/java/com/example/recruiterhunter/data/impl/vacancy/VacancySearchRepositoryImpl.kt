@@ -9,7 +9,6 @@ import com.example.recruiterhunter.infrastructure.local.roomdb.filters.dao.Filte
 import com.example.recruiterhunter.infrastructure.local.roomdb.filters.entity.FiltersEntity
 import domain.model.vacancy.VacanciesList
 import domain.repository.VacancySearchRepository
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -22,13 +21,11 @@ class VacancySearchRepositoryImpl(
 ) : VacancySearchRepository {
     private val filtersFlow = filtersDao.getFilters()
         .onEach { filters ->
-            Log.d("он ич", "Как вы поняли, ничего не работает")
             if (filters == null) {
                 filtersDao.insert(FiltersEntity())
             }
         }
         .map { filters ->
-            Log.d("Дошли до запроса во флоу", "Как вы поняли, ничего не работает")
             VacancySearchRequest(
                 area = filters?.area,
                 industry = filters?.industry,
@@ -46,5 +43,5 @@ class VacancySearchRepositoryImpl(
                     .copy(text = query, page = page)
             )
         ).map { response -> vacanciesPreviewConverter.map(response) }
-            .onFailure { exception -> Log.d("Ошибка",exception.toString() ) }
+            .onFailure { exception -> Log.d("Ошибка", exception.toString()) }
 }

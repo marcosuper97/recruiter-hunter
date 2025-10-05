@@ -87,7 +87,7 @@ fun VacancyPreviewCard(
     Card(
         modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 6.dp)
+            .padding(horizontal = 12.dp, vertical = 6.dp)
             .clickable(
                 enabled = true,
                 onClick = { onCardClick(vacancy.vacancyId) },
@@ -188,7 +188,7 @@ fun PreviewCard(
     RecruiterHunterTheme(ActualTheme.DARK) {
         Scaffold { innerPadding ->
             Column {
-                SearchBarDock(state,label = "")
+                SearchBarDock(state, label = "")
                 Spacer(modifier = Modifier.padding(vertical = 12.dp))
                 VacancyPreviewCard(
                     {},

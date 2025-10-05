@@ -5,7 +5,6 @@ import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.recruiterhunter.presentation.app_theme_vm.AppThemeViewModel
 import com.example.recruiterhunter.ui.screens.search_screen.SearchScreen
-import com.example.recruiterhunter.ui.screens.setting_screen.SettingsScreen
 import com.example.recruiterhunter.ui.theme.RecruiterHunterTheme
 import org.koin.androidx.compose.koinViewModel
 

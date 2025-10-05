@@ -64,7 +64,7 @@ fun SkeletonVacancyPreviewCard(
     Column(
         modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 6.dp)
+            .padding(horizontal = 12.dp, vertical = 6.dp)
             .clip(RoundedCornerShape(12.dp))
             .background(CardDefaults.cardColors().containerColor)
             .padding(12.dp)

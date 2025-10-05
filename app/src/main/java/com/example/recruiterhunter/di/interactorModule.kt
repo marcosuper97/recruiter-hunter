@@ -12,8 +12,8 @@ import com.example.recruiterhunter.domain.interactor.favorites.FavoritesInteract
 import com.example.recruiterhunter.domain.interactor.filters.FiltersInteractor
 import com.example.recruiterhunter.domain.interactor.settings.SettingsInteractor
 import com.example.recruiterhunter.domain.interactor.vacancy.VacancyDetailsInteractor
-import domain.impl.VacancySearchInteractorImpl
 import com.example.recruiterhunter.domain.interactor.vacancy.VacancySearchInteractor
+import domain.impl.VacancySearchInteractorImpl
 import org.koin.dsl.module
 
 val interactorModule = module {

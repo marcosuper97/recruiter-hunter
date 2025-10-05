@@ -101,8 +101,6 @@ fun SearchBarDock(
         },
         lineLimits = TextFieldLineLimits.SingleLine,
         interactionSource = interactionSource,
-        modifier = Modifier
-            .padding(12.dp),
         decorator = { innerTextField ->
             Row(
                 Modifier

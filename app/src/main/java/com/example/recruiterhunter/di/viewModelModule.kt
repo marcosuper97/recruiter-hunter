@@ -15,7 +15,7 @@ val viewModelModule = module {
         SettingsScreenViewModel(get())
     }
 
-    viewModel{
-        SearchVacancyViewModel(get(),get())
+    viewModel {
+        SearchVacancyViewModel(get(), get())
     }
 }

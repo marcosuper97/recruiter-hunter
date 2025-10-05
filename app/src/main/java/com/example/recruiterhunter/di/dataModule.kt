@@ -97,7 +97,7 @@ val dataModule = module {
         RequestEngineImpl(get())
     }
 
-    single<RequestBuildService>{
+    single<RequestBuildService> {
         RequestBuildServiceImpl()
     }
 }
