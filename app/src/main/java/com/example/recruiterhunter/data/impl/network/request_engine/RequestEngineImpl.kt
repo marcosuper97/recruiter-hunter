@@ -14,7 +14,7 @@ class RequestEngineImpl(private val networkCheckService: NetworkCheckService) : 
     ): Result<T> {
         if (!networkCheckService.isInternetAvailable()) {
             return Result.failure(
-                AppException.NetworkError(
+                AppException.InternetHasNotAvailable(
                     "Отсутствует соединение с интернетом.",
                     Exception("Отсутствие соединения: NetworkCheck вернул false")
                 )

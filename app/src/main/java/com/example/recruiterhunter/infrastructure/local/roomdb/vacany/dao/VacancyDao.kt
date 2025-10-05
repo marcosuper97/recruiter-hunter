@@ -1,11 +1,13 @@
 package com.example.recruiterhunter.infrastructure.local.roomdb.vacany.dao
 
+import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.recruiterhunter.infrastructure.local.roomdb.vacany.entity.VacancyEntity
 import kotlinx.coroutines.flow.Flow
 
+@Dao
 interface VacancyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertVacancy(vacancy: VacancyEntity)
