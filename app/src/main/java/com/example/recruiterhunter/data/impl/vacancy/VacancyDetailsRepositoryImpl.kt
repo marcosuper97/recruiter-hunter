@@ -15,7 +15,7 @@ class VacancyDetailsRepositoryImpl(
         vacancyDao.isFavorite(vacancyId)
             .let { isFavorite ->
                 if (isFavorite) {
-                    Result.success(vacanciesDetailsConverter.map(vacancyDao.getVacancy(vacancyId)!!))
+                    Result.success(vacanciesDetailsConverter.map(vacancyDao.getVacancy(vacancyId)))
                 } else {
                     hhNetworkClient.detailsVacancyRequest(vacancyId)
                         .map { vacanciesDetailsConverter.map(it) }
