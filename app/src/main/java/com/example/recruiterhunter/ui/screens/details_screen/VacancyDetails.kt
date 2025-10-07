@@ -3,6 +3,7 @@ package com.example.recruiterhunter.ui.screens.details_screen
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -39,43 +41,46 @@ fun VacancyDetails(
     viewModel: DetailsScreenViewModel = koinViewModel()
 ) {
     with(sharedTransitionScope) {
-        Scaffold() { innerPaddings ->
-            Column(
+        Scaffold(modifier = Modifier.fillMaxSize()) { innerPaddings ->
+            Box(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.surfaceContainer)
                     .padding(innerPaddings)
             ) {
-                Box(
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
+                        .background(color = MaterialTheme.colorScheme.surface)
                 ) {
-                    SubcomposeAsyncImage(
+                    Box(
                         modifier = Modifier
-                            .size(100.dp)
-                            .clip(RoundedCornerShape(4.dp))
-                            .sharedElement(
-                                sharedContentState = rememberSharedContentState(
-                                    key = DetailsTransition.vacancyIdKey(
-                                        vacancyId
-                                    )
+                            .fillMaxWidth()
+                            .height(200.dp)
+                    ) {
+                        SubcomposeAsyncImage(
+                            modifier = Modifier
+                                .size(100.dp)
+                                .clip(RoundedCornerShape(4.dp))
+                                .sharedElement(
+                                    sharedContentState = rememberSharedContentState(
+                                        key = DetailsTransition.vacancyIdKey(
+                                            vacancyId
+                                        )
+                                    ),
+                                    animatedVisibilityScope = animatedVisibilityScope
                                 ),
-                                animatedVisibilityScope = animatedVisibilityScope
-                            ),
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(employerLogo)
-                            .memoryCacheKey("vacancy_logo${vacancyId}")
-                            .placeholderMemoryCacheKey("vacancy_logo${vacancyId}")
-                            .build(),
-                        contentScale = ContentScale.Fit,
-                        contentDescription = "",
-                        loading = { JobIcon() },
-                        error = { JobIcon() }
-                    )
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(employerLogo)
+                                .memoryCacheKey("vacancy_logo${vacancyId}")
+                                .placeholderMemoryCacheKey("vacancy_logo${vacancyId}")
+                                .build(),
+                            contentScale = ContentScale.Fit,
+                            contentDescription = "",
+                            loading = { JobIcon() },
+                            error = { JobIcon() }
+                        )
+                    }
                 }
             }
         }
     }
 }
-
-
