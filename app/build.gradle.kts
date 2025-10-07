@@ -95,4 +95,5 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.koin.androidx.compose)
     implementation(libs.androidx.animation)
+    implementation("androidx.palette:palette:1.0.0")
 }

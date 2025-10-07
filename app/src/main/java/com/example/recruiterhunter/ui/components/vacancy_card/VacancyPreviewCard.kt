@@ -1,21 +1,20 @@
 package com.example.recruiterhunter.ui.components.vacancy_card
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -24,25 +23,28 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
 import com.example.recruiterhunter.R
-import com.example.recruiterhunter.domain.model.theme_state.ActualTheme
 import com.example.recruiterhunter.domain.model.vacancy.preview.VacancyPreview
-import com.example.recruiterhunter.ui.components.search_bar.SearchBarDock
-import com.example.recruiterhunter.ui.theme.RecruiterHunterTheme
+import com.example.recruiterhunter.ui.components.placeholder_icon.JobIcon
+import com.example.recruiterhunter.ui.transition_keys.DetailsTransition
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun VacancyPreviewCard(
-    onCardClick: (Long) -> Unit,
+    onCardClick: (Long, String, String, String, String, String) -> Unit,
     vacancy: VacancyPreview,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
 ) {
     val themeTypo = MaterialTheme.typography
     val themeColors = MaterialTheme.colorScheme
@@ -66,23 +68,11 @@ fun VacancyPreviewCard(
             fontWeight = FontWeight.Bold
         )
     val locationIcon = ImageVector.vectorResource(R.drawable.outline_location_on_24)
-    val salary = when {
-        vacancy.salaryFrom.isNotEmpty() && vacancy.salaryTo.isEmpty() -> {
-            "От ${vacancy.salaryFrom} ${vacancy.currency}"
-        }
-
-        vacancy.salaryFrom.isEmpty() && vacancy.salaryTo.isNotEmpty() -> {
-            "До ${vacancy.salaryTo} ${vacancy.currency}"
-        }
-
-        vacancy.salaryFrom.isNotEmpty() && vacancy.salaryTo.isNotEmpty() -> {
-            "От ${vacancy.salaryFrom} до ${vacancy.salaryTo} ${vacancy.currency}"
-        }
-
-        else -> {
-            "Зарплата не указана"
-        }
-    }
+    val salary = formatSalary(
+        salaryFrom = vacancy.salaryFrom,
+        salaryTo = vacancy.salaryTo,
+        currency = vacancy.currency
+    )
 
     Card(
         modifier
@@ -90,22 +80,45 @@ fun VacancyPreviewCard(
             .padding(horizontal = 12.dp, vertical = 6.dp)
             .clickable(
                 enabled = true,
-                onClick = { onCardClick(vacancy.vacancyId) },
+                onClick = {
+                    onCardClick(
+                        vacancy.vacancyId,
+                        vacancy.vacancyName,
+                        vacancy.employerName,
+                        vacancy.employerLogo,
+                        salary,
+                        vacancy.address
+                    )
+                },
                 role = Role.Button
             )
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
             Row(verticalAlignment = Alignment.Top) {
-                SubcomposeAsyncImage(
-                    modifier = Modifier
-                        .size(56.dp)
-                        .clip(RoundedCornerShape(4.dp)),
-                    model = vacancy.employerLogo,
-                    contentScale = ContentScale.Fit,
-                    contentDescription = "",
-                    loading = { JobIcon() },
-                    error = { JobIcon() },
-                )
+                with(sharedTransitionScope) {
+                    SubcomposeAsyncImage(
+                        modifier = Modifier
+                            .size(56.dp)
+                            .clip(RoundedCornerShape(4.dp))
+                            .sharedElement(
+                                sharedContentState = rememberSharedContentState(
+                                    key = DetailsTransition.vacancyIdKey(
+                                        vacancy.vacancyId
+                                    )
+                                ),
+                                animatedVisibilityScope = animatedVisibilityScope
+                            ),
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(vacancy.employerLogo)
+                            .memoryCacheKey("vacancy_logo${vacancy.vacancyId}")
+                            .placeholderMemoryCacheKey("vacancy_logo${vacancy.vacancyId}")
+                            .build(),
+                        contentScale = ContentScale.Fit,
+                        contentDescription = "",
+                        loading = { JobIcon() },
+                        error = { JobIcon() },
+                    )
+                }
                 Spacer(modifier = Modifier.padding(horizontal = 6.dp))
                 Column() {
                     Text(
@@ -148,20 +161,9 @@ fun VacancyPreviewCard(
 }
 
 @Composable
-private fun JobIcon() {
-    Icon(
-        imageVector = ImageVector.vectorResource(R.drawable.baseline_work_24),
-        contentDescription = "Заглушка вакансии", // ✅ Исправить на осмысленный
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(4.dp),
-    )
-}
-
-
-@Composable
 private fun formatSalary(salaryFrom: String, salaryTo: String, currency: String): String {
     return when {
+        salaryFrom.toIntOrNull() == salaryTo.toIntOrNull() -> "$salaryFrom $currency"
         salaryFrom.isNotEmpty() && salaryTo.isEmpty() -> "От $salaryFrom $currency"
         salaryFrom.isEmpty() && salaryTo.isNotEmpty() -> "До $salaryTo $currency"
         salaryFrom.isNotEmpty() && salaryTo.isNotEmpty() -> "От $salaryFrom до $salaryTo $currency"
@@ -170,32 +172,32 @@ private fun formatSalary(salaryFrom: String, salaryTo: String, currency: String)
 }
 
 
-@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
-@Composable
-fun PreviewCard(
-    vacancyPreview: VacancyPreview = VacancyPreview(
-        vacancyId = 111,
-        vacancyName = "Android developer в команду маркета",
-        employerName = "Yandex",
-        employerLogo = "https://img.hhcdn.ru/employer-logo/6459906.png",
-        address = "Улица Пушкина, дом колотушкина",
-        salaryFrom = "120 000",
-        salaryTo = "122 000",
-        currency = "Руб"
-    )
-) {
-    val state = rememberTextFieldState()
-    RecruiterHunterTheme(ActualTheme.DARK) {
-        Scaffold { innerPadding ->
-            Column {
-                SearchBarDock(state, label = "")
-                Spacer(modifier = Modifier.padding(vertical = 12.dp))
-                VacancyPreviewCard(
-                    {},
-                    vacancyPreview, modifier = Modifier
-                        .padding(innerPadding)
-                )
-            }
-        }
-    }
-}
+//@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+//@Composable
+//fun PreviewCard(
+//    vacancyPreview: VacancyPreview = VacancyPreview(
+//        vacancyId = 111,
+//        vacancyName = "Android developer в команду маркета",
+//        employerName = "Yandex",
+//        employerLogo = "https://img.hhcdn.ru/employer-logo/6459906.png",
+//        address = "Улица Пушкина, дом колотушкина",
+//        salaryFrom = "120 000",
+//        salaryTo = "122 000",
+//        currency = "Руб"
+//    )
+//) {
+//    val state = rememberTextFieldState()
+//    RecruiterHunterTheme(ActualTheme.DARK) {
+//        Scaffold { innerPadding ->
+//            Column {
+//                SearchBarDock(state, label = "")
+//                Spacer(modifier = Modifier.padding(vertical = 12.dp))
+//                VacancyPreviewCard(
+//                    {},
+//                    vacancyPreview, modifier = Modifier
+//                        .padding(innerPadding)
+//                )
+//            }
+//        }
+//    }
+//}
