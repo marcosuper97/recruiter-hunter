@@ -51,7 +51,10 @@ class SearchVacancyViewModel(
     fun sendSideEffect(effect: SearchScreenSideEffects) {
         viewModelScope.launch {
             when (effect) {
-                is SearchScreenSideEffects.OpenDetails -> {_sideEffect.send(effect)}
+                is SearchScreenSideEffects.OpenDetails -> {
+                    _sideEffect.send(effect)
+                }
+
                 SearchScreenSideEffects.OpenFilters -> {}
                 SearchScreenSideEffects.DownloadError -> _sideEffect.send(effect)
             }

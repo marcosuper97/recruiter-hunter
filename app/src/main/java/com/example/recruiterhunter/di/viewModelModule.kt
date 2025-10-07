@@ -20,7 +20,7 @@ val viewModelModule = module {
         SearchVacancyViewModel(get(), get())
     }
 
-    viewModel{
+    viewModel {
         DetailsScreenViewModel(get())
     }
 }

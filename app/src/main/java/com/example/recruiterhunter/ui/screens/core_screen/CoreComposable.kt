@@ -49,11 +49,16 @@ fun CoreCompose(
                     )
                 ) { backStackEntry ->
                     val vacancyId = backStackEntry.arguments?.getLong("vacancyId")
-                    val vacancyName = backStackEntry.arguments?.getString("vacancyName")?.let { Uri.decode(it) }
-                    val employerName = backStackEntry.arguments?.getString("employerName")?.let { Uri.decode(it) }
-                    val employerLogo = backStackEntry.arguments?.getString("employerLogo")?.let { Uri.decode(it) }
-                    val address = backStackEntry.arguments?.getString("address")?.let { Uri.decode(it) }
-                    val salary = backStackEntry.arguments?.getString("salary")?.let { Uri.decode(it) }
+                    val vacancyName =
+                        backStackEntry.arguments?.getString("vacancyName")?.let { Uri.decode(it) }
+                    val employerName =
+                        backStackEntry.arguments?.getString("employerName")?.let { Uri.decode(it) }
+                    val employerLogo =
+                        backStackEntry.arguments?.getString("employerLogo")?.let { Uri.decode(it) }
+                    val address =
+                        backStackEntry.arguments?.getString("address")?.let { Uri.decode(it) }
+                    val salary =
+                        backStackEntry.arguments?.getString("salary")?.let { Uri.decode(it) }
                     VacancyDetails(
                         vacancyId = vacancyId,
                         employerLogo = employerLogo,
