@@ -38,7 +38,7 @@ fun CoreCompose(
                     )
                 }
                 composable(
-                    route = "job_detail/{vacancyId}/{vacancyName}/{employerName}/{employerLogo}/{address}/{salary}",
+                    route = "job_detail/{vacancyId}?vacancyName={vacancyName}&employerName={employerName}&employerLogo={employerLogo}&address={address}&salary={salary}",
                     arguments = listOf(
                         navArgument("vacancyId") { type = NavType.LongType },
                         navArgument("vacancyName") { type = NavType.StringType },
@@ -61,9 +61,14 @@ fun CoreCompose(
                         backStackEntry.arguments?.getString("salary")?.let { Uri.decode(it) }
                     VacancyDetails(
                         vacancyId = vacancyId,
+                        vacancyName = vacancyName,
+                        employerName = employerName,
                         employerLogo = employerLogo,
+                        address = address,
+                        salary = salary,
                         sharedTransitionScope = this@SharedTransitionLayout,
-                        animatedVisibilityScope = this@composable
+                        animatedVisibilityScope = this@composable,
+                        navController = navController
                     )
                 }
                 composable("settings_screen") {

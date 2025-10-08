@@ -70,7 +70,7 @@ fun SearchScreen(
             }
 
             is SearchScreenSideEffects.OpenDetails -> {
-                navController.navigate("job_detail/${sideEffect.vacancyId}/${sideEffect.vacancyName}/${sideEffect.employerName}/${sideEffect.employerLogo}/${sideEffect.address}/${sideEffect.salary}")
+                navController.navigate(sideEffect.route)
             }
 
             SearchScreenSideEffects.OpenFilters -> {
@@ -124,13 +124,14 @@ fun SearchScreen(
                         VacancyPreviewCard(
                             onCardClick = { vacancyId, vacancyName, employerName, employerLogo, address, salary ->
                                 viewModel.sendSideEffect(
+
                                     SearchScreenSideEffects.OpenDetails(
-                                        vacancyId = vacancyId,
-                                        vacancyName = Uri.encode(vacancyName),
-                                        employerName = Uri.encode(employerName),
-                                        employerLogo = Uri.encode(employerLogo),
-                                        address = Uri.encode(address),
-                                        salary = salary
+                                        route = "job_detail/$vacancyId" +
+                                                "?vacancyName=${Uri.encode(vacancyName)}" +
+                                                "&employerName=${Uri.encode(employerName)}" +
+                                                "&employerLogo=${Uri.encode(employerLogo)}" +
+                                                "&address=${Uri.encode(address)}" +
+                                                "&salary=$salary"
                                     )
                                 )
                             },

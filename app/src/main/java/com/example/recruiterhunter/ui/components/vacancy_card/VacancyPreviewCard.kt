@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -26,7 +28,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -68,34 +69,46 @@ fun VacancyPreviewCard(
             fontWeight = FontWeight.Bold
         )
     val locationIcon = ImageVector.vectorResource(R.drawable.outline_location_on_24)
+
+    /**
+     * @param salary тут критическая ошибка у меня, надо скорректировать.
+     * Никаких вычислений в UI слое и форматирований
+     */
+
     val salary = formatSalary(
         salaryFrom = vacancy.salaryFrom,
         salaryTo = vacancy.salaryTo,
         currency = vacancy.currency
     )
 
-    Card(
-        modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 6.dp)
-            .clickable(
-                enabled = true,
-                onClick = {
-                    onCardClick(
-                        vacancy.vacancyId,
-                        vacancy.vacancyName,
-                        vacancy.employerName,
-                        vacancy.employerLogo,
-                        salary,
-                        vacancy.address
-                    )
-                },
-                role = Role.Button
-            )
-    ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            Row(verticalAlignment = Alignment.Top) {
-                with(sharedTransitionScope) {
+    with(sharedTransitionScope) {
+        Card(
+            modifier
+                .fillMaxWidth()
+                .sharedBounds(
+                    rememberSharedContentState(key = DetailsTransition.containerKey(vacancy.vacancyId)),
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds,
+                )
+                .padding(horizontal = 12.dp, vertical = 6.dp)
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = null,
+                    enabled = true,
+                    onClick = {
+                        onCardClick(
+                            vacancy.vacancyId,
+                            vacancy.vacancyName,
+                            vacancy.employerName,
+                            vacancy.employerLogo,
+                            salary,
+                            vacancy.address
+                        )
+                    },
+                )
+        ) {
+            Column(modifier = Modifier.padding(12.dp)) {
+                Row(verticalAlignment = Alignment.Top) {
                     SubcomposeAsyncImage(
                         modifier = Modifier
                             .size(56.dp)
@@ -118,86 +131,75 @@ fun VacancyPreviewCard(
                         loading = { JobIcon() },
                         error = { JobIcon() },
                     )
+                    Spacer(modifier = Modifier.padding(horizontal = 6.dp))
+                    Column() {
+                        Text(
+                            text = vacancy.vacancyName,
+                            style = vacancyNameStyle,
+                            modifier = Modifier.sharedBounds(
+                                rememberSharedContentState(DetailsTransition.vacancyName(vacancy.vacancyId)),
+                                animatedVisibilityScope = animatedVisibilityScope,
+                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+                            )
+                        )
+                        Spacer(modifier = Modifier.padding(vertical = 4.dp))
+                        Text(
+                            text = vacancy.employerName,
+                            style = vacancyEmployerStyle,
+                            modifier = Modifier
+                                .alpha(0.7f)
+                                .sharedBounds(
+                                    rememberSharedContentState(DetailsTransition.salary(vacancy.vacancyId)),
+                                    animatedVisibilityScope = animatedVisibilityScope,
+                                    resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+                                )
+                        )
+                    }
                 }
-                Spacer(modifier = Modifier.padding(horizontal = 6.dp))
-                Column() {
-                    Text(
-                        text = vacancy.vacancyName,
-                        style = vacancyNameStyle,
+                Spacer(modifier = Modifier.padding(vertical = 6.dp))
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = locationIcon,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(20.dp)
+                            .sharedElement(
+                                rememberSharedContentState(DetailsTransition.navigationIcon(vacancy.vacancyId)),
+                                animatedVisibilityScope = animatedVisibilityScope
+                            )
                     )
-                    Spacer(modifier = Modifier.padding(vertical = 4.dp))
+                    Spacer(modifier = Modifier.padding(horizontal = 2.dp))
                     Text(
-                        text = vacancy.employerName,
-                        style = vacancyEmployerStyle,
-                        modifier = Modifier.alpha(0.7f)
+                        modifier = Modifier
+                            .sharedBounds(
+                                rememberSharedContentState(DetailsTransition.address(vacancy.vacancyId)),
+                                animatedVisibilityScope = animatedVisibilityScope,
+                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+                            ),
+                        text = vacancy.address,
+                        style = addressTextStyle,
+                        fontWeight = FontWeight.Light
                     )
                 }
-            }
-            Spacer(modifier = Modifier.padding(vertical = 6.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    imageVector = locationIcon,
-                    contentDescription = "",
-                    modifier = Modifier.size(20.dp)
-                )
-                Spacer(modifier = Modifier.padding(horizontal = 2.dp))
-                Text(
-                    text = vacancy.address,
-                    style = addressTextStyle,
-                    fontWeight = FontWeight.Light
-                )
-            }
-            Spacer(modifier = Modifier.padding(vertical = 6.dp))
-            HorizontalDivider(Modifier.alpha(0.8f))
-            Spacer(modifier = Modifier.padding(vertical = 6.dp))
-            Row {
-                Text(
-                    text = salary,
-                    style = salaryTextStyle,
-                )
+                Spacer(modifier = Modifier.padding(vertical = 6.dp))
+                HorizontalDivider(Modifier.alpha(0.8f))
+                Spacer(modifier = Modifier.padding(vertical = 6.dp))
+                Row {
+                    Text(
+                        text = salary,
+                        style = salaryTextStyle,
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-private fun formatSalary(salaryFrom: String, salaryTo: String, currency: String): String {
-    return when {
-        salaryFrom.toIntOrNull() == salaryTo.toIntOrNull() -> "$salaryFrom $currency"
-        salaryFrom.isNotEmpty() && salaryTo.isEmpty() -> "От $salaryFrom $currency"
-        salaryFrom.isEmpty() && salaryTo.isNotEmpty() -> "До $salaryTo $currency"
-        salaryFrom.isNotEmpty() && salaryTo.isNotEmpty() -> "От $salaryFrom до $salaryTo $currency"
-        else -> stringResource(R.string.salary_no_specified)
-    }
+private fun formatSalary(salaryFrom: String, salaryTo: String, currency: String): String = when {
+    salaryFrom.isNotEmpty() && salaryTo.isNotEmpty() -> "От $salaryFrom до $salaryTo $currency"
+    salaryFrom.isNotEmpty() && salaryTo.isEmpty() -> "От $salaryFrom $currency"
+    salaryFrom.isEmpty() && salaryTo.isNotEmpty() -> "До $salaryTo $currency"
+    salaryFrom.isEmpty() && salaryTo.isEmpty() -> stringResource(R.string.salary_no_specified)
+    else -> stringResource(R.string.salary_no_specified)
 }
-
-
-//@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
-//@Composable
-//fun PreviewCard(
-//    vacancyPreview: VacancyPreview = VacancyPreview(
-//        vacancyId = 111,
-//        vacancyName = "Android developer в команду маркета",
-//        employerName = "Yandex",
-//        employerLogo = "https://img.hhcdn.ru/employer-logo/6459906.png",
-//        address = "Улица Пушкина, дом колотушкина",
-//        salaryFrom = "120 000",
-//        salaryTo = "122 000",
-//        currency = "Руб"
-//    )
-//) {
-//    val state = rememberTextFieldState()
-//    RecruiterHunterTheme(ActualTheme.DARK) {
-//        Scaffold { innerPadding ->
-//            Column {
-//                SearchBarDock(state, label = "")
-//                Spacer(modifier = Modifier.padding(vertical = 12.dp))
-//                VacancyPreviewCard(
-//                    {},
-//                    vacancyPreview, modifier = Modifier
-//                        .padding(innerPadding)
-//                )
-//            }
-//        }
-//    }
-//}
