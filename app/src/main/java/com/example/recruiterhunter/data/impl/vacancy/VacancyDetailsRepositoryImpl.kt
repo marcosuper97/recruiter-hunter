@@ -3,7 +3,7 @@ package com.example.recruiterhunter.data.impl.vacancy
 import com.example.recruiterhunter.data.converters.vacancy.full.VacanciesDetailsConverter
 import com.example.recruiterhunter.data.impl.network.vacancies.HhNetworkClient
 import com.example.recruiterhunter.infrastructure.local.roomdb.vacany.dao.VacancyDao
-import domain.model.vacancy.details.Vacancy
+import com.example.recruiterhunter.domain.model.vacancy.details.Vacancy
 import domain.repository.VacancyDetailsRepository
 
 class VacancyDetailsRepositoryImpl(

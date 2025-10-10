@@ -25,16 +25,14 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
-import coil.request.ImageRequest
 import com.example.recruiterhunter.R
 import com.example.recruiterhunter.domain.model.vacancy.preview.VacancyPreview
+import com.example.recruiterhunter.ui.components.employer_logo.buildImageRequest
 import com.example.recruiterhunter.ui.components.placeholder_icon.JobIcon
 import com.example.recruiterhunter.ui.transition_keys.DetailsTransition
 
@@ -70,17 +68,6 @@ fun VacancyPreviewCard(
         )
     val locationIcon = ImageVector.vectorResource(R.drawable.outline_location_on_24)
 
-    /**
-     * @param salary тут критическая ошибка у меня, надо скорректировать.
-     * Никаких вычислений в UI слое и форматирований
-     */
-
-    val salary = formatSalary(
-        salaryFrom = vacancy.salaryFrom,
-        salaryTo = vacancy.salaryTo,
-        currency = vacancy.currency
-    )
-
     with(sharedTransitionScope) {
         Card(
             modifier
@@ -101,7 +88,7 @@ fun VacancyPreviewCard(
                             vacancy.vacancyName,
                             vacancy.employerName,
                             vacancy.employerLogo,
-                            salary,
+                            vacancy.salary,
                             vacancy.address
                         )
                     },
@@ -121,11 +108,7 @@ fun VacancyPreviewCard(
                                 ),
                                 animatedVisibilityScope = animatedVisibilityScope
                             ),
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(vacancy.employerLogo)
-                            .memoryCacheKey("vacancy_logo${vacancy.vacancyId}")
-                            .placeholderMemoryCacheKey("vacancy_logo${vacancy.vacancyId}")
-                            .build(),
+                        model = buildImageRequest(vacancy.employerLogo, vacancy.vacancyId),
                         contentScale = ContentScale.Fit,
                         contentDescription = "",
                         loading = { JobIcon() },
@@ -164,7 +147,11 @@ fun VacancyPreviewCard(
                         modifier = Modifier
                             .size(20.dp)
                             .sharedElement(
-                                rememberSharedContentState(DetailsTransition.navigationIcon(vacancy.vacancyId)),
+                                rememberSharedContentState(
+                                    DetailsTransition.navigationIcon(
+                                        vacancy.vacancyId
+                                    )
+                                ),
                                 animatedVisibilityScope = animatedVisibilityScope
                             )
                     )
@@ -186,20 +173,11 @@ fun VacancyPreviewCard(
                 Spacer(modifier = Modifier.padding(vertical = 6.dp))
                 Row {
                     Text(
-                        text = salary,
+                        text = vacancy.salary,
                         style = salaryTextStyle,
                     )
                 }
             }
         }
     }
-}
-
-@Composable
-private fun formatSalary(salaryFrom: String, salaryTo: String, currency: String): String = when {
-    salaryFrom.isNotEmpty() && salaryTo.isNotEmpty() -> "От $salaryFrom до $salaryTo $currency"
-    salaryFrom.isNotEmpty() && salaryTo.isEmpty() -> "От $salaryFrom $currency"
-    salaryFrom.isEmpty() && salaryTo.isNotEmpty() -> "До $salaryTo $currency"
-    salaryFrom.isEmpty() && salaryTo.isEmpty() -> stringResource(R.string.salary_no_specified)
-    else -> stringResource(R.string.salary_no_specified)
 }

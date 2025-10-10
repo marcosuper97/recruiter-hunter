@@ -59,4 +59,8 @@
 
     <string name="unknown_error">Неизвестная ошибка</string>
     <string name="unknown_error_hint">Это такая же неизвестная ошибка, как Нэсси! Напишите разработчику…</string>
+
+    <string name="salary_from_to">От %1$d до %2$d %3$s</string>
+    <string name="salary_from">От %1$d %2$s</string>
+    <string name="salary_to">До %1$d %2$s</string>
 </resources>

@@ -1,6 +1,6 @@
 package com.example.recruiterhunter.domain.repository.favorites
 
-import domain.model.vacancy.details.Vacancy
+import com.example.recruiterhunter.domain.model.vacancy.details.Vacancy
 import kotlinx.coroutines.flow.Flow
 
 interface FavoritesRepository {

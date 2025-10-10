@@ -21,10 +21,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -62,6 +62,16 @@ fun SearchScreen(
     val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val themeColors = MaterialTheme.colorScheme
+
+    val shouldLoadNext by remember {
+        derivedStateOf {
+            val last = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
+            last == screenState.vacancyList.lastIndex && !screenState.loadingNextPage
+        }
+    }
+    LaunchedEffect(shouldLoadNext) {
+        if (shouldLoadNext) viewModel.sendIntent(SearchScreenIntent.LoadNextPage)
+    }
 
     LaunchedEffect(sideEffect) {
         when (val sideEffect = sideEffect) {
@@ -115,91 +125,90 @@ fun SearchScreen(
         },
         snackbarHost = { SnackbarHost(snackBarHostState) }
     ) { innerPaddings ->
-        Column(modifier = Modifier.padding(innerPaddings)) {
-            if (screenState.hasContent) {
-                LazyColumn(state = listState) {
-                    itemsIndexed(
-                        screenState.vacancyList,
-                        key = { index, item -> "${index}_${item.vacancyId}" }) { index, item ->
-                        VacancyPreviewCard(
-                            onCardClick = { vacancyId, vacancyName, employerName, employerLogo, address, salary ->
-                                viewModel.sendSideEffect(
+        if (screenState.hasContent) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.padding(innerPaddings)
+            ) {
+                itemsIndexed(
+                    items = screenState.vacancyList,
+                    key = { index, item -> "${index}_${item.vacancyId}" },
+                    contentType = { _, _ -> "vacancy" },
+                ) { index, item ->
+                    VacancyPreviewCard(
+                        onCardClick = { vacancyId, vacancyName, employerName, employerLogo, address, salary ->
+                            viewModel.sendSideEffect(
 
-                                    SearchScreenSideEffects.OpenDetails(
-                                        route = "job_detail/$vacancyId" +
-                                                "?vacancyName=${Uri.encode(vacancyName)}" +
-                                                "&employerName=${Uri.encode(employerName)}" +
-                                                "&employerLogo=${Uri.encode(employerLogo)}" +
-                                                "&address=${Uri.encode(address)}" +
-                                                "&salary=$salary"
-                                    )
+                                SearchScreenSideEffects.OpenDetails(
+                                    route = "job_detail/$vacancyId" +
+                                            "?vacancyName=${Uri.encode(vacancyName)}" +
+                                            "&employerName=${Uri.encode(employerName)}" +
+                                            "&employerLogo=${Uri.encode(employerLogo)}" +
+                                            "&address=${Uri.encode(address)}" +
+                                            "&salary=$salary"
                                 )
-                            },
-                            vacancy = item,
-                            sharedTransitionScope = sharedTransitionScope,
-                            animatedVisibilityScope = animatedVisibilityScope,
-                        )
-                    }
-                    if (screenState.loadingNextPage)
-                        items(1) {
-                            SkeletonVacancyPreviewCard()
-                        }
+                            )
+                        },
+                        vacancy = item,
+                        sharedTransitionScope = sharedTransitionScope,
+                        animatedVisibilityScope = animatedVisibilityScope,
+                    )
                 }
-                LaunchedEffect(listState) {
-                    snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
-                        .collect { lastVisibleIdx ->
-                            if (
-                                lastVisibleIdx == screenState.vacancyList.lastIndex && !screenState.loadingNextPage
-                            ) {
-                                viewModel.sendIntent(SearchScreenIntent.LoadNextPage)
-                            }
-                        }
-                }
-            }
-
-            when {
-                screenState.loading -> LazyColumn {
-                    items(4) {
+                if (screenState.loadingNextPage)
+                    items(1, contentType = { "skeleton" }) {
                         SkeletonVacancyPreviewCard()
                     }
-                }
-
-                screenState.emptyResult -> ErrorStateScreen(
-                    title = stringResource(R.string.nothing_found),
-                    message = stringResource(R.string.nothing_found_hint),
-                    iconState = ImageVector.vectorResource(R.drawable.cow_01)
-                )
-
-                screenState.internetHasNotAvailable -> ErrorStateScreen(
-                    title = stringResource(R.string.internet_is_unavailable),
-                    message = stringResource(R.string.internet_is_unavailable_hint),
-                    iconState = ImageVector.vectorResource(R.drawable.error_naughty_dog)
-                )
-
-                screenState.networkError -> ErrorStateScreen(
-                    title = stringResource(R.string.internet_is_unavailable),
-                    message = stringResource(R.string.internet_is_unavailable_hint),
-                    iconState = ImageVector.vectorResource(R.drawable.error_naughty_dog)
-                )
-
-                screenState.authorizationError || screenState.clientError -> ErrorStateScreen(
-                    title = stringResource(R.string.authorization_error),
-                    message = stringResource(R.string.authorization_error_hint),
-                    iconState = ImageVector.vectorResource(R.drawable.error_rocket_destroyed)
-                )
-
-                screenState.serverError -> ErrorStateScreen(
-                    title = stringResource(R.string.server_error),
-                    message = stringResource(R.string.server_error_hint),
-                    iconState = ImageVector.vectorResource(R.drawable.tissue_01)
-                )
-
-                screenState.unknownError -> ErrorStateScreen(
-                    title = stringResource(R.string.unknown_error),
-                    message = stringResource(R.string.unknown_error_hint),
-                    iconState = ImageVector.vectorResource(R.drawable.lochness_monster_01)
-                )
             }
+        }
+
+        when {
+            screenState.loading -> LazyColumn(modifier = Modifier.padding(innerPaddings)) {
+                items(4, contentType = { "skeleton" }) {
+                    SkeletonVacancyPreviewCard()
+                }
+            }
+
+            screenState.emptyResult -> ErrorStateScreen(
+                modifier = Modifier.padding(innerPaddings),
+                title = stringResource(R.string.nothing_found),
+                message = stringResource(R.string.nothing_found_hint),
+                iconState = ImageVector.vectorResource(R.drawable.cow_01)
+            )
+
+            screenState.internetHasNotAvailable -> ErrorStateScreen(
+                modifier = Modifier.padding(innerPaddings),
+                title = stringResource(R.string.internet_is_unavailable),
+                message = stringResource(R.string.internet_is_unavailable_hint),
+                iconState = ImageVector.vectorResource(R.drawable.error_naughty_dog)
+            )
+
+            screenState.networkError -> ErrorStateScreen(
+                modifier = Modifier.padding(innerPaddings),
+                title = stringResource(R.string.internet_is_unavailable),
+                message = stringResource(R.string.internet_is_unavailable_hint),
+                iconState = ImageVector.vectorResource(R.drawable.error_naughty_dog)
+            )
+
+            screenState.authorizationError || screenState.clientError -> ErrorStateScreen(
+                modifier = Modifier.padding(innerPaddings),
+                title = stringResource(R.string.authorization_error),
+                message = stringResource(R.string.authorization_error_hint),
+                iconState = ImageVector.vectorResource(R.drawable.error_rocket_destroyed)
+            )
+
+            screenState.serverError -> ErrorStateScreen(
+                modifier = Modifier.padding(innerPaddings),
+                title = stringResource(R.string.server_error),
+                message = stringResource(R.string.server_error_hint),
+                iconState = ImageVector.vectorResource(R.drawable.tissue_01)
+            )
+
+            screenState.unknownError -> ErrorStateScreen(
+                modifier = Modifier.padding(innerPaddings),
+                title = stringResource(R.string.unknown_error),
+                message = stringResource(R.string.unknown_error_hint),
+                iconState = ImageVector.vectorResource(R.drawable.lochness_monster_01)
+            )
         }
     }
 }

@@ -2,7 +2,7 @@ package com.example.recruiterhunter.domain.impl.favorites
 
 import com.example.recruiterhunter.domain.interactor.favorites.FavoritesInteractor
 import com.example.recruiterhunter.domain.repository.favorites.FavoritesRepository
-import domain.model.vacancy.details.Vacancy
+import com.example.recruiterhunter.domain.model.vacancy.details.Vacancy
 import kotlinx.coroutines.flow.Flow
 
 class FavoritesInteractorImpl(

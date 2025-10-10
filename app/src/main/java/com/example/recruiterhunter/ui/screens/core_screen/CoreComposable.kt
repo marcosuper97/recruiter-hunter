@@ -60,8 +60,8 @@ fun CoreCompose(
                     val salary =
                         backStackEntry.arguments?.getString("salary")?.let { Uri.decode(it) }
                     VacancyDetails(
-                        vacancyId = vacancyId,
-                        vacancyName = vacancyName,
+                        vacancyId = vacancyId!!,
+                        vacancyName = vacancyName!!,
                         employerName = employerName,
                         employerLogo = employerLogo,
                         address = address,

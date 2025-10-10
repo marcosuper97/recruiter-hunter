@@ -62,7 +62,7 @@ val dataModule = module {
     }
 
     single<VacanciesListConverter> {
-        VacanciesListConverterImpl()
+        VacanciesListConverterImpl(get())
     }
 
     single<VacanciesPreviewConverter> {

@@ -1,5 +1,11 @@
 package com.example.recruiterhunter.data.util
 
+fun String?.toCurrencySymbol(): String {
+    return this?.let { code ->
+        CURRENCY_VALUES.find { it.name == code }?.label ?: NOTHING
+    } ?: NOTHING
+}
+
 enum class Currency(val label: String) {
     USD("$"),
     EUR("€"),
@@ -14,10 +20,5 @@ enum class Currency(val label: String) {
     UZS("so\'m")
 }
 
-fun String?.toCurrencySymbol(): String {
-    return this?.let { code ->
-        enumValues<Currency>().find { it.name == code }?.label ?: NOTHING
-    } ?: NOTHING
-}
-
+private val CURRENCY_VALUES = enumValues<Currency>()
 private const val NOTHING: String = ""

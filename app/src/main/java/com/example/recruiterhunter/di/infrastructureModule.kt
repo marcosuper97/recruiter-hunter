@@ -12,6 +12,8 @@ import com.example.recruiterhunter.domain.actions.source_code.OpenSourceCodeActi
 import com.example.recruiterhunter.domain.services.application_theme.ThemeChangerService
 import com.example.recruiterhunter.domain.services.application_theme.ThemeGetterService
 import com.example.recruiterhunter.domain.services.network_check.NetworkCheckService
+import com.example.recruiterhunter.infrastructure.converter.salary.VacancySalaryConverter
+import com.example.recruiterhunter.infrastructure.converter.salary.VacancySalaryConverterImpl
 import com.example.recruiterhunter.infrastructure.impl.actions.dev_link.SendToActionImpl
 import com.example.recruiterhunter.infrastructure.impl.actions.share_vacancy.ShareActionImpl
 import com.example.recruiterhunter.infrastructure.impl.actions.source_code.OpenSourceCodeActionImpl
@@ -57,6 +59,10 @@ val infrastructureModule = module {
 
     single<OpenSourceCodeAction> {
         OpenSourceCodeActionImpl(androidContext())
+    }
+
+    single<VacancySalaryConverter> {
+        VacancySalaryConverterImpl(androidContext())
     }
 
     single<AppDb> {
