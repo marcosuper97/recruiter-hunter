@@ -66,7 +66,7 @@ fun SearchScreen(
     val shouldLoadNext by remember {
         derivedStateOf {
             val last = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
-            last == screenState.vacancyList.lastIndex && !screenState.loadingNextPage
+            last == screenState.vacancyList.itemsList.lastIndex && !screenState.loadingNextPage
         }
     }
     LaunchedEffect(shouldLoadNext) {
@@ -131,7 +131,7 @@ fun SearchScreen(
                 modifier = Modifier.padding(innerPaddings)
             ) {
                 itemsIndexed(
-                    items = screenState.vacancyList,
+                    items = screenState.vacancyList.itemsList,
                     key = { index, item -> "${index}_${item.vacancyId}" },
                     contentType = { _, _ -> "vacancy" },
                 ) { index, item ->
