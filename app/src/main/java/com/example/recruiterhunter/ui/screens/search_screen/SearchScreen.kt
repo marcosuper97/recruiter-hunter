@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -130,15 +130,14 @@ fun SearchScreen(
                 state = listState,
                 modifier = Modifier.padding(innerPaddings)
             ) {
-                itemsIndexed(
+                items(
                     items = screenState.vacancyList.itemsList,
-                    key = { index, item -> "${index}_${item.vacancyId}" },
-                    contentType = { _, _ -> "vacancy" },
-                ) { index, item ->
+                    key = { item -> "${item.vacancyId}" },
+                    contentType = { "vacancy" },
+                ) { item ->
                     VacancyPreviewCard(
                         onCardClick = { vacancyId, vacancyName, employerName, employerLogo, address, salary ->
                             viewModel.sendSideEffect(
-
                                 SearchScreenSideEffects.OpenDetails(
                                     route = "job_detail/$vacancyId" +
                                             "?vacancyName=${Uri.encode(vacancyName)}" +
