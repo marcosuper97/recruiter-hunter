@@ -99,15 +99,7 @@ fun VacancyPreviewCard(
                     SubcomposeAsyncImage(
                         modifier = Modifier
                             .size(56.dp)
-                            .clip(RoundedCornerShape(4.dp))
-                            .sharedElement(
-                                sharedContentState = rememberSharedContentState(
-                                    key = DetailsTransition.vacancyIdKey(
-                                        vacancy.vacancyId
-                                    )
-                                ),
-                                animatedVisibilityScope = animatedVisibilityScope
-                            ),
+                            .clip(RoundedCornerShape(4.dp)),
                         model = buildImageRequest(vacancy.employerLogo, vacancy.vacancyId),
                         contentScale = ContentScale.Fit,
                         contentDescription = "",
