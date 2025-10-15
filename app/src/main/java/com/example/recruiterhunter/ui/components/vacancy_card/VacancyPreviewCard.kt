@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -28,12 +27,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import com.example.recruiterhunter.R
 import com.example.recruiterhunter.domain.model.vacancy.preview.VacancyPreview
 import com.example.recruiterhunter.ui.components.employer_logo.buildImageRequest
 import com.example.recruiterhunter.ui.components.placeholder_icon.JobIcon
+import com.example.recruiterhunter.ui.theme.vacancyDetailsTypo
 import com.example.recruiterhunter.ui.transition_keys.DetailsTransition
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -45,27 +44,6 @@ fun VacancyPreviewCard(
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
 ) {
-    val themeTypo = MaterialTheme.typography
-    val themeColors = MaterialTheme.colorScheme
-    val vacancyNameStyle = themeTypo.titleMedium.copy(
-        color = themeColors.onSurface,
-        lineHeight = 18.sp,
-        fontWeight = FontWeight.Medium
-    )
-    val vacancyEmployerStyle = themeTypo.labelLarge.copy(
-        color = themeColors.onSurface,
-        lineHeight = 16.sp,
-        fontWeight = FontWeight.Light,
-    )
-    val addressTextStyle = themeTypo.labelMedium.copy(
-        lineHeight = 14.sp,
-        color = themeColors.onSurface,
-    )
-    val salaryTextStyle =
-        themeTypo.bodyLarge.copy(
-            color = themeColors.tertiary,
-            fontWeight = FontWeight.Bold
-        )
     val locationIcon = ImageVector.vectorResource(R.drawable.outline_location_on_24)
 
     with(sharedTransitionScope) {
@@ -88,8 +66,8 @@ fun VacancyPreviewCard(
                             vacancy.vacancyName,
                             vacancy.employerName,
                             vacancy.employerLogo,
+                            vacancy.address,
                             vacancy.salary,
-                            vacancy.address
                         )
                     },
                 )
@@ -110,7 +88,7 @@ fun VacancyPreviewCard(
                     Column() {
                         Text(
                             text = vacancy.vacancyName,
-                            style = vacancyNameStyle,
+                            style = vacancyDetailsTypo().cardVacancyNameStyle,
                             modifier = Modifier.sharedBounds(
                                 rememberSharedContentState(DetailsTransition.vacancyName(vacancy.vacancyId)),
                                 animatedVisibilityScope = animatedVisibilityScope,
@@ -120,7 +98,7 @@ fun VacancyPreviewCard(
                         Spacer(modifier = Modifier.padding(vertical = 4.dp))
                         Text(
                             text = vacancy.employerName,
-                            style = vacancyEmployerStyle,
+                            style = vacancyDetailsTypo().vacancyEmployerStyle,
                             modifier = Modifier
                                 .alpha(0.7f)
                                 .sharedBounds(
@@ -156,7 +134,7 @@ fun VacancyPreviewCard(
                                 resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
                             ),
                         text = vacancy.address,
-                        style = addressTextStyle,
+                        style = vacancyDetailsTypo().addressTextStyle,
                         fontWeight = FontWeight.Light
                     )
                 }
@@ -166,7 +144,7 @@ fun VacancyPreviewCard(
                 Row {
                     Text(
                         text = vacancy.salary,
-                        style = salaryTextStyle,
+                        style = vacancyDetailsTypo().salaryTextStyle,
                     )
                 }
             }

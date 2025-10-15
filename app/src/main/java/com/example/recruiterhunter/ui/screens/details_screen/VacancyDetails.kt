@@ -1,5 +1,6 @@
 package com.example.recruiterhunter.ui.screens.details_screen
 
+import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -20,40 +21,39 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.CompositingStrategy
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.LocalWindowInfo
-import androidx.compose.ui.platform.WindowInfo
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import androidx.navigation.NavController
 import com.example.recruiterhunter.R
 import com.example.recruiterhunter.presentation.detailsScreen_vm.DetailsScreenViewModel
 import com.example.recruiterhunter.ui.components.employer_logo.EmployerLogo
+import com.example.recruiterhunter.ui.theme.vacancyDetailsTypo
 import com.example.recruiterhunter.ui.transition_keys.DetailsTransition
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -81,7 +81,9 @@ fun VacancyDetails(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             DetailsTopBar(
-                modifier = Modifier.statusBarsPadding().padding(top = 12.dp),
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .padding(top = 12.dp),
                 vacancyId = vacancyId,
                 vacancyName = vacancyName,
                 employerName = employerName,
@@ -94,18 +96,7 @@ fun VacancyDetails(
             )
         }
     ) { innerPaddings ->
-//        DetailsTopBar(
-//            modifier = Modifier.padding(innerPaddings),
-//            vacancyId = vacancyId,
-//            vacancyName = vacancyName,
-//            employerName = employerName,
-//            employerLogo = employerLogo,
-//            address = address,
-//            salary = salary,
-//            sharedTransitionScope = sharedTransitionScope,
-//            animatedVisibilityScope = animatedVisibilityScope,
-//            navController = navController
-//        )
+
     }
 }
 
@@ -126,15 +117,30 @@ fun DetailsTopBar(
 ) {
 
     val themeColors = MaterialTheme.colorScheme
-    val themeTypo = MaterialTheme.typography
-    val vacancyNameStyle = themeTypo.titleLarge.copy(color = themeColors.onSurface)
-    var topBackgroundColor by remember(LocalContext.current) {
+
+    var topBackgroundColor by remember {
         mutableStateOf(themeColors.onSurface)
     }
-    var elementsColor by remember(LocalContext.current) {
+
+    var elementsColor by remember {
         mutableStateOf(themeColors.onSurfaceVariant)
     }
+
+    val employerLogoIsEmpty by remember { mutableStateOf(employerLogo != "") }
+
     val logoShape = CircleShape
+    val locationIcon = ImageVector.vectorResource(R.drawable.outline_location_on_24)
+    val view = LocalView.current
+
+    SideEffect {
+        if (topBackgroundColor != Color.Transparent && !view.isInEditMode) {
+            val window = (view.context as Activity).window
+            window.statusBarColor = topBackgroundColor.toArgb()
+            window.navigationBarColor = elementsColor.toArgb()
+
+        }
+    }
+
 
     with(sharedTransitionScope) {
         Box(
@@ -249,96 +255,109 @@ fun DetailsTopBar(
 
 
                 }
-                EmployerLogo(
-                    modifier = Modifier
-                        .dropShadow(
-                            shape = CircleShape
-                        ) {
-                            offset = Offset(x = 0f, y = 8f)
-                            spread = 2f
-                            radius = 18f
-                            alpha = 0.4f
-                            color = topBackgroundColor
-                        }
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(
-                                    topBackgroundColor.copy(0.16f),
-                                    topBackgroundColor.copy(0.08f),
-                                    topBackgroundColor.copy(0.02f),
+                if(employerLogoIsEmpty == true){
+                    EmployerLogo(
+                        modifier = Modifier
+                            .padding(top= 12.dp)
+                            .dropShadow(
+                                shape = CircleShape
+                            ) {
+                                offset = Offset(x = 0f, y = 8f)
+                                spread = 2f
+                                radius = 18f
+                                alpha = 0.4f
+                                color = topBackgroundColor
+                            }
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        topBackgroundColor.copy(0.16f),
+                                        topBackgroundColor.copy(0.08f),
+                                        topBackgroundColor.copy(0.02f),
+                                    ),
+                                    startY = 0f,
+                                    endY = Float.POSITIVE_INFINITY
                                 ),
-                                startY = 0f,
-                                endY = Float.POSITIVE_INFINITY
-                            ),
-                            shape = logoShape
-                        )
-                        .border(4.dp, topBackgroundColor, logoShape)
-                        .size(100.dp)
-                        .clip(logoShape),
-                    vacancyId = vacancyId,
-                    employerLogo = employerLogo,
-                    generatedBackgroundColors = { backgroundColor, elementColors ->
-                        topBackgroundColor = backgroundColor
-                        elementsColor = elementColors
-                    }
-                )
+                                shape = logoShape
+                            )
+                            .border(4.dp, topBackgroundColor, logoShape)
+                            .size(100.dp)
+                            .clip(logoShape),
+                        vacancyId = vacancyId,
+                        employerLogo = employerLogo,
+                        generatedBackgroundColors = { backgroundColor, elementColors ->
+                            topBackgroundColor = backgroundColor
+                            elementsColor = elementColors
+                        }
+                    )
+                }
+                Spacer(Modifier.padding(vertical = 12.dp))
                 Text(
                     text = vacancyName,
                     textAlign = TextAlign.Center,
-                    style = vacancyNameStyle,
-                    fontWeight = FontWeight.Bold,
-                    color = themeColors.onSurface,
+                    style = vacancyDetailsTypo().cardVacancyNameStyle,
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp)
                         .sharedBounds(
                             rememberSharedContentState(DetailsTransition.vacancyName(vacancyId)),
                             animatedVisibilityScope = animatedVisibilityScope,
                             resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
                         )
                 )
-                Spacer(Modifier.padding(vertical = 6.dp))
+                Spacer(Modifier.padding(vertical = 2.dp))
                 Text(
                     text = employerName ?: "",
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = themeColors.onSurface,
+                    style = vacancyDetailsTypo().vacancyEmployerStyle,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 12.dp)
+                        .alpha(0.7f)
                         .sharedBounds(
                             rememberSharedContentState(DetailsTransition.employerName(vacancyId)),
                             animatedVisibilityScope = animatedVisibilityScope,
                             resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
                         )
                 )
-                Spacer(Modifier.padding(vertical = 6.dp))
-                Text(
-                    text = address ?: "",
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = themeColors.onSurface,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp)
-                        .sharedBounds(
-                            rememberSharedContentState(DetailsTransition.address(vacancyId)),
-                            animatedVisibilityScope = animatedVisibilityScope,
-                            resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                        )
-                )
-                Spacer(Modifier.padding(vertical = 6.dp))
+                Spacer(Modifier.padding(vertical = 4.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = 32.dp)
+                ) {
+                    Icon(
+                        imageVector = locationIcon,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(20.dp)
+                            .sharedElement(
+                                rememberSharedContentState(
+                                    DetailsTransition.navigationIcon(
+                                        vacancyId
+                                    )
+                                ),
+                                animatedVisibilityScope = animatedVisibilityScope
+                            )
+                    )
+                    Text(
+                        text = address ?: "",
+                        textAlign = TextAlign.Center,
+                        style = vacancyDetailsTypo().addressTextStyle,
+                        modifier = Modifier
+                            .sharedBounds(
+                                rememberSharedContentState(DetailsTransition.address(vacancyId)),
+                                animatedVisibilityScope = animatedVisibilityScope,
+                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+                            )
+                    )
+                }
+                Spacer(modifier = Modifier.padding(vertical = 2.dp))
+                HorizontalDivider(Modifier.alpha(0.8f))
+                Spacer(modifier = Modifier.padding(vertical = 6.dp))
                 Text(
                     text = salary ?: "",
                     textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = themeColors.onSurface,
+                    style = vacancyDetailsTypo().salaryTextStyle,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 12.dp)
+                        .padding(bottom = 12.dp)
                         .sharedBounds(
                             rememberSharedContentState(DetailsTransition.salary(vacancyId)),
                             animatedVisibilityScope = animatedVisibilityScope,
@@ -348,4 +367,13 @@ fun DetailsTopBar(
             }
         }
     }
+}
+
+
+@Composable
+fun Modifier.adaptiveSystemPadding(backgroundColor: Color, elementsColor:Color): Modifier{
+    return this.{
+
+    }
+
 }
