@@ -113,7 +113,6 @@ fun SearchScreen(
                             filterState = screenState.hasAnyFilters,
                             label = stringResource(R.string.search)
                         )
-
                     }
                 },
                 scrollBehavior = scrollBehavior,

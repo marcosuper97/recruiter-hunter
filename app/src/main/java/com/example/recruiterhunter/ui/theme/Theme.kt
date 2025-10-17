@@ -121,20 +121,15 @@ fun RecruiterHunterTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            // Цвет статус-бара
-            window.statusBarColor = colorScheme.background.toArgb()
-            // Цвет навигационной панели
-            window.navigationBarColor = colorScheme.background.toArgb()
-
             val controller = WindowInsetsControllerCompat(window, view)
             // true — иконки светлые (для тёмного фона), false — тёмные (для светлого фона)
-            val lightIcons = when (actualTheme) {
+            val iconsMode = when (actualTheme) {
                 ActualTheme.DARK -> false
                 ActualTheme.LIGHT -> true
                 ActualTheme.SYSTEM -> !isDarkTheme // если система светлая — делаем иконки тёмными
             }
-            controller.isAppearanceLightStatusBars = lightIcons
-            controller.isAppearanceLightNavigationBars = lightIcons
+            controller.isAppearanceLightStatusBars = iconsMode
+            controller.isAppearanceLightNavigationBars = iconsMode
         }
     }
 
