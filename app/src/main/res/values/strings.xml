@@ -63,4 +63,7 @@
     <string name="salary_from_to">От %1$d до %2$d %3$s</string>
     <string name="salary_from">От %1$d %2$s</string>
     <string name="salary_to">До %1$d %2$s</string>
+
+    <string name="key_skills">Ключевые навыки:</string>
+    <string name="experience">Опыт работы:</string>
 </resources>
