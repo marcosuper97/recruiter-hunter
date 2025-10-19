@@ -5,7 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recruiterhunter.domain.interactor.favorites.FavoritesInteractor
+import com.example.recruiterhunter.domain.interactor.favorites.control.FavoritesControlInteractor
 import com.example.recruiterhunter.domain.interactor.vacancy.VacancyDetailsInteractor
 import com.example.recruiterhunter.ui.screens.details_screen.VacancyDetailsIntent
 import com.example.recruiterhunter.ui.screens.details_screen.VacancyDetailsState
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class DetailsScreenViewModel(
     private val vacancyDetailsInteractor: VacancyDetailsInteractor,
-    private val favoritesInteractor: FavoritesInteractor
+    private val favoritesInteractor: FavoritesControlInteractor
 ) : ViewModel() {
     private val _screenState: MutableState<VacancyDetailsState> =
         mutableStateOf(VacancyDetailsState())

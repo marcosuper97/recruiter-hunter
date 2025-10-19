@@ -21,6 +21,6 @@ val viewModelModule = module {
     }
 
     viewModel {
-        DetailsScreenViewModel(get())
+        DetailsScreenViewModel(get(), get())
     }
 }
