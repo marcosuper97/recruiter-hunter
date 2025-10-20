@@ -66,4 +66,5 @@
 
     <string name="key_skills">Ключевые навыки:</string>
     <string name="experience">Опыт работы:</string>
+    <string name="not_specified">не указано</string>
 </resources>

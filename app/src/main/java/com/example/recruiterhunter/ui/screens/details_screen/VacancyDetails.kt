@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.recruiterhunter.R
 import com.example.recruiterhunter.presentation.detailsScreen_vm.DetailsScreenViewModel
+import com.example.recruiterhunter.presentation.detailsScreen_vm.VacancyDetailsIntent
 import com.example.recruiterhunter.ui.components.details_top_bar.DetailsTopBar
 import com.example.recruiterhunter.ui.theme.vacancyDetailsTypo
 import org.koin.compose.viewmodel.koinViewModel
@@ -44,9 +45,10 @@ fun VacancyDetails(
     viewModel: DetailsScreenViewModel = koinViewModel()
 ) {
     var scrollableState by remember { mutableFloatStateOf(0f) }
+    val state by viewModel.screenState
 
     LaunchedEffect(vacancyId) {
-
+        viewModel.sendIntent(VacancyDetailsIntent.FetchDetails(vacancyId))
     }
 
     BackHandler() {
@@ -85,7 +87,7 @@ fun VacancyDetails(
             style = vacancyDetailsTypo().detailsTitleText
         )
         Spacer(Modifier.padding(vertical = 6.dp))
-        Text(text = "Опыт")
+        Text(text = state.vacancyDetails?.experience ?: stringResource(R.string.not_specified))
 //        KeySkillsBar()
     }
 }

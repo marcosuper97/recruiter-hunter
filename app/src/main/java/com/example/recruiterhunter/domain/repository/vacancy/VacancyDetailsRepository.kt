@@ -1,4 +1,4 @@
-package domain.repository
+package com.example.recruiterhunter.domain.repository.vacancy
 
 import com.example.recruiterhunter.domain.model.vacancy.details.Vacancy
 

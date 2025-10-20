@@ -14,7 +14,7 @@ import com.example.recruiterhunter.domain.repository.favorites.control.Favorites
 import com.example.recruiterhunter.domain.repository.favorites.fetch.FavoritesFetchRepository
 import com.example.recruiterhunter.domain.repository.filters.FiltersDbRepository
 import com.example.recruiterhunter.domain.repository.filters.FiltersNetworkRepository
-import domain.repository.VacancyDetailsRepository
+import com.example.recruiterhunter.domain.repository.vacancy.VacancyDetailsRepository
 import domain.repository.VacancySearchRepository
 import org.koin.dsl.module
 

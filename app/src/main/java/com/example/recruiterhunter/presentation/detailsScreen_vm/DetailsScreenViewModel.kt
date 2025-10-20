@@ -8,9 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.recruiterhunter.domain.actions.share.ShareAction
 import com.example.recruiterhunter.domain.interactor.favorites.control.FavoritesControlInteractor
 import com.example.recruiterhunter.domain.interactor.vacancy.VacancyDetailsInteractor
-import com.example.recruiterhunter.ui.screens.details_screen.VacancyDetailsIntent
-import com.example.recruiterhunter.ui.screens.details_screen.VacancyDetailsState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class DetailsScreenViewModel(
     private val vacancyDetailsInteractor: VacancyDetailsInteractor,
@@ -30,35 +30,43 @@ class DetailsScreenViewModel(
     }
 
     private fun fetchDetails(vacancyId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             vacancyDetailsInteractor.fetchDetails(vacancyId)
                 .onSuccess { vacancyDetails ->
-                    _screenState.value = _screenState.value.copy(
-                        isLoading = false,
-                        content = true,
-                        vacancyDetails = vacancyDetails
-                    )
+                    withContext(Dispatchers.Main) {
+                        _screenState.value = _screenState.value.copy(
+                            isLoading = false,
+                            content = true,
+                            vacancyDetails = vacancyDetails
+                        )
+                    }
                 }
                 .onFailure {
-                    _screenState.value = _screenState.value.copy(
-                        isLoading = false,
-                        isError = true,
-                    )
+                    withContext(Dispatchers.Main) {
+                        _screenState.value = _screenState.value.copy(
+                            isLoading = false,
+                            isError = true,
+                        )
+                    }
                 }
         }
     }
 
     private fun favoriteControl() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             screenState.value.vacancyDetails?.let { vacancy ->
                 if (vacancy.isFavorite) {
                     favoritesInteractor.removeFromFavorites(vacancy.vacancyId)
-                    _screenState.value =
-                        _screenState.value.copy(vacancyDetails = vacancy.copy(isFavorite = false))
+                    withContext(Dispatchers.Main) {
+                        _screenState.value =
+                            _screenState.value.copy(vacancyDetails = vacancy.copy(isFavorite = false))
+                    }
                 } else {
                     favoritesInteractor.addToFavorites(vacancy)
-                    _screenState.value =
-                        _screenState.value.copy(vacancyDetails = vacancy.copy(isFavorite = true))
+                    withContext(Dispatchers.Main) {
+                        _screenState.value =
+                            _screenState.value.copy(vacancyDetails = vacancy.copy(isFavorite = true))
+                    }
                 }
             }
         }

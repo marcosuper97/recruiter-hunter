@@ -1,4 +1,4 @@
-package com.example.recruiterhunter.ui.screens.details_screen
+package com.example.recruiterhunter.presentation.detailsScreen_vm
 
 import com.example.recruiterhunter.domain.model.vacancy.details.Vacancy
 
