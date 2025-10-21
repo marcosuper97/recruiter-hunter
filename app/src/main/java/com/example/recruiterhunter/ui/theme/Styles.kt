@@ -36,7 +36,12 @@ fun vacancyDetailsTypo(): VacancyTypography {
         detailsTitleText = themeTypo.titleSmall.copy(
             color = themeColors.onSurface,
             lineHeight = 18.sp,
-        )
+            fontWeight = FontWeight.Bold
+        ),
+        detailsText = themeTypo.titleSmall.copy(
+            color = themeColors.onSurface,
+            lineHeight = 18.sp,
+        ),
     )
 }
 
@@ -46,5 +51,6 @@ data class VacancyTypography(
     val addressTextStyle: TextStyle,
     val salaryTextStyle: TextStyle,
     val vacancyKeySkills: TextStyle,
-    val detailsTitleText: TextStyle
+    val detailsTitleText: TextStyle,
+    val detailsText: TextStyle,
 )

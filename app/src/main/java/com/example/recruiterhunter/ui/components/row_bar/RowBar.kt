@@ -1,4 +1,4 @@
-package com.example.recruiterhunter.ui.components.key_skills
+package com.example.recruiterhunter.ui.components.row_bar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -17,29 +17,31 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.recruiterhunter.R
 import com.example.recruiterhunter.domain.model.theme_state.ActualTheme
 import com.example.recruiterhunter.ui.theme.RecruiterHunterTheme
 import com.example.recruiterhunter.ui.theme.vacancyDetailsTypo
 
 @Composable
-fun KeySkillsBar(keySkills: List<String>) {
+fun RowBar(
+    modifier: Modifier = Modifier,
+    barTitle: String,
+    rowData: List<String>
+) {
     val themeColors = MaterialTheme.colorScheme
     val state = rememberLazyListState()
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
     ) {
         Text(
-            text = stringResource(R.string.key_skills),
+            text = barTitle,
             style = vacancyDetailsTypo().detailsTitleText
         )
         Spacer(Modifier.padding(vertical = 4.dp))
         LazyRow(state = state, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-            items(keySkills) { keySkill ->
+            items(rowData) { keySkill ->
                 Box(
                     modifier = Modifier
                         .padding(horizontal = 2.dp)
@@ -77,7 +79,7 @@ val keySkills = listOf(
 fun PreviewKeySkills() {
     RecruiterHunterTheme(ActualTheme.DARK) {
         Scaffold(Modifier.fillMaxSize()) { innerPadding ->
-            KeySkillsBar(keySkills)
+            RowBar(Modifier, barTitle = "", rowData = keySkills)
         }
     }
 }

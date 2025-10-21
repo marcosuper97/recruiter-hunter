@@ -4,29 +4,28 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.fromHtml
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.recruiterhunter.R
 import com.example.recruiterhunter.presentation.detailsScreen_vm.DetailsScreenViewModel
 import com.example.recruiterhunter.presentation.detailsScreen_vm.VacancyDetailsIntent
 import com.example.recruiterhunter.ui.components.details_top_bar.DetailsTopBar
+import com.example.recruiterhunter.ui.components.row_bar.RowBar
 import com.example.recruiterhunter.ui.theme.vacancyDetailsTypo
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -44,7 +43,7 @@ fun VacancyDetails(
     navController: NavController,
     viewModel: DetailsScreenViewModel = koinViewModel()
 ) {
-    var scrollableState by remember { mutableFloatStateOf(0f) }
+    val scrollState = rememberScrollState()
     val state by viewModel.screenState
 
     LaunchedEffect(vacancyId) {
@@ -58,19 +57,13 @@ fun VacancyDetails(
     }
 
     Column(
-        Modifier
+        modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 12.dp)
-            .scrollable(
-                state = rememberScrollableState { offset ->
-                    scrollableState = scrollableState + offset
-                    offset
-                },
-                orientation = Orientation.Vertical
+            .verticalScroll(
+                state = scrollState
             )
     ) {
         DetailsTopBar(
-            modifier = Modifier,
             vacancyId = vacancyId,
             vacancyName = vacancyName,
             employerName = employerName,
@@ -84,10 +77,47 @@ fun VacancyDetails(
         Spacer(Modifier.padding(vertical = 12.dp))
         Text(
             text = stringResource(R.string.experience),
-            style = vacancyDetailsTypo().detailsTitleText
+            style = vacancyDetailsTypo().detailsTitleText,
+            modifier = Modifier.padding(horizontal = 12.dp)
         )
-        Spacer(Modifier.padding(vertical = 6.dp))
-        Text(text = state.vacancyDetails?.experience ?: stringResource(R.string.not_specified))
-//        KeySkillsBar()
+        Spacer(Modifier.padding(vertical = 4.dp))
+        Text(
+            text = state.vacancyDetails?.experience ?: stringResource(R.string.not_specified),
+            modifier = Modifier.padding(horizontal = 12.dp),
+            style = vacancyDetailsTypo().detailsText
+        )
+        Spacer(Modifier.padding(vertical = 12.dp))
+        RowBar(
+            modifier = Modifier.padding(horizontal = 12.dp),
+            barTitle = stringResource(R.string.key_skills),
+            rowData = state.vacancyDetails?.keySkills
+                ?: listOf(stringResource(R.string.not_specified))
+        )
+        Spacer(Modifier.padding(vertical = 12.dp))
+        RowBar(
+            modifier = Modifier.padding(horizontal = 12.dp),
+            barTitle = stringResource(R.string.work_format),
+            rowData = state.vacancyDetails?.workFormat
+                ?: listOf(stringResource(R.string.not_specified))
+        )
+        Spacer(Modifier.padding(vertical = 12.dp))
+        Text(
+            text = stringResource(R.string.employment_form),
+            style = vacancyDetailsTypo().detailsTitleText,
+            modifier = Modifier.padding(horizontal = 12.dp)
+        )
+        Spacer(Modifier.padding(vertical = 4.dp))
+        Text(
+            text = state.vacancyDetails?.employmentForm ?: stringResource(R.string.not_specified),
+            modifier = Modifier.padding(horizontal = 12.dp),
+            style = vacancyDetailsTypo().detailsText
+        )
+
+        Text(
+            text = AnnotatedString.fromHtml(
+                state.vacancyDetails?.description ?: stringResource(R.string.not_specified)
+            ),
+            modifier = Modifier.padding(horizontal = 12.dp),
+        )
     }
 }
