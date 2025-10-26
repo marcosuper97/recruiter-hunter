@@ -40,7 +40,7 @@ fun vacancyDetailsTypo(): VacancyTypography {
         ),
         detailsText = themeTypo.titleSmall.copy(
             color = themeColors.onSurface,
-            lineHeight = 18.sp,
+            lineHeight = 16.sp,
         ),
     )
 }

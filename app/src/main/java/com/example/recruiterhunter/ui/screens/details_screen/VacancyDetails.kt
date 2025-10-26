@@ -1,5 +1,6 @@
 package com.example.recruiterhunter.ui.screens.details_screen
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -15,6 +16,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -25,6 +30,7 @@ import com.example.recruiterhunter.R
 import com.example.recruiterhunter.presentation.detailsScreen_vm.DetailsScreenViewModel
 import com.example.recruiterhunter.presentation.detailsScreen_vm.VacancyDetailsIntent
 import com.example.recruiterhunter.ui.components.details_top_bar.DetailsTopBar
+import com.example.recruiterhunter.ui.components.details_top_bar.TopAppBarDetailsDefaults
 import com.example.recruiterhunter.ui.components.row_bar.RowBar
 import com.example.recruiterhunter.ui.theme.vacancyDetailsTypo
 import org.koin.compose.viewmodel.koinViewModel
@@ -46,6 +52,17 @@ fun VacancyDetails(
     val scrollState = rememberScrollState()
     val state by viewModel.screenState
 
+    LaunchedEffect(scrollState.value) {
+        Log.d("Скроллстейт", scrollState.value.toString())
+    }
+    var maxTopBarHeight by rememberSaveable { mutableIntStateOf(0) }
+    val minTopBarHeight = TopAppBarDetailsDefaults.COLLAPSED
+    val collapseRangePx = (maxTopBarHeight - minTopBarHeight).toFloat().coerceAtLeast(1f)
+    val collapseProgress =
+        if (!sharedTransitionScope.isTransitionActive)
+            (scrollState.value / collapseRangePx).coerceIn(0f, 1f)
+        else
+            0f
     LaunchedEffect(vacancyId) {
         viewModel.sendIntent(VacancyDetailsIntent.FetchDetails(vacancyId))
     }
@@ -55,14 +72,7 @@ fun VacancyDetails(
             navController.popBackStack()
         }
     }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(
-                state = scrollState
-            )
-    ) {
+    Column {
         DetailsTopBar(
             vacancyId = vacancyId,
             vacancyName = vacancyName,
@@ -72,52 +82,64 @@ fun VacancyDetails(
             salary = salary,
             sharedTransitionScope = sharedTransitionScope,
             animatedVisibilityScope = animatedVisibilityScope,
-            navController = navController
+            navController = navController,
+            appBarHeight = { barHeight -> maxTopBarHeight = barHeight },
+            collapseProgress = { collapseProgress },
         )
-        Spacer(Modifier.padding(vertical = 12.dp))
-        Text(
-            text = stringResource(R.string.experience),
-            style = vacancyDetailsTypo().detailsTitleText,
-            modifier = Modifier.padding(horizontal = 12.dp)
-        )
-        Spacer(Modifier.padding(vertical = 4.dp))
-        Text(
-            text = state.vacancyDetails?.experience ?: stringResource(R.string.not_specified),
-            modifier = Modifier.padding(horizontal = 12.dp),
-            style = vacancyDetailsTypo().detailsText
-        )
-        Spacer(Modifier.padding(vertical = 12.dp))
-        RowBar(
-            modifier = Modifier.padding(horizontal = 12.dp),
-            barTitle = stringResource(R.string.key_skills),
-            rowData = state.vacancyDetails?.keySkills
-                ?: listOf(stringResource(R.string.not_specified))
-        )
-        Spacer(Modifier.padding(vertical = 12.dp))
-        RowBar(
-            modifier = Modifier.padding(horizontal = 12.dp),
-            barTitle = stringResource(R.string.work_format),
-            rowData = state.vacancyDetails?.workFormat
-                ?: listOf(stringResource(R.string.not_specified))
-        )
-        Spacer(Modifier.padding(vertical = 12.dp))
-        Text(
-            text = stringResource(R.string.employment_form),
-            style = vacancyDetailsTypo().detailsTitleText,
-            modifier = Modifier.padding(horizontal = 12.dp)
-        )
-        Spacer(Modifier.padding(vertical = 4.dp))
-        Text(
-            text = state.vacancyDetails?.employmentForm ?: stringResource(R.string.not_specified),
-            modifier = Modifier.padding(horizontal = 12.dp),
-            style = vacancyDetailsTypo().detailsText
-        )
+        Spacer(Modifier.padding(vertical = 2.dp))
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(
+                    state = scrollState,
+                )
+        ) {
+            Text(
+                text = stringResource(R.string.experience),
+                style = vacancyDetailsTypo().detailsTitleText,
+                modifier = Modifier.padding(horizontal = 12.dp)
+            )
+            Spacer(Modifier.padding(vertical = 4.dp))
+            Text(
+                text = state.vacancyDetails?.experience ?: stringResource(R.string.not_specified),
+                modifier = Modifier.padding(horizontal = 12.dp),
+                style = vacancyDetailsTypo().detailsText
+            )
+            Spacer(Modifier.padding(vertical = 12.dp))
+            RowBar(
+                modifier = Modifier.padding(horizontal = 12.dp),
+                barTitle = stringResource(R.string.key_skills),
+                rowData = state.vacancyDetails?.keySkills
+                    ?: listOf(stringResource(R.string.not_specified))
+            )
+            Spacer(Modifier.padding(vertical = 12.dp))
+            RowBar(
+                modifier = Modifier.padding(horizontal = 12.dp),
+                barTitle = stringResource(R.string.work_format),
+                rowData = state.vacancyDetails?.workFormat
+                    ?: listOf(stringResource(R.string.not_specified))
+            )
+            Spacer(Modifier.padding(vertical = 12.dp))
+            Text(
+                text = stringResource(R.string.employment_form),
+                style = vacancyDetailsTypo().detailsTitleText,
+                modifier = Modifier.padding(horizontal = 12.dp)
+            )
+            Spacer(Modifier.padding(vertical = 4.dp))
+            Text(
+                text = state.vacancyDetails?.employmentForm
+                    ?: stringResource(R.string.not_specified),
+                modifier = Modifier.padding(horizontal = 12.dp),
+                style = vacancyDetailsTypo().detailsText
+            )
 
-        Text(
-            text = AnnotatedString.fromHtml(
-                state.vacancyDetails?.description ?: stringResource(R.string.not_specified)
-            ),
-            modifier = Modifier.padding(horizontal = 12.dp),
-        )
+            Text(
+                text = AnnotatedString.fromHtml(
+                    state.vacancyDetails?.description ?: stringResource(R.string.not_specified)
+                ),
+                modifier = Modifier.padding(horizontal = 12.dp),
+                style = vacancyDetailsTypo().detailsText
+            )
+        }
     }
 }
