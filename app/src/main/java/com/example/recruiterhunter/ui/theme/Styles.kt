@@ -14,7 +14,7 @@ fun vacancyDetailsTypo(): VacancyTypography {
     return VacancyTypography(
         cardVacancyNameStyle = themeTypo.titleMedium.copy(
             color = themeColors.onSurface,
-            lineHeight = 18.sp,
+            fontSize = 18.sp,
             fontWeight = FontWeight.Medium
         ),
         vacancyEmployerStyle = themeTypo.labelLarge.copy(
