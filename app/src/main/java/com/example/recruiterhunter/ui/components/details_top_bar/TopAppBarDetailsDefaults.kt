@@ -10,7 +10,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,7 +31,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -55,6 +53,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.util.lerp
 import androidx.navigation.NavController
 import com.example.recruiterhunter.R
@@ -75,35 +74,39 @@ fun DetailsTopBar(
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope,
     navController: NavController,
-    appBarHeight: (Int) -> Unit,
+    appBarHeight: (Float) -> Unit,
     collapseProgress: () -> Float
 ) {
     val density = LocalDensity.current
-    var maxHeightInt by remember { mutableIntStateOf(0) }
-    var boxIsMeasured by remember(maxHeightInt) { mutableStateOf(false) }
+    var maxHeightDp by remember { mutableStateOf(0.dp) }
+    var boxIsMeasured by remember(maxHeightDp) { mutableStateOf(false) }
 
     val topBarAnimHolder = topBarAnimHolder(
         density = density,
-        maxHeight = maxHeightInt,
+        maxHeightDp = maxHeightDp,
         collapseProgress = collapseProgress(),
     )
 
-    val logoSpaceWidth = remember { muta }
-    val logoSpaceAnimHolder = logoSpaceAnim(density, width = maxWidth, collapseProgress())
+    var logoSpaceWidth by remember { mutableStateOf(0.dp) }
+    val logoSpaceAnimHolder = logoSpaceAnim(density, width = logoSpaceWidth, collapseProgress())
 
     LaunchedEffect(collapseProgress) {
         Log.d(
             "высота контейнера", topBarAnimHolder.animatedTopBarBox.value.toString()
         )
-        Log.d(
-            "скругления краев", topBarAnimHolder.animatedRoundedCorner.value.toString()
-        )
-        Log.d(
-            "альфа текста", topBarAnimHolder.textAlphaAnim.value.toString()
-        )
-        Log.d(
-            "скролл прогресс", collapseProgress().toString()
-        )
+//        Log.d(
+//            "скругления краев", topBarAnimHolder.animatedRoundedCorner.value.toString()
+//        )
+//        Log.d(
+//            "альфа текста", topBarAnimHolder.textAlphaAnim.value.toString()
+//        )
+//        Log.d(
+//            "скролл прогресс", collapseProgress().toString()
+//        )
+
+        Log.d("ширина спейса", logoSpaceWidth.toString())
+        Log.d("высота спейса", logoSpaceAnimHolder.logoSpaceHeight.value.toString())
+        Log.d("положение логотипа", logoSpaceAnimHolder.logoAnimPosition.value.toString())
     }
 
     val themeColors = MaterialTheme.colorScheme
@@ -118,7 +121,7 @@ fun DetailsTopBar(
     val locationIcon = ImageVector.vectorResource(R.drawable.outline_location_on_24)
     val paddingTop = LocalView.current.paddingTop.dp + 42.dp
     with(sharedTransitionScope) {
-        Box(
+        BoxWithConstraints(
             modifier = modifier
                 .fillMaxWidth()
                 .height(height = topBarAnimHolder.animatedTopBarBox.value)
@@ -141,10 +144,10 @@ fun DetailsTopBar(
                 )
                 .onGloballyPositioned { coordinates ->
                     val newHeight = coordinates.size.height
-                    val newWidth = coordinates.size.width
                     if (!isTransitionActive && !boxIsMeasured) {
+                    val newHeightPx = with(density){newHeight.to}
                         appBarHeight(newHeight)
-                        maxHeightInt = newHeight
+                        maxHeightDp = newHeight
                         boxIsMeasured = true
                     }
                 }
@@ -154,6 +157,13 @@ fun DetailsTopBar(
                     resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds,
                 )
         ) {
+            val appBarHeightDp = this.minHeight
+            val appBarHeightPx = with(density){appBarHeightDp.toPx()}
+            if (!isTransitionActive && !boxIsMeasured) {
+                appBarHeight(appBarHeightPx)
+                maxHeightDp = appBarHeightDp
+                boxIsMeasured = true
+            }
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -235,15 +245,16 @@ fun DetailsTopBar(
                 Spacer(Modifier.padding(vertical = 12.dp))
                 BoxWithConstraints(
                     contentAlignment = Alignment.TopStart,
-                    modifier = height()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(logoSpaceAnimHolder.logoSpaceHeight.value)
                 ) {
-                    val maxHeight = this.maxHeight
                     val maxWidth = this.maxWidth
-                    val boxAnimHolder = logoSpaceAnim(density, width = maxWidth, collapseProgress())
+                    logoSpaceWidth = maxWidth
                     if (employerLogoIsEmpty == true) {
                         EmployerLogo(
                             modifier = Modifier
-                                .offset(x = topBarAnimHolder.employerLogoOffset.value)
+                                .offset(x = logoSpaceAnimHolder.logoAnimPosition.value)
                                 .padding(top = 12.dp)
                                 .dropShadow(
                                     shape = CircleShape
@@ -263,7 +274,7 @@ fun DetailsTopBar(
                                     shape = logoShape
                                 )
                                 .border(4.dp, topBackgroundColor, logoShape)
-                                .size(topBarAnimHolder.employerLogoSizeAnim.value)
+                                .size(logoSpaceAnimHolder.logoSizeAnim.value)
                                 .clip(logoShape),
                             vacancyId = vacancyId,
                             employerLogo = employerLogo,
@@ -276,11 +287,11 @@ fun DetailsTopBar(
                     Text(
                         text = vacancyName,
                         textAlign = TextAlign.Center,
-                        style = vacancyDetailsTypo().cardVacancyNameStyle,
+                        style = vacancyDetailsTypo().cardVacancyNameStyle.copy(fontSize = logoSpaceAnimHolder.vacancyNameSize.value.sp),
                         modifier = Modifier
                             .offset(
-                                x = topBarAnimHolder.vacancyNameHorizontalAlignAnim.value,
-                                y = topBarAnimHolder.vacancyNameVerticalAlignAnim.value
+                                x = logoSpaceAnimHolder.vacancyNameHorizontalPosition.value,
+                                y = logoSpaceAnimHolder.vacancyNameVerticalPosition.value
                             )
                             .sharedBounds(
                                 rememberSharedContentState(DetailsTransition.vacancyName(vacancyId)),
@@ -396,13 +407,10 @@ fun Color.getLogoGradient(): List<Color> = remember(this) {
 @Composable
 fun topBarAnimHolder(
     density: Density,
-    maxHeight: Int,
+    maxHeightDp: Dp,
     collapseProgress: Float,
 ): TopBarAnimHolder {
-    val minHeight: Dp = TopAppBarDetailsDefaults.COLLAPSED
-    val maxHeightDp = remember(maxHeight, density) {
-        if (maxHeight != 0) maxHeight.convertToDp(density).convertedSize else 0.dp
-    }
+    val minHeight = TopAppBarDetailsDefaults.COLLAPSED
 
     val appBarHeight = if (maxHeightDp != 0.dp) {
         lerp(maxHeightDp, minHeight, collapseProgress)
@@ -508,9 +516,9 @@ data class TopVacancyDetailsSize(
 
 @Immutable
 object TopAppBarDetailsDefaults {
-    val COLLAPSED: Dp = 380.dp
+    val COLLAPSED:Dp = 280.dp
     val LOGO_SPACE_MAX_HEIGHT: Dp = 124.dp
-    val LOGO_SPACE_MIN_HEIGHT: Dp = 48.dp
+    val LOGO_SPACE_MIN_HEIGHT: Dp = 80.dp
     val LOGO_PIC_DEFAULT_SIZE: Dp = 100.dp
     val LOGO_PIC_MIN_SIZE: Dp = 48.dp
     const val VACANCY_NAME_DEFAULT_SIZE: Float = 18f

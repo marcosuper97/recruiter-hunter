@@ -16,11 +16,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.fromHtml
@@ -51,12 +52,13 @@ fun VacancyDetails(
 ) {
     val scrollState = rememberScrollState()
     val state by viewModel.screenState
+    val density = LocalDensity.current
 
     LaunchedEffect(scrollState.value) {
         Log.d("Скроллстейт", scrollState.value.toString())
     }
-    var maxTopBarHeight by rememberSaveable { mutableIntStateOf(0) }
-    val minTopBarHeight = TopAppBarDetailsDefaults.COLLAPSED
+    var maxTopBarHeight by rememberSaveable { mutableFloatStateOf(0f) }
+    val minTopBarHeight = with(density){ TopAppBarDetailsDefaults.COLLAPSED.toPx() }
     val collapseRangePx = (maxTopBarHeight - minTopBarHeight).toFloat().coerceAtLeast(1f)
     val collapseProgress =
         if (!sharedTransitionScope.isTransitionActive)
