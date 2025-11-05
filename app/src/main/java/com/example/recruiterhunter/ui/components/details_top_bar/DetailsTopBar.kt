@@ -1,6 +1,5 @@
 package com.example.recruiterhunter.ui.components.details_top_bar
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -8,8 +7,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +17,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
@@ -27,7 +26,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -38,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
@@ -49,7 +48,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Density
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
@@ -77,37 +76,22 @@ fun DetailsTopBar(
     appBarHeight: (Float) -> Unit,
     collapseProgress: () -> Float
 ) {
+    val currentProgress = collapseProgress()
     val density = LocalDensity.current
     var maxHeightDp by remember { mutableStateOf(0.dp) }
-    var boxIsMeasured by remember(maxHeightDp) { mutableStateOf(false) }
+    var vacancyNameHeight by remember { mutableStateOf(0.dp) }
 
     val topBarAnimHolder = topBarAnimHolder(
-        density = density,
         maxHeightDp = maxHeightDp,
-        collapseProgress = collapseProgress(),
+        collapseProgress = { currentProgress },
     )
 
     var logoSpaceWidth by remember { mutableStateOf(0.dp) }
-    val logoSpaceAnimHolder = logoSpaceAnim(density, width = logoSpaceWidth, collapseProgress())
-
-    LaunchedEffect(collapseProgress) {
-        Log.d(
-            "высота контейнера", topBarAnimHolder.animatedTopBarBox.value.toString()
-        )
-//        Log.d(
-//            "скругления краев", topBarAnimHolder.animatedRoundedCorner.value.toString()
-//        )
-//        Log.d(
-//            "альфа текста", topBarAnimHolder.textAlphaAnim.value.toString()
-//        )
-//        Log.d(
-//            "скролл прогресс", collapseProgress().toString()
-//        )
-
-        Log.d("ширина спейса", logoSpaceWidth.toString())
-        Log.d("высота спейса", logoSpaceAnimHolder.logoSpaceHeight.value.toString())
-        Log.d("положение логотипа", logoSpaceAnimHolder.logoAnimPosition.value.toString())
-    }
+    val logoSpaceAnimHolder = logoSpaceAnim(
+        width = logoSpaceWidth,
+        vacancyNameHeightDp = vacancyNameHeight,
+        collapseProgress = { currentProgress }
+    )
 
     val themeColors = MaterialTheme.colorScheme
     var topBackgroundColor by remember {
@@ -116,12 +100,12 @@ fun DetailsTopBar(
     var elementsColor by remember {
         mutableStateOf(themeColors.onSurfaceVariant)
     }
-    val employerLogoIsEmpty by remember { mutableStateOf(employerLogo != "") }
     val logoShape = CircleShape
     val locationIcon = ImageVector.vectorResource(R.drawable.outline_location_on_24)
     val paddingTop = LocalView.current.paddingTop.dp + 42.dp
+
     with(sharedTransitionScope) {
-        BoxWithConstraints(
+        Box(
             modifier = modifier
                 .fillMaxWidth()
                 .height(height = topBarAnimHolder.animatedTopBarBox.value)
@@ -143,12 +127,11 @@ fun DetailsTopBar(
                     )
                 )
                 .onGloballyPositioned { coordinates ->
-                    val newHeight = coordinates.size.height
-                    if (!isTransitionActive && !boxIsMeasured) {
-                    val newHeightPx = with(density){newHeight.to}
-                        appBarHeight(newHeight)
-                        maxHeightDp = newHeight
-                        boxIsMeasured = true
+                    if (!isTransitionActive && maxHeightDp == 0.dp) {
+                        val newHeight = coordinates.size.height
+                        val newHeightPx = with(density) { newHeight.toFloat() }
+                        appBarHeight(newHeightPx)
+                        maxHeightDp = with(density) { newHeight.toDp() }
                     }
                 }
                 .sharedBounds(
@@ -157,13 +140,6 @@ fun DetailsTopBar(
                     resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds,
                 )
         ) {
-            val appBarHeightDp = this.minHeight
-            val appBarHeightPx = with(density){appBarHeightDp.toPx()}
-            if (!isTransitionActive && !boxIsMeasured) {
-                appBarHeight(appBarHeightPx)
-                maxHeightDp = appBarHeightDp
-                boxIsMeasured = true
-            }
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -177,173 +153,127 @@ fun DetailsTopBar(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Spacer(Modifier.padding(top = paddingTop))
-                Row(
-                    modifier = modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp)
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.baseline_arrow_back_24),
-                        tint = elementsColor,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .size(28.dp)
-                            .clickable(
-                                enabled = true,
-                                onClick = {
-                                    if (!sharedTransitionScope.isTransitionActive) {
-                                        navController.popBackStack()
-                                    }
-                                },
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                            )
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.baseline_share_24),
-                        tint = elementsColor,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .size(28.dp)
-                            .clickable(
-                                enabled = true,
-                                onClick = {
-                                    if (!sharedTransitionScope.isTransitionActive) {
-                                        navController.popBackStack()
-                                    }
-                                },
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                            )
-                    )
-
-                    Spacer(Modifier.padding(horizontal = 12.dp))
-
-                    Icon(
-                        imageVector = ImageVector.vectorResource(R.drawable.outline_bookmark_add_24),
-                        tint = elementsColor,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .size(28.dp)
-                            .clickable(
-                                enabled = true,
-                                onClick = {
-                                    if (!sharedTransitionScope.isTransitionActive) {
-                                        navController.popBackStack()
-                                    }
-                                },
-                                interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
-                            )
-                    )
-
-
-                }
-                Spacer(Modifier.padding(vertical = 12.dp))
+                TopBarButtons(
+                    iconTint = elementsColor,
+                    onBackClick = {},
+                    markBookClick = {},
+                    shareClick = {}
+                )
+                Spacer(Modifier.padding(vertical = 4.dp))
                 BoxWithConstraints(
                     contentAlignment = Alignment.TopStart,
                     modifier = Modifier
+                        .clipToBounds()
                         .fillMaxWidth()
                         .height(logoSpaceAnimHolder.logoSpaceHeight.value)
                 ) {
                     val maxWidth = this.maxWidth
                     logoSpaceWidth = maxWidth
-                    if (employerLogoIsEmpty == true) {
-                        EmployerLogo(
-                            modifier = Modifier
-                                .offset(x = logoSpaceAnimHolder.logoAnimPosition.value)
-                                .padding(top = 12.dp)
-                                .dropShadow(
-                                    shape = CircleShape
-                                ) {
-                                    offset = Offset(x = 0f, y = 8f)
-                                    spread = 2f
-                                    radius = 18f
-                                    alpha = 0.4f
-                                    color = topBackgroundColor
-                                }
-                                .background(
-                                    brush = Brush.verticalGradient(
-                                        colors = topBackgroundColor.getLogoGradient(),
-                                        startY = 0f,
-                                        endY = Float.POSITIVE_INFINITY
-                                    ),
-                                    shape = logoShape
-                                )
-                                .border(4.dp, topBackgroundColor, logoShape)
-                                .size(logoSpaceAnimHolder.logoSizeAnim.value)
-                                .clip(logoShape),
-                            vacancyId = vacancyId,
-                            employerLogo = employerLogo,
-                            generatedBackgroundColors = { backgroundColor, elementColors ->
-                                topBackgroundColor = backgroundColor
-                                elementsColor = elementColors
-                            }
-                        )
-                    }
-                    Text(
-                        text = vacancyName,
-                        textAlign = TextAlign.Center,
-                        style = vacancyDetailsTypo().cardVacancyNameStyle.copy(fontSize = logoSpaceAnimHolder.vacancyNameSize.value.sp),
+                    EmployerLogo(
                         modifier = Modifier
+                            .offset(x = logoSpaceAnimHolder.logoAnimPosition.value)
+                            .padding(top = 12.dp)
+                            .dropShadow(
+                                shape = CircleShape
+                            ) {
+                                offset = Offset(x = 0f, y = 8f)
+                                spread = 2f
+                                radius = 18f
+                                alpha = 0.4f
+                                color = topBackgroundColor
+                            }
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = topBackgroundColor.getLogoGradient(),
+                                    startY = 0f,
+                                    endY = Float.POSITIVE_INFINITY
+                                ),
+                                shape = logoShape
+                            )
+                            .border(4.dp, topBackgroundColor, logoShape)
+                            .size(logoSpaceAnimHolder.logoSizeAnim.value)
+                            .clip(logoShape),
+                        vacancyId = vacancyId,
+                        employerLogo = employerLogo,
+                        generatedBackgroundColors = { backgroundColor, elementColors ->
+                            topBackgroundColor = backgroundColor
+                            elementsColor = elementColors
+                        }
+                    )
+                    Text(
+                        modifier = Modifier
+                            .align(Alignment.BottomCenter)
+                            .width(if (logoSpaceWidth > 0.dp) logoSpaceWidth - 60.dp else Dp.Unspecified)
                             .offset(
                                 x = logoSpaceAnimHolder.vacancyNameHorizontalPosition.value,
                                 y = logoSpaceAnimHolder.vacancyNameVerticalPosition.value
                             )
+                            .padding(12.dp)
+                            .onGloballyPositioned { coordinates ->
+                                vacancyNameHeight = with(density) {
+                                    coordinates.size.height.toDp()
+                                }
+                            }
                             .sharedBounds(
                                 rememberSharedContentState(DetailsTransition.vacancyName(vacancyId)),
+                                animatedVisibilityScope = animatedVisibilityScope,
+                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+                            ),
+                        text = vacancyName,
+                        textAlign = if (currentProgress < 0.5f) TextAlign.Center else TextAlign.Start,
+                        maxLines = if (currentProgress > 0.5f) 2 else Int.MAX_VALUE,
+                        overflow = TextOverflow.Ellipsis,
+                        style = vacancyDetailsTypo().cardVacancyNameStyle.copy(fontSize = logoSpaceAnimHolder.vacancyNameSize.value.sp),
+                    )
+                }
+                Spacer(Modifier.padding(vertical = 2.dp))
+                if (employerName != null) {
+                    Text(
+                        text = employerName,
+                        textAlign = TextAlign.Center,
+                        style = vacancyDetailsTypo().vacancyEmployerStyle,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .alpha(0.7f)
+                            .sharedBounds(
+                                rememberSharedContentState(DetailsTransition.employerName(vacancyId)),
                                 animatedVisibilityScope = animatedVisibilityScope,
                                 resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
                             )
                     )
                 }
-                Spacer(Modifier.padding(vertical = 2.dp))
-                Text(
-                    text = employerName ?: "",
-                    textAlign = TextAlign.Center,
-                    style = vacancyDetailsTypo().vacancyEmployerStyle,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .alpha(0.7f)
-                        .sharedBounds(
-                            rememberSharedContentState(DetailsTransition.employerName(vacancyId)),
-                            animatedVisibilityScope = animatedVisibilityScope,
-                            resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                        )
-                )
                 Spacer(Modifier.padding(vertical = 4.dp))
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(horizontal = 32.dp)
-                ) {
-                    Icon(
-                        imageVector = locationIcon,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .size(20.dp)
-                            .sharedElement(
-                                rememberSharedContentState(
-                                    DetailsTransition.navigationIcon(
-                                        vacancyId
-                                    )
-                                ),
-                                animatedVisibilityScope = animatedVisibilityScope
-                            )
-                    )
-                    Text(
-                        text = address ?: "",
-                        textAlign = TextAlign.Center,
-                        style = vacancyDetailsTypo().addressTextStyle,
-                        modifier = Modifier
-                            .sharedBounds(
-                                rememberSharedContentState(DetailsTransition.address(vacancyId)),
-                                animatedVisibilityScope = animatedVisibilityScope,
-                                resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
-                            )
-                    )
+                if (address != null) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.padding(horizontal = 32.dp)
+                    ) {
+                        Icon(
+                            imageVector = locationIcon,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(20.dp)
+                                .sharedElement(
+                                    rememberSharedContentState(
+                                        DetailsTransition.navigationIcon(
+                                            vacancyId
+                                        )
+                                    ),
+                                    animatedVisibilityScope = animatedVisibilityScope
+                                )
+                        )
+                        Text(
+                            text = address,
+                            textAlign = TextAlign.Center,
+                            style = vacancyDetailsTypo().addressTextStyle,
+                            modifier = Modifier
+                                .sharedBounds(
+                                    rememberSharedContentState(DetailsTransition.address(vacancyId)),
+                                    animatedVisibilityScope = animatedVisibilityScope,
+                                    resizeMode = SharedTransitionScope.ResizeMode.RemeasureToBounds
+                                )
+                        )
+                    }
                 }
                 Spacer(modifier = Modifier.padding(vertical = 2.dp))
                 HorizontalDivider(Modifier.alpha(0.8f))
@@ -363,17 +293,6 @@ fun DetailsTopBar(
                 )
             }
         }
-    }
-}
-
-
-@Stable
-fun Int.convertToDp(density: Density): TopVacancyDetailsSize {
-    val heightSize = this
-    with(density) {
-        return TopVacancyDetailsSize(
-            convertedSize = heightSize.toDp(),
-        )
     }
 }
 
@@ -406,11 +325,11 @@ fun Color.getLogoGradient(): List<Color> = remember(this) {
 @Stable
 @Composable
 fun topBarAnimHolder(
-    density: Density,
     maxHeightDp: Dp,
-    collapseProgress: Float,
+    collapseProgress: () -> Float,
 ): TopBarAnimHolder {
     val minHeight = TopAppBarDetailsDefaults.COLLAPSED
+    val collapseProgress = collapseProgress()
 
     val appBarHeight = if (maxHeightDp != 0.dp) {
         lerp(maxHeightDp, minHeight, collapseProgress)
@@ -427,23 +346,22 @@ fun topBarAnimHolder(
         label = "alpha"
     )
 
-    return remember {
-        TopBarAnimHolder(
-            animatedTopBarBox = animatedTopBarBox,
-            animatedRoundedCorner = animatedRoundedCorner,
-            textAlphaAnim = textAlphaAnim,
-        )
-    }
+    return TopBarAnimHolder(
+        animatedTopBarBox = animatedTopBarBox,
+        animatedRoundedCorner = animatedRoundedCorner,
+        textAlphaAnim = textAlphaAnim,
+    )
 }
 
 @Stable
 @Composable
 fun logoSpaceAnim(
-    density: Density,
     width: Dp,
-    collapseProgress: Float,
+    vacancyNameHeightDp: Dp,
+    collapseProgress: () -> Float,
 ): LogoSpaceAnimHolder {
-    val maxHeight: Dp = TopAppBarDetailsDefaults.LOGO_SPACE_MAX_HEIGHT
+    val collapseProgress = collapseProgress()
+    val maxHeight: Dp = TopAppBarDetailsDefaults.LOGO_SPACE_MAX_HEIGHT + vacancyNameHeightDp
     val minHeight: Dp = TopAppBarDetailsDefaults.LOGO_SPACE_MIN_HEIGHT
     val logoDefSize: Dp = TopAppBarDetailsDefaults.LOGO_PIC_DEFAULT_SIZE
     val logoMinSize: Dp = TopAppBarDetailsDefaults.LOGO_PIC_MIN_SIZE
@@ -451,7 +369,11 @@ fun logoSpaceAnim(
     val vacancyNameMinSize: Float = TopAppBarDetailsDefaults.VACANCY_NAME_MIN_SIZE
 
     val logoAnimPosition = animateDpAsState(
-        lerp(width / 2, 12.dp, collapseProgress),
+        lerp(
+            (width / 2) - (TopAppBarDetailsDefaults.LOGO_PIC_DEFAULT_SIZE / 2),
+            12.dp,
+            collapseProgress
+        ),
         label = "logo_offset"
     )
 
@@ -471,25 +393,25 @@ fun logoSpaceAnim(
     )
 
     val vacancyNameVerticalPosition = animateDpAsState(
-        lerp(maxHeight, minHeight / 2, collapseProgress),
-        label = "vacancy_name_horizon_position"
-    )
-
-    val vacancyNameHorizontalPosition = animateDpAsState(
-        lerp(width / 2, width * 0.75f, collapseProgress),
+        if (vacancyNameHeightDp < TopAppBarDetailsDefaults.TWO_LINES_CONTAINER_HEIGHT) {
+            lerp(0.dp, -(TopAppBarDetailsDefaults.LOGO_PIC_MIN_SIZE / 4), collapseProgress)
+        } else 0.dp,
         label = "vacancy_name_vertical_position"
     )
 
-    return remember(density) {
-        LogoSpaceAnimHolder(
-            logoSpaceHeight = logoSpaceHeight,
-            logoAnimPosition = logoAnimPosition,
-            logoSizeAnim = logoSizeAnim,
-            vacancyNameHorizontalPosition = vacancyNameHorizontalPosition,
-            vacancyNameVerticalPosition = vacancyNameVerticalPosition,
-            vacancyNameSize = vacancyNameSize
-        )
-    }
+    val vacancyNameHorizontalPosition = animateDpAsState(
+        lerp(0.dp, width * 0.05f, collapseProgress),
+        label = "vacancy_name_horizon_position"
+    )
+
+    return LogoSpaceAnimHolder(
+        logoSpaceHeight = logoSpaceHeight,
+        logoAnimPosition = logoAnimPosition,
+        logoSizeAnim = logoSizeAnim,
+        vacancyNameHorizontalPosition = vacancyNameHorizontalPosition,
+        vacancyNameVerticalPosition = vacancyNameVerticalPosition,
+        vacancyNameSize = vacancyNameSize
+    )
 }
 
 @Immutable
@@ -510,18 +432,14 @@ data class LogoSpaceAnimHolder(
 )
 
 @Immutable
-data class TopVacancyDetailsSize(
-    val convertedSize: Dp,
-)
-
-@Immutable
 object TopAppBarDetailsDefaults {
-    val COLLAPSED:Dp = 280.dp
-    val LOGO_SPACE_MAX_HEIGHT: Dp = 124.dp
+    val COLLAPSED: Dp = 152.dp
+    val LOGO_SPACE_MAX_HEIGHT: Dp = 132.dp
     val LOGO_SPACE_MIN_HEIGHT: Dp = 80.dp
     val LOGO_PIC_DEFAULT_SIZE: Dp = 100.dp
     val LOGO_PIC_MIN_SIZE: Dp = 48.dp
+    val TWO_LINES_CONTAINER_HEIGHT: Dp = 48.dp
     const val VACANCY_NAME_DEFAULT_SIZE: Float = 18f
-    const val VACANCY_NAME_MIN_SIZE: Float = 11f
+    const val VACANCY_NAME_MIN_SIZE: Float = 14f
 }
 
