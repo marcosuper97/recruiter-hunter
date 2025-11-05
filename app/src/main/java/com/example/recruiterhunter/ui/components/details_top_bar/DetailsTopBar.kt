@@ -155,7 +155,7 @@ fun DetailsTopBar(
                 Spacer(Modifier.padding(top = paddingTop))
                 TopBarButtons(
                     iconTint = elementsColor,
-                    onBackClick = {},
+                    onBackClick = {if (!isTransitionActive) navController.popBackStack()},
                     markBookClick = {},
                     shareClick = {}
                 )
