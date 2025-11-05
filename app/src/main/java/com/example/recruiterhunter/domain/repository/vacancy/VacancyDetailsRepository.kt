@@ -1,6 +1,6 @@
-package domain.repository
+package com.example.recruiterhunter.domain.repository.vacancy
 
-import domain.model.vacancy.details.Vacancy
+import com.example.recruiterhunter.domain.model.vacancy.details.Vacancy
 
 interface VacancyDetailsRepository {
     suspend fun fetchDetails(vacancyId: Long): Result<Vacancy>
