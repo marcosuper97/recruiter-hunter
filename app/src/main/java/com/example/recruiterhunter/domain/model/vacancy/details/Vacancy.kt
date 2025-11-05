@@ -1,5 +1,8 @@
-package domain.model.vacancy.details
+package com.example.recruiterhunter.domain.model.vacancy.details
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class Vacancy(
     val vacancyId: Long,
     val vacancyName: String,

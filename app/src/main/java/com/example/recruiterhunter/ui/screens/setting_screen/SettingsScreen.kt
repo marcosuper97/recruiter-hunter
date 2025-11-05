@@ -1,5 +1,8 @@
 package com.example.recruiterhunter.ui.screens.setting_screen
 
+import androidx.compose.animation.AnimatedVisibilityScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -24,9 +27,11 @@ import com.example.recruiterhunter.ui.components.buttons_group.ThemeButtonConfig
 import com.example.recruiterhunter.ui.components.buttons_group.ThemeButtonGroups
 import org.koin.androidx.compose.koinViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 fun SettingsScreen(
+    sharedTransitionScope: SharedTransitionScope,
+    animatedVisibilityScope: AnimatedVisibilityScope,
     actualTheme: ActualTheme,
     viewModel: SettingsScreenViewModel = koinViewModel()
 ) {

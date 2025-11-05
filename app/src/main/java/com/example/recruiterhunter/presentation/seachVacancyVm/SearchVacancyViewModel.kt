@@ -51,7 +51,10 @@ class SearchVacancyViewModel(
     fun sendSideEffect(effect: SearchScreenSideEffects) {
         viewModelScope.launch {
             when (effect) {
-                is SearchScreenSideEffects.OpenDetails -> {}
+                is SearchScreenSideEffects.OpenDetails -> {
+                    _sideEffect.send(effect)
+                }
+
                 SearchScreenSideEffects.OpenFilters -> {}
                 SearchScreenSideEffects.DownloadError -> _sideEffect.send(effect)
             }
@@ -63,7 +66,7 @@ class SearchVacancyViewModel(
             loading = true,
             loadingNextPage = false,
             hasContent = false,
-            vacancyList = emptyList(),
+            vacancyList = VacancyList(),
             vacanciesFounded = 0L,
             emptyResult = false,
             authorizationError = false,
@@ -80,7 +83,7 @@ class SearchVacancyViewModel(
                     _screenState.value = _screenState.value.copy(
                         loading = false,
                         hasContent = true,
-                        vacancyList = vacancyList,
+                        vacancyList = VacancyList(vacancyList),
                         vacanciesFounded = found
                     )
                     Log.d("SUCCESS", vacancyList.toString())
@@ -106,9 +109,10 @@ class SearchVacancyViewModel(
                 val query = textField.text.toString()
                 vacancySearchInteractor.doRequest(query, nextPage)
                     .onSuccess { (page, pages, found, vacancyList) ->
+                        val oldList = _screenState.value.vacancyList.itemsList
                         _screenState.value = _screenState.value.copy(
                             loadingNextPage = false,
-                            vacancyList = _screenState.value.vacancyList + vacancyList,
+                            vacancyList = VacancyList(oldList + vacancyList),
                             vacanciesFounded = found
                         )
                         canLoadMore = page < pages
